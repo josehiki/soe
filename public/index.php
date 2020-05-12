@@ -61,7 +61,8 @@
 	$map->get('adminDashboard', '/soe/dashboard', [
 		'controller' => 'App\Controllers\AdminDashController',
 		'action' => 'getAdminDashboard',
-		'auth' => true
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
 	]);
 
 
@@ -84,18 +85,35 @@
 		$controllerName = $handlerData['controller'];
 		$actionName = $handlerData['action'];
 		$needsAuth = $handlerData['auth'] ?? false;
+		$needsUserType = $handlerData['userType'] ?? false;
 
 		$sessionUserId = $_SESSION['userId'] ?? null;
+		$sessionUserType = $_SESSION['userType'] ?? null;
+
 		if($needsAuth && !$sessionUserId)
 		{
 			$response = new RedirectResponse('/soe');  
 		}else
 		{
-			$controller = new $controllerName;
-			$response = $controller->$actionName($request);
-
-
+			if(!$needsUserType){
+				$controller = new $controllerName;
+				$response = $controller->$actionName($request);	
+			}else
+			{
+				if ($needsUserType == $sessionUserType) 
+				{
+					$controller = new $controllerName;
+					$response = $controller->$actionName($request);
+				}else
+				{
+					unset($_SESSION['userId']);
+					$response = new RedirectResponse('/soe');
+				}	
+			}	
+			
 		}
+
+
 		foreach ($response->getHeaders() as $name => $values) 
 		{
 			foreach ($values as $value) {

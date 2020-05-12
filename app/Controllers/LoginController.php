@@ -12,6 +12,7 @@
 		// imprime el html para mostrat la pantalla de login
 		function getLogin($request)
 		{
+			session_destroy();
 			return $this->renderHTML('index.twig');
 		}
 
@@ -28,6 +29,7 @@
 				if(password_verify($postData['password'], $user->userPassword))
 				{
 					$_SESSION['userId'] = $user->idUser;
+					$_SESSION['userType'] = $user->userType;
 					return new RedirectResponse('/soe/dashboard');
 				}else
 				{
@@ -41,5 +43,11 @@
 			return $this->renderHTML('index.twig', [
 				'responseMessage' => $responseMessage
 			]);
+		}
+
+		function logout($request)
+		{
+			unset($_SESSION['userId']);
+			$response = new RedirectResponse('/soe');
 		}
 	}
