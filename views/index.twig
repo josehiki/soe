@@ -5,6 +5,8 @@
 <html>
 <head>
 	<title>Soe</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+	
 	{% block estilo %}{% endblock %}
 	{% block index_css %}{% endblock %}
 </head>
@@ -13,10 +15,15 @@
 		<p class="header_p">Sistema de Organización para Estudiantes</p>
 	</div>
 	<div class="index_Content">
-		<form id="form_Inicio_Sesion" class="form_Inicio_Sesion">
+		<form action="/soe/postLogin" method="post" class="form_Inicio_Sesion">
 			<p class="form_p">Inicio de sesión</p>
-			<input type="text" class="input_Text input_Text_Form"  placeholder="Ingresa tu correo electronico"/>
-			<input type="text" class="input_Text input_Text_Form" placeholder="Ingresa tu contraseña" />
+			{% if responseMessage != null %}
+				<div class="alert alert-primary" role="alert">
+					{{ responseMessage }}
+				</div>
+			{% endif %}
+			<input type="text" class="input_Text input_Text_Form"  placeholder="Ingresa tu correo electronico" name="email" />
+			<input type="password" class="input_Text input_Text_Form" placeholder="Ingresa tu contraseña" name="password" />
 			<button class="boton boton_Form">Enviar</button>
 		</form>
 	</div>
