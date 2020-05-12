@@ -1,0 +1,75 @@
+{% block estilo %}
+
+<style type="text/css">
+
+body, html {
+width: 100%;
+height: 90%;
+margin: 0px;
+padding: 0px;
+font-family: arial;
+--primary_Color: #5c6bc0;
+--primary_Light_Color: #8e99f3;
+--primary_Dark_Color: #26418f;
+--font-title-size: 1.8em;
+--font-text-size: 1em;
+color: #333;
+	
+}
+a{
+	text-decoration: none;
+	color: #333;
+}
+a:hover, a:active, a:visited{
+	color: #333;
+}
+
+.header {
+	display: block;
+	width: 100%;
+	height: 15%;
+	background-color: var(--primary_Color); 
+	text-align: center;
+}
+.header_Usuario{
+	text-align: right;
+}
+.header_p {
+	display: inline-block;
+	color: white;
+	font-size: var(--font-title-size);
+}
+.etiqueta_Cerrar_Sesion{
+	font-size: 1em;
+	padding: .2em 1em .2em .7em;
+	font-weight: normal;
+	border-left: 1px solid white;
+}
+
+.input_Text{
+	display: block;
+	height: 2.8em;
+	border-radius: 5px;
+	border: 1px solid #b9b9b9; 
+	font-size: 1em;
+	padding: 10px;
+}
+
+.boton {
+	display: block;
+	background-color: var(--primary_Dark_Color);
+	color: white;
+	border: 1px solid #565353;
+	font-size: 1em;
+	padding: 10px;
+	border-radius: 5px;
+	width: 120px; 
+}
+.instrucciones{
+	font-size: var(--font-text-size);
+	color: #333;
+}
+</style>
+
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/index_CSS.twig' %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Soe</title>
+	{% block estilo %}{% endblock %}
+	{% block index_css %}{% endblock %}
+</head>
+<body>
+	<div class="header">
+		<p class="header_p">Sistema de Organización para Estudiantes</p>
+	</div>
+	<div class="index_Content">
+		<form id="form_Inicio_Sesion" class="form_Inicio_Sesion">
+			<p class="form_p">Inicio de sesión</p>
+			<input type="text" class="input_Text input_Text_Form"  placeholder="Ingresa tu correo electronico"/>
+			<input type="text" class="input_Text input_Text_Form" placeholder="Ingresa tu contraseña" />
+			<button class="boton boton_Form">Enviar</button>
+		</form>
+	</div>
+</body>
+</html>
