@@ -29,7 +29,7 @@
 
 			if ($user) 
 			{
-				if(password_verify($postData['password'], $user->userPassword))
+				if(password_verify($postData['password'], $user->userPassword) && $user->active)
 				{
 					$_SESSION['userId'] = $user->idUser;
 					$_SESSION['userType'] = $user->userType;
