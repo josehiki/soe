@@ -1,0 +1,32 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/administrador_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Materia Dashboard</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		{% block estilo %}{% endblock %}
+		{% block administrador_css %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+		<div class="content">
+			<h1 class="content_Title_Menus">Nueva Materia</h1>			
+			<p class="instrucciones">Ingresa los siguientes datos</p>
+			{% if responseMessage != null %}
+				<div class="alert alert-primary" role="alert">
+					{{ responseMessage }}
+				</div>
+			{% endif %}
+			<form method="post" action="/soe/dashboard/materia/add">
+				<input type="text" class="input_Text input_Text_Admin" placeholder="Nombre de la Materia" name="subject" />
+				<button type="submit" class="boton boton_Admin">Enviar</button>
+			</form>
+		</div>
+	</body>
+</html>

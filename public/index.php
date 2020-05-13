@@ -77,6 +77,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+	$map->get('adminMateriaAddForm', '/soe/dashboard/materia/add', [
+		'controller' => 'App\Controllers\AdminMateriaController',
+		'action' => 'getAdminAddMateriaForm',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 	// TEACHER ROUTES
 	$map->get('studentDashboard', '/soe/student', [
@@ -94,10 +100,19 @@
 		'userType' => getenv('USER_TYPE3')
 	]);
 
+
 	// POST METHOD
 	$map->post('PostLogin', '/soe/postLogin', [
 		'controller' => 'App\Controllers\LoginController',
 		'action' => 'postLogin'
+	]);
+
+	// ADMIN ROUTES 
+	$map->post('adminMateriaAdd', '/soe/dashboard/materia/add', [
+		'controller' => 'App\Controllers\AdminMateriaController',
+		'action' => 'adminAddMateria',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
 	]);
 
 
