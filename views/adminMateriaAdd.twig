@@ -5,11 +5,15 @@
 	<head>	
 		<title>Materia Dashboard</title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 		{% block estilo %}{% endblock %}
 		{% block administrador_css %}{% endblock %}
 	</head>
 	<body>
 		<div class="header header_Usuario" >
+			<a href="/soe/dashboard/materia" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
 			<p class="header_p"  id="nombreUsuario">{{username}}</p>
 			<span>
 				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>

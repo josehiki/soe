@@ -4,11 +4,15 @@
 <html>
 	<head>	
 		<title>Materia Dashboard</title>
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 		{% block estilo %}{% endblock %}
 		{% block administrador_css %}{% endblock %}
 	</head>
 	<body>
 		<div class="header header_Usuario" >
+			<a href="/soe/dashboard" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
 			<p class="header_p"  id="nombreUsuario">{{username}}</p>
 			<span>
 				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
@@ -16,10 +20,10 @@
 		</div>
 		<div class="content">
 			<h1 class="content_Title_Menus" >Gestión de materias</h1>
-			<div class="menu_Opciones">
+			<div class="menu_Opciones menu_Materias">
 				<div class="fila">
 					<div class="columna">
-						<span class="menu_Item"><a href="/soe/dashboard/materia/add">Crear Nueva Materia</a></span>
+						<span class="menu_Item"><a href="/soe/dashboard/materia/add">Nueva Materia</a></span>
 					</div>
 					<div class="columna">
 						<span class="menu_Item"><a href="">Listar Materias</a></span>
