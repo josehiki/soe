@@ -1,10 +1,9 @@
 {% include 'css/estilos.twig' %}
 {% include 'css/administrador_CSS.twig' %}
-
 <!DOCTYPE html>
 <html>
 	<head>	
-		<title>Admin Dashboard</title>
+		<title>Materia Dashboard</title>
 		{% block estilo %}{% endblock %}
 		{% block administrador_css %}{% endblock %}
 	</head>
@@ -16,22 +15,14 @@
 			</span>
 		</div>
 		<div class="content">
-			<h1 class="content_Title">Bienvenido</h1>
+			<h1 class="content_Title_Menus" >Gestión de materias</h1>
 			<div class="menu_Opciones">
 				<div class="fila">
 					<div class="columna">
-						<span class="menu_Item"><a href="menu_Admin_Profesor.html">Gestionar Profesor</a></span>
+						<span class="menu_Item"><a href="form_Nueva_Materia.html">Crear Nueva Materia</a></span>
 					</div>
 					<div class="columna">
-						<span class="menu_Item"><a href="menu_Admin_Alumno.html">Gestionar Alumno</a></span>
-					</div>
-				</div>
-				<div class="fila">
-					<div class="columna">
-						<span class="menu_Item"><a href="/soe/dashboard/materia">Gestionar Materia</a></span>						
-					</div>
-					<div class="columna">
-						<span class="menu_Item"><a href="menu_Admin_Secuencia.html">Gestionar Secuencia</a></span>						
+						<span class="menu_Item"><a href="">Listar Materias</a></span>
 					</div>
 				</div>
 			</div>			

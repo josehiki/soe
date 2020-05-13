@@ -16,4 +16,11 @@
 				'username' => $_SESSION['userName']
 			]);
 		}
+
+		function getAdminMateriaDashboard($request)
+		{
+			return $this->renderHTML('adminMateriaDash.twig', [
+				'username' => $_SESSION['userName']
+			]);
+		}
 	}
