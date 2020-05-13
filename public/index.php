@@ -69,7 +69,18 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-
+	$map->get('studentDashboard', '/soe/student', [
+		'controller' => 'App\Controllers\StudentDashController',
+		'action' => 'getStudentDashboard',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE2')
+	]);
+	$map->get('teacherDashboard', '/soe/teacher', [
+		'controller' => 'App\Controllers\TeacherDashController',
+		'action' => 'getTeacherDashboard',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE3')
+	]);
 
 	// POST METHOD
 	$map->post('PostLogin', '/soe/postLogin', [

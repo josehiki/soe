@@ -3,6 +3,9 @@
 
 	use Laminas\Diactoros\Response\RedirectResponse;
 	use App\Models\User;
+
+	// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../..');
+	// $dotenv->load();
 	/**
 	 * Controla el acceso al sistema y el logout, ademas imprime
 	 el login.
@@ -31,7 +34,24 @@
 					$_SESSION['userId'] = $user->idUser;
 					$_SESSION['userType'] = $user->userType;
 					$_SESSION['userName'] = $user->userName;
-					return new RedirectResponse('/soe/dashboard');
+					
+					try
+					{
+						if ($user->userType == 'admin') {
+							return new RedirectResponse('/soe/dashboard');
+
+						}elseif ($user->userType == 'student') {
+							return new RedirectResponse('/soe/student');
+
+						}elseif($user->userType == 'teacher') {
+							return new RedirectResponse('/soe/teacher');
+						}
+					}catch (\Exception $e)
+					{
+						echo $e;
+					}
+					
+					
 				}else
 				{
 					$responseMessage = 'Usuario o Contraseña incorrectos';
