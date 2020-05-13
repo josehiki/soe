@@ -1,1 +1,40 @@
-<h1>welcome admin</h1>
+{% include 'css/estilos.twig' %}
+{% include 'css/administrador_CSS.twig' %}
+
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Menu administrador_CSS</title>
+		{% block estilo %}{% endblock %}
+		{% block administrador_css %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+		<div class="content">
+			<h1 class="content_Title">Bienvenido</h1>
+			<div class="menu_Opciones">
+				<div class="fila">
+					<div class="columna">
+						<span class="menu_Item"><a href="menu_Admin_Profesor.html">Gestionar Profesor</a></span>
+					</div>
+					<div class="columna">
+						<span class="menu_Item"><a href="menu_Admin_Alumno.html">Gestionar Alumno</a></span>
+					</div>
+				</div>
+				<div class="fila">
+					<div class="columna">
+						<span class="menu_Item"><a href="menu_Admin_Materia.html">Gestionar Materia</a></span>						
+					</div>
+					<div class="columna">
+						<span class="menu_Item"><a href="menu_Admin_Secuencia.html">Gestionar Secuencia</a></span>						
+					</div>
+				</div>
+			</div>			
+		</div>
+	</body>
+</html>

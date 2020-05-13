@@ -58,6 +58,11 @@
 		'controller' => 'App\Controllers\LoginController',
 		'action' => 'getLogin'
 	]);
+	$map->get('Logout', '/soe/logout', [
+		'controller' => 'App\Controllers\LoginController',
+		'action' => 'logout',
+		'auth' => true
+	]);
 	$map->get('adminDashboard', '/soe/dashboard', [
 		'controller' => 'App\Controllers\AdminDashController',
 		'action' => 'getAdminDashboard',

@@ -30,6 +30,7 @@
 				{
 					$_SESSION['userId'] = $user->idUser;
 					$_SESSION['userType'] = $user->userType;
+					$_SESSION['userName'] = $user->userName;
 					return new RedirectResponse('/soe/dashboard');
 				}else
 				{
@@ -47,7 +48,7 @@
 
 		function logout($request)
 		{
-			unset($_SESSION['userId']);
-			$response = new RedirectResponse('/soe');
+			session_destroy();
+			return new RedirectResponse('/soe');
 		}
 	}
