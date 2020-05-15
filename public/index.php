@@ -83,6 +83,24 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+	$map->get('adminMateriaList', '/soe/dashboard/materia/list', [
+		'controller' => 'App\Controllers\AdminMateriaController',
+		'action' => 'getAdminMaterias',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->get('adminMateriaDeleteConfirmation', '/soe/dashboard/materia/list/{id}', [
+		'controller' => 'App\Controllers\AdminMateriaController',
+		'action' => 'getAdminMateriasDeleteConfirmation',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->get('adminMateriaDelete', '/soe/dashboard/materia/del/{id}', [
+		'controller' => 'App\Controllers\AdminMateriaController',
+		'action' => 'getAdminMateriasDelete',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 	// TEACHER ROUTES
 	$map->get('studentDashboard', '/soe/student', [
@@ -120,11 +138,16 @@
 	$matcher = $routerContainer->getMatcher();	
 	$route = $matcher->match($request);
 
+	foreach ($route->attributes as $key => $val) {
+	    $request = $request->withAttribute($key, $val);
+	}
+
 	if(!$route)
 	{
 		echo 'Ruta no encontrada';
 	}else{
 		$handlerData = $route->handler;
+
 		$controllerName = $handlerData['controller'];
 		$actionName = $handlerData['action'];
 		$needsAuth = $handlerData['auth'] ?? false;

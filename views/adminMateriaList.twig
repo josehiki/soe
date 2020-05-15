@@ -1,0 +1,64 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/administrador_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Materia Dashboard</title>
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+
+
+		{% block estilo %}{% endblock %}
+		{% block administrador_css %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+			<a href="/soe/dashboard/materia" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+		<div class="content">
+			<h1 class="content_Title_Menus" >Materias registradas</h1>
+			<p class="instrucciones">Posicionese sobre una materia para conocer las opciones</p>
+			{% if responseMessage != null %}
+				<div class="alert alert-primary" role="alert">
+					{{ responseMessage }}
+				</div>
+			{% endif %}
+			<ul class="lista_Materias">
+				{% for subject in subjects%}
+				<li class="instrucciones">
+					<p>{{subject.subjectName}}</p>
+					<a href="/soe/dashboard/materia/list/{{subject.idSubject}}">
+						<span  class="icon_Opcion eliminar" onclick="">Eliminar</span>
+					</a>
+					<span  class="icon_Opcion editar">Editar</span>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+		{% if selectedSubject != null %}
+			<div id="modal" class="modal">
+				<div class="modal_Content">
+					<span class="close" id="closeButton">
+						<a href="/soe/dashboard/materia/list">&times;</a>
+					</span>
+					<form method="get" action="/soe/dashboard/materia/del/{{selectedSubject.idSubject}}"> 
+						<span class="instrucciones">¿Seguro quieres eliminar esta materia?</span>
+						<h1>{{selectedSubject.subjectName}}</h1>
+						<button class="boton_Cancelar boton_Modal">
+							<a href="/soe/dashboard/materia/list">Cancelar</a>
+						</button>
+						<button class="boton boton_Modal">
+							Eliminar
+						</button>
+					</form>
+				</div>
+			</div>
+		{% endif %}
+	</body>
+</html>

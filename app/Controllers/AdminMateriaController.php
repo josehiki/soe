@@ -3,11 +3,13 @@
 
 	use App\Models\Subject;
 	use Respect\Validation\Validator as v;
+	use Laminas\Diactoros\Response\RedirectResponse;
 	/**
 	 * 
 	 */
 	class AdminMateriaController extends BaseController
 	{
+		// imprime el panel de control de materia
 		function getAdminAddMateriaForm($request)
 		{
 			return $this->renderHTML('adminMateriaAdd.twig', [
@@ -15,6 +17,8 @@
 			]);
 		}
 
+
+		// Da de alta una materia
 		function adminAddMateria($request)
 		{
 			$responseMessage = null;
@@ -54,5 +58,47 @@
                 	'username' => $_SESSION['userName']
                 ]);
 			}
+		}
+
+		// Imprime lista de materias
+		function getAdminMaterias($request)
+		{
+			$subjects = Subject::all();
+
+
+			return $this->renderHTML('adminMateriaList.twig', [
+				'username' => $_SESSION['userName'],
+				'subjects' => $subjects
+			]);
+		}
+
+		function getAdminMateriasDeleteConfirmation($request){
+			$postData = $request->getAttribute('id');
+
+			$subjects = Subject::all();
+			$subject = Subject::find($postData);
+
+			return $this->renderHTML('adminMateriaList.twig',[
+				'selectedSubject' => $subject,
+				'username' => $_SESSION['userName'],
+				'subjects' => $subjects
+			]);
+
+		}
+		function getAdminMateriasDelete($request){
+			$postData = $request->getAttribute('id');
+
+			$subject = Subject::find($postData);
+			$subject->delete();
+			
+			// $subjects = Subject::all();
+
+			// return $this->renderHTML('adminMateriaList.twig',[
+			// 	'username' => $_SESSION['userName'],
+			// 	'subjects' => $subjects,
+			// 	'responseMessage' => 'Materia eliminada'
+			// ]);
+
+			return new RedirectResponse('/soe/dashboard/materia/list');
 		}
 	}
