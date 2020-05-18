@@ -5,7 +5,7 @@
 	<head>	
 		<title>Materia Dashboard</title>
 		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
-
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
 
 		{% block estilo %}{% endblock %}
 		{% block administrador_css %}{% endblock %}
@@ -35,16 +35,18 @@
 					<a href="/soe/dashboard/materia/list/{{subject.idSubject}}">
 						<span  class="icon_Opcion eliminar" onclick="">Eliminar</span>
 					</a>
-					<span  class="icon_Opcion editar">Editar</span>
+					<a href="/soe/dashboard/materia/edit/{{subject.idSubject}}">
+						<span  class="icon_Opcion editar">Editar</span>
+					</a>
 				</li>
 				{% endfor %}
 			</ul>
 		</div>
 
 		{% if selectedSubject != null %}
-			<div id="modal" class="modal">
+			<div  class="modal_This">
 				<div class="modal_Content">
-					<span class="close" id="closeButton">
+					<span class="close" >
 						<a href="/soe/dashboard/materia/list">&times;</a>
 					</span>
 					<form method="get" action="/soe/dashboard/materia/del/{{selectedSubject.idSubject}}"> 
@@ -55,6 +57,27 @@
 						</button>
 						<button class="boton boton_Modal">
 							Eliminar
+						</button>
+					</form>
+				</div>
+			</div>
+		{% endif %}
+		{% if editedSubject != NULL %}
+			<div  class="modal_This">
+				<div class="modal_Content">
+					<span class="close" >
+						<a href="/soe/dashboard/materia/list">&times;</a>
+					</span>
+					<form method="post" action="/soe/dashboard/materia/edit/"> 
+						<h2>Editar materia</h2>
+						<span class="instrucciones">Modifique la informaci&oacuten que desea</span>
+						<input type="text" name="subjectId" value="{{editedSubject.idSubject}}" style="display: none;">
+						<input type="text" class="input_Text" value="{{editedSubject.subjectName}}" name="inputSubject">
+						<button class="boton_Cancelar boton_Modal">
+							<a href="/soe/dashboard/materia/list">Cancelar</a>
+						</button>
+						<button class="boton boton_Modal">
+							Modificar
 						</button>
 					</form>
 				</div>

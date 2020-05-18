@@ -101,4 +101,66 @@
 
 			return new RedirectResponse('/soe/dashboard/materia/list');
 		}
+
+		function getAdminMateriasEditForm($request){
+			$postData = $request->getAttribute('id');
+
+			$subjects = Subject::all();
+			$subject = Subject::find($postData);
+
+			return $this->renderHTML('adminMateriaList.twig',[
+				'editedSubject' => $subject,
+				'username' => $_SESSION['userName'],
+				'subjects' => $subjects
+			]);
+		}
+
+		function getAdminMateriasEdit($request)
+		{
+			$postData = $request->getParsedBody();
+			$projectValidator = v::key('inputSubject', v::stringType()->notEmpty());
+			
+			try
+                {					
+                	$projectValidator->assert($postData);
+
+                	$dbSubject = Subject::where('subjectName', $postData['inputSubject'])
+                	->first();
+                	
+                	if(!$dbSubject)
+                	{
+	                	$subject = Subject::find($postData['subjectId']);
+						$subject->subjectName = $postData['inputSubject'];
+						$subject->save();
+						$responseMessage = 'Materia modificada exitosamente';
+						$subjects = Subject::all();
+
+						return $this->renderHTML('adminMateriaList.twig', [
+		                	'responseMessage' => $responseMessage, 
+		                	'username' => $_SESSION['userName'], 
+		                	'subjects' => $subjects
+		                ]);
+                	}else
+                	{
+                		$responseMessage = 'Ya existe esa materia';
+                		$subjects = Subject::all();
+                		return $this->renderHTML('adminMateriaList.twig', [
+		                	'responseMessage' => $responseMessage, 
+		                	'username' => $_SESSION['userName'], 
+		                	'subjects' => $subjects
+		                ]);
+                	}
+
+                }catch(\Exception $e)
+                {
+                	$responseMessage = 'Porfavor rellene todos los campos';
+                	$subjects = Subject::all();
+                	return $this->renderHTML('adminMateriaList.twig', [
+	                	'responseMessage' => $responseMessage, 
+	                	'username' => $_SESSION['userName'], 
+	                	'subjects' => $subjects
+	                ]);
+                }
+                
+		}
 	}

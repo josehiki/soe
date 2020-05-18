@@ -101,6 +101,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+	$map->get('adminMateriaEditForm', '/soe/dashboard/materia/edit/{id}', [
+		'controller' => 'App\Controllers\AdminMateriaController',
+		'action' => 'getAdminMateriasEditForm',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 	// TEACHER ROUTES
 	$map->get('studentDashboard', '/soe/student', [
@@ -119,6 +125,7 @@
 	]);
 
 
+
 	// POST METHOD
 	$map->post('PostLogin', '/soe/postLogin', [
 		'controller' => 'App\Controllers\LoginController',
@@ -132,7 +139,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-
+	$map->post('adminMateriaEdit', '/soe/dashboard/materia/edit/', [
+		'controller' => 'App\Controllers\AdminMateriaController',
+		'action' => 'getAdminMateriasEdit',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 
 	$matcher = $routerContainer->getMatcher();	
