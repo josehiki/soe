@@ -23,4 +23,11 @@
 				'username' => $_SESSION['userName']
 			]);
 		}
+
+		function getAdminSecuenciaDashboard($request)
+		{
+			return $this->renderHTML('adminSecuenciaDash.twig', [
+				'username' => $_SESSION['userName']
+			]);
+		}
 	}

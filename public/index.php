@@ -65,18 +65,27 @@
 	]);
 
 	//ADMIN ROUTES
+	// DASHBOARD
 	$map->get('adminDashboard', '/soe/dashboard', [
 		'controller' => 'App\Controllers\AdminDashController',
 		'action' => 'getAdminDashboard',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	$map->get('adminMateriaDashboard', '/soe/dashboard/materia', [
+	$map->get('adminMateriaDash', '/soe/dashboard/materia', [
 		'controller' => 'App\Controllers\AdminDashController',
 		'action' => 'getAdminMateriaDashboard',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+	$map->get('adminSecuenciaDash', '/soe/dashboard/secuencia', [
+		'controller' => 'App\Controllers\AdminDashController',
+		'action' => 'getAdminSecuenciaDashboard',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+
+	// ADMIN MATERIA 
 	$map->get('adminMateriaAddForm', '/soe/dashboard/materia/add', [
 		'controller' => 'App\Controllers\AdminMateriaController',
 		'action' => 'getAdminAddMateriaForm',
@@ -107,6 +116,8 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+
+
 
 	// TEACHER ROUTES
 	$map->get('studentDashboard', '/soe/student', [
