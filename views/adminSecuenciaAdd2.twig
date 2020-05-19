@@ -11,42 +11,82 @@
 	</head>
 	<body>
 		<div class="header header_Usuario" >
-			<a href="/soe/dashboard/secuencia" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
-				<i class='fas fa-arrow-left'></i>
-			</a>
-			<p class="header_p"  id="nombreUsuario">{{username}}</p>
-			<span>
-				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
-			</span>
+			
+			<p class="header_p p_Secuencia"  id="nombreUsuario">{{username}}</p>
+			
 		</div>
 		<div class="content">
-			<h1 class="content_Title_Menus">Nueva Secuencia</h1>	
+			<h1 class="content_Title_Menus">Nueva Secuencia (Continuaci&oacuten)</h1>	
 			<br>		
-			<p class="instrucciones">Ahora, selecciona las materias que pertenecerán a esta secuencia</p>
+			<span class="instrucciones">Secuencia</span>
+			<h3>{{actualSecuencia.claveSecuencia}}</h3>
+			<span class="instrucciones">Carrera</span>
+			<h5>{{actualSecuencia.carreraSecuencia}}</h5>
+			<br><br>
 			{% if responseMessage != null %}
 				<div class="alert alert-primary" role="alert">
 					{{ responseMessage }}
 				</div>
 			{% endif %}
-				
-				<span class="instrucciones">Selecciona las materias que pertenecer&aacuten a esta secuencia</span><br>
-				<input type="text" name="materia" class="input_Text input_Text_Admin input_Materia" list="subjectsList">
-				<datalist id="subjectsList" >
-					{% for subject in subjects %}
-						<option value="{{subject.subjectName}}">
+
+			<p class="instrucciones">Ahora, selecciona las materias que pertenecerán a esta secuencia</p>
+			
+			<input type="text" name="materia" id="inputMateria" class="input_Text input_Text_Admin input_Materia" list="subjectsList" autocomplete="off">
+			<span class="editar span_Agregar" onclick="showModal()">Agregar</span>
+
+			<div id="modalSecuencia" class="modal_This modal_Secuencia">
+				<div class="modal_Content">
+					<span class="close" >
+						<a onclick="hideModal()">&times;</a>
+					</span>
+					<h4>¿Seguro quiere agregar esta materia?</h4>
+					<br><br>
+					<form method="post" action="/soe/dashboard/secuencia/add/sec2">
+						<input type="text" id="auxMateria" name="materia"  style="display: none;">
+						<input type="text" value="{{actualSecuencia.claveSecuencia}}" name="clave" style="display: none;">
+						<input type="text" value="{{actualSecuencia.carreraSecuencia}}" name="carrera" style="display: none;">
+
+						<a class="boton_Cancelar boton_Modal cancelar_Secuencia" onclick="hideModal()">
+							Cancelar
+						</a>
+						<button type="submit" class="boton boton_Modal">
+								Agregar
+						</button>
+					</form>
+				</div>
+			</div>
+			
+
+			<datalist id="subjectsList" >
+				{% for subject in subjects %}
+					<option value="{{subject.subjectName}}">
+				{% endfor %}
+			</datalist>
+			<br>
+			<h5 style="margin-top: .8cm;">Materias Seleccionadas<h5>
+			<ul class="lista_Materias_Secuencia">
+				{% if relSecSub != null %}
+					{% for rel in relSecSub %}
+						<li class="instrucciones">{{rel}}</li>
 					{% endfor %}
-				</datalist>
-				<span class="span_Agregar"><a href="" class="editar">Agregar</a></span><br><br>
-				<span class="instrucciones" >Materias seleccionadas</span>
-				<ul>
-					{% if materiasSeleccionadas != null %}
-						
-					{% endif %}
-				</ul>
-
-
-				<button type="submit" class="boton boton_Admin">Continuar</button>
-			</form>
+				{% endif %}
+			</ul>
+			
 		</div>
+		<script type="text/javascript">
+			function showModal(){
+				var materiaValue = document.getElementById('inputMateria').value;
+				if (materiaValue == '') {
+					alert('Ingresa una materia');
+				}else
+				{
+					document.getElementById('auxMateria').value = materiaValue;
+					document.getElementById('modalSecuencia').style.display = 'block';
+				}
+			}
+			function hideModal(){
+				document.getElementById('modalSecuencia').style.display = 'none';
+			}
+		</script>
 	</body>
 </html>

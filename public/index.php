@@ -174,6 +174,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+	$map->post('adminSecuenciaAddMateria', '/soe/dashboard/secuencia/add/sec2', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'addMateriatoSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 
 
