@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 	<head>	
-		<title>Materia Dashboard</title>
+		<title>List Materia</title>
 		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
 
@@ -71,7 +71,7 @@
 					<form method="post" action="/soe/dashboard/materia/edit/"> 
 						<h2>Editar materia</h2>
 						<span class="instrucciones">Modifique la informaci&oacuten que desea</span>
-						<input type="text" name="subjectId" value="{{editedSubject.idSubject}}" style="display: none;">
+						<input type="text" name="subjectId" value="{{editedSubject.idSubject}}" style="display: none;" required="true">
 						<input type="text" class="input_Text" value="{{editedSubject.subjectName}}" name="inputSubject">
 						<button class="boton_Cancelar boton_Modal">
 							<a href="/soe/dashboard/materia/list">Cancelar</a>

@@ -11,4 +11,5 @@
 	{
 		
 		protected $table = 'users';
+		protected $primaryKey = 'idUser';
 	}

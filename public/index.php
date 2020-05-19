@@ -117,6 +117,14 @@
 		'userType' => getenv('USER_TYPE1')
 	]);
 
+	// ADMIN SECUENCIA
+	$map->get('adminSecuenciaAddForm', '/soe/dashboard/secuencia/add', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'getAdminAddSecuenciaForm',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	
 
 
 	// TEACHER ROUTES
@@ -144,6 +152,8 @@
 	]);
 
 	// ADMIN ROUTES 
+
+	// ADMIN MATERIA 
 	$map->post('adminMateriaAdd', '/soe/dashboard/materia/add', [
 		'controller' => 'App\Controllers\AdminMateriaController',
 		'action' => 'adminAddMateria',
@@ -156,6 +166,15 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+
+	// ADMIN SECUENCIA
+	$map->post('adminSecuenciaAdd', '/soe/dashboard/secuencia/add/sec', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'getAdminAddSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+
 
 
 	$matcher = $routerContainer->getMatcher();	

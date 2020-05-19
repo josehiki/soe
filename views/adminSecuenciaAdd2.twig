@@ -1,0 +1,52 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/administrador_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Add Secuencia</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+		{% block estilo %}{% endblock %}
+		{% block administrador_css %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+			<a href="/soe/dashboard/secuencia" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+		<div class="content">
+			<h1 class="content_Title_Menus">Nueva Secuencia</h1>	
+			<br>		
+			<p class="instrucciones">Ahora, selecciona las materias que pertenecerán a esta secuencia</p>
+			{% if responseMessage != null %}
+				<div class="alert alert-primary" role="alert">
+					{{ responseMessage }}
+				</div>
+			{% endif %}
+				
+				<span class="instrucciones">Selecciona las materias que pertenecer&aacuten a esta secuencia</span><br>
+				<input type="text" name="materia" class="input_Text input_Text_Admin input_Materia" list="subjectsList">
+				<datalist id="subjectsList" >
+					{% for subject in subjects %}
+						<option value="{{subject.subjectName}}">
+					{% endfor %}
+				</datalist>
+				<span class="span_Agregar"><a href="" class="editar">Agregar</a></span><br><br>
+				<span class="instrucciones" >Materias seleccionadas</span>
+				<ul>
+					{% if materiasSeleccionadas != null %}
+						
+					{% endif %}
+				</ul>
+
+
+				<button type="submit" class="boton boton_Admin">Continuar</button>
+			</form>
+		</div>
+	</body>
+</html>
