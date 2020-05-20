@@ -10,4 +10,5 @@
 	{
 		protected $table = 'secuencias';
 		protected $primaryKey = 'idSecuencia';
+
 	}

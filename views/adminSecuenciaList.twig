@@ -1,0 +1,70 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/administrador_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Add Materia</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+		{% block estilo %}{% endblock %}
+		{% block administrador_css %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+			<a href="/soe/dashboard/secuencia" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+
+		<div class="content">
+			<h1 class="content_Title_Menus" >Secuencias registradas</h1>
+			<br>
+			<p class="instrucciones">Posicionese sobre una materia para conocer las opciones</p>
+			{% if responseMessage != null %}
+				<div class="alert alert-primary" role="alert">
+					{{ responseMessage }}
+				</div>
+			{% endif %}
+
+			<ul class="lista_Materias">
+				{% for secuencia in secuencias %}
+				<li class="instrucciones">
+					<span>{{secuencia.claveSecuencia}}</span>
+					<a href="">
+						<span  class="icon_Opcion eliminar" onclick="">Eliminar</span>
+					</a>
+					<a href="">
+						<span  class="icon_Opcion editar">Editar</span>
+					</a>
+					<a href="/soe/dashboard/secuencia/list/d/{{secuencia.claveSecuencia}}">
+						<span  class="icon_Opcion editar">Mostrar materias</span>
+					</a>
+
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+		{% if listSubjects != null %}
+			<div  class="modal_This">
+				<div class="modal_Content">
+					<span class="close" >
+						<a href="/soe/dashboard/secuencia/list">&times;</a>
+					</span>
+					<br>
+					<h4>{{actualSecuencia}}</h4>
+					<span class="instrucciones">Materias:</span>
+					<ul class="lista_Materias_Secuencia">
+						{% for list in listSubjects%}
+							<li class="">{{list.subjectName}}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		{% endif %}
+	</body>
+</html>

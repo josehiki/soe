@@ -198,4 +198,38 @@
 		}
 
 
+		function getAdminSecuenciaList($request)
+		{
+			$dbSecuencias = Secuencia::all(); //obtener todas las secuencias registradas
+
+			return $this->renderHTML('adminSecuenciaList.twig', [
+				'username' => $_SESSION['userName'],
+				'secuencias' => $dbSecuencias
+			]);
+		}
+
+		function getSecuenciaDetalle($request)
+		{
+			$dbSecuencias = Secuencia::all(); //permite volver a cargar las demas secuencias
+			$postData = $request->getAttribute('clave');
+			
+			$dbSecuencia = Secuencia::where('claveSecuencia', $postData)->first(); //obtener la informacion de la secuencia solicitada
+			$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
+			
+			$listSubject = null;//Lista de ids de las materias
+			foreach ($dbRel_Sec_Sub as $rel) {
+				$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
+				$listSubject[] = $auxSubject->idSubject;
+			}
+			
+			$listSubjectNames = Subject::find($listSubject);
+			// echo $listSubjectNames;
+
+			return $this->renderHTML('adminSecuenciaList.twig', [
+				'username' => $_SESSION['userName'],
+				'secuencias' => $dbSecuencias, 
+				'listSubjects' => $listSubjectNames, 
+				'actualSecuencia' => $postData
+			]);
+		}
 	}

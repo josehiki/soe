@@ -124,7 +124,18 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	
+	$map->get('adminSecuenciaList', '/soe/dashboard/secuencia/list', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'getAdminSecuenciaList',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->get('adminSecuenciaDetalle', '/soe/dashboard/secuencia/list/d/{clave}', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'getSecuenciaDetalle',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 	
 
 
