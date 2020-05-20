@@ -232,4 +232,58 @@
 				'actualSecuencia' => $postData
 			]);
 		}
+
+		function deleteSecuencia($request){
+			$dbSecuencias = Secuencia::all(); 
+			$postData = $request->getAttribute('clave');
+
+			return $this->renderHTML('adminSecuenciaList.twig', [
+				'username' => $_SESSION['userName'],
+				'secuencias' => $dbSecuencias, 
+				'deletedSubject' => $postData
+			]);
+		}
+
+		function getDeleteSecuencia($request)
+		{
+			$postData = $request->getParsedBody();
+
+			$dbSecuencia = Secuencia::where('claveSecuencia', $postData['clave'])->first(); //obtiene la informacion de la secuencia de la clave enviada 
+			$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtiene las relaciones de la secuencia enviada
+
+			if($dbSecuencia)
+			{
+				if($dbRel_Sec_Sub)
+				{
+					foreach ($dbRel_Sec_Sub as $rel) {
+						$auxRel = $rel;
+						$auxRel->delete();
+					}
+					$dbSecuencia->delete();
+					$dbSecuencias = Secuencia::all();
+					return $this->renderHTML('adminSecuenciaList.twig', [
+						'username' => $_SESSION['userName'],
+						'secuencias' => $dbSecuencias, 
+						'responseMessage' => 'La secuencia ha sido eliminada correctamente'
+					]);
+				}else{
+					$dbSecuencia->delete();
+					$dbSecuencias = Secuencia::all();
+					return $this->renderHTML('adminSecuenciaList.twig', [
+						'username' => $_SESSION['userName'],
+						'secuencias' => $dbSecuencias, 
+						'responseMessage' => 'La secuencia ha sido eliminada'
+					]);
+				}
+
+			}else
+			{
+				$dbSecuencias = Secuencia::all();
+				return $this->renderHTML('adminSecuenciaList.twig', [
+					'username' => $_SESSION['userName'],
+					'secuencias' => $dbSecuencias, 
+					'responseMessage' => 'Ha ocurrido un error'
+				]);
+			}
+		}
 	}

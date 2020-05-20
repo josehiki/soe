@@ -34,8 +34,8 @@
 				{% for secuencia in secuencias %}
 				<li class="instrucciones">
 					<span>{{secuencia.claveSecuencia}}</span>
-					<a href="">
-						<span  class="icon_Opcion eliminar" onclick="">Eliminar</span>
+					<a href="/soe/dashboard/secuencia/list/del/{{secuencia.claveSecuencia}}">
+						<span  class="icon_Opcion eliminar" >Eliminar</span>
 					</a>
 					<a href="">
 						<span  class="icon_Opcion editar">Editar</span>
@@ -63,6 +63,27 @@
 							<li class="">{{list.subjectName}}</li>
 						{% endfor %}
 					</ul>
+				</div>
+			</div>
+		{% endif %}
+
+		{% if deletedSubject != null %}
+			<div  class="modal_This">
+				<div class="modal_Content">
+					<span class="close" >
+						<a href="/soe/dashboard/secuencia/list">&times;</a>
+					</span>
+					<br>
+					<h3>¿Seguro desea borrar esta secuencia?</h3>
+					<form method="post" action="/soe/dashboard/secuencia/list/del">
+						<h5>{{deletedSubject}}</h5>
+						<br>
+						<input name="clave" value="{{deletedSubject}}" style="display: none;">
+						<a class="boton_Cancelar boton_Modal a_Boton_Secuencia" href="/soe/dashboard/secuencia/list">Cancelar</a>
+						<button class="boton boton_Modal">
+							Eliminar
+						</button>
+					</form>
 				</div>
 			</div>
 		{% endif %}

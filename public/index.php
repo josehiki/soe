@@ -136,7 +136,13 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	
+	$map->get('adminSecuenciaDelete', '/soe/dashboard/secuencia/list/del/{clave}', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'deleteSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+
 
 
 	// TEACHER ROUTES
@@ -198,6 +204,13 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+	$map->post('adminSecuenciaDeleted', '/soe/dashboard/secuencia/list/del', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'getDeleteSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+
 
 
 	$matcher = $routerContainer->getMatcher();	
