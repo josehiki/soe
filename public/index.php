@@ -125,6 +125,7 @@
 		'userType' => getenv('USER_TYPE1')
 	]);
 	
+	
 
 
 	// TEACHER ROUTES
@@ -180,7 +181,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-
+	$map->post('adminSecuenciaAddMateriaCancel', '/soe/dashboard/secuencia/add/sec2/cancel', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'addSecuenciaCancel',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 
 	$matcher = $routerContainer->getMatcher();	

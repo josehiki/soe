@@ -67,14 +67,44 @@
 			<ul class="lista_Materias_Secuencia">
 				{% if relSecSub != null %}
 					{% for rel in relSecSub %}
-						<li class="instrucciones">{{rel}}</li>
+						<li class="instrucciones li_Secuencia">{{rel}}</li>
 					{% endfor %}
 				{% endif %}
 			</ul>
-			
+			<div class="boton_Footer">
+				<button type="submit" class="boton_Cancelar boton_Modal cancelar_Secuencia" onclick="showModalCancel()">
+					Cancelar
+				</button>
+				<a href="/soe/dashboard/secuencia/add" style="color: white;" class="boton boton_Modal">
+						Terminar
+				</a>
+				<div id="modalSecuenciaCancel" class="modal_This modal_Secuencia">
+					<div class="modal_Content">
+						<span class="close" >
+							<a onclick="hideModalCancel()">&times;</a>
+						</span>
+						<h4>¿Está seguro de cancelar ahora?</h4>
+						<span class="instrucciones">Si cancela ahora se perderá todo lo que ha hecho y tanto las secuencias y las materias que haya agregado se perderán</span>
+						<br><br>
+						<form method="post" action="/soe/dashboard/secuencia/add/sec2/cancel">
+							<input type="text" value="{{actualSecuencia.claveSecuencia}}" name="clave" style="display: none;">
+
+							<a class="boton_Cancelar boton_Modal cancelar_Secuencia" onclick="hideModalCancel()">
+								Seguir Trabajando
+							</a>
+							<button type="submit" class="boton boton_Modal">
+									Cancelar
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+
+
 		</div>
 		<script type="text/javascript">
-			function showModal(){
+			function showModal()
+			{
 				var materiaValue = document.getElementById('inputMateria').value;
 				if (materiaValue == '') {
 					alert('Ingresa una materia');
@@ -84,8 +114,17 @@
 					document.getElementById('modalSecuencia').style.display = 'block';
 				}
 			}
-			function hideModal(){
+			function hideModal()
+			{
 				document.getElementById('modalSecuencia').style.display = 'none';
+			}
+			function showModalCancel()
+			{
+				document.getElementById('modalSecuenciaCancel').style.display = 'block';
+			}
+			function hideModalCancel()
+			{
+				document.getElementById('modalSecuenciaCancel').style.display = 'none';
 			}
 		</script>
 	</body>

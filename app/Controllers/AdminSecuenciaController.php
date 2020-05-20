@@ -5,6 +5,7 @@
 	use App\Models\Secuencia;
 	use App\Models\Rel_Sec_Sub;
 	use Respect\Validation\Validator as v;
+	use Laminas\Diactoros\Response\RedirectResponse;
 	/**
 	 * 
 	 */
@@ -23,7 +24,10 @@
 			$postData = $request->getParsedBody();
 			$carreras = [
 				'Licenciatura en Ciencias de la informática', 
-				'Ingenieria en informática'
+				'Ingenieria en informática', 
+				'Licenciatura en Administración industrial', 
+				'Ingeniería en Transporte', 
+				'Ingeniería Industrial'
 			];
 			$flag = false;
 
@@ -142,7 +146,7 @@
 						$auxMat = Subject::where('idSubject', $unit->idSubject)->first();
 						array_push($auxPrintRel, $auxMat->subjectName);
 					}
-					
+
 					$responseMessage = 'No se puede agregar la misma materia dos veces';
 					return $this->renderHTML('adminSecuenciaAdd2.twig', [
 						'username' => $_SESSION['userName'],
@@ -171,6 +175,26 @@
 						'subjects' => $dbAuxSubjects
 				]);
         	}
+		}
+
+		function addSecuenciaCancel($request)
+		{
+			$postData = $request->getParsedBody();
+
+			$dbSecuencia = Secuencia::where('claveSecuencia', $postData['clave'])->first(); //obtiene la informacion de la secuencia de la clave enviada 
+			$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtiene las relaciones de la secuencia enviada
+
+			if($dbRel_Sec_Sub)
+			{
+				foreach ($dbRel_Sec_Sub as $rel) {
+					$auxRel = $rel;
+					$auxRel->delete();
+				}
+				$dbSecuencia->delete();
+				return new RedirectResponse('/soe/dashboard/secuencia/add');
+			}else{
+				return new RedirectResponse('/soe/dashboard/secuencia/add');
+			}
 		}
 
 
