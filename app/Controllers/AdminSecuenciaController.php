@@ -100,45 +100,75 @@
 			$actualSecuencia->claveSecuencia = $postData['clave'];
 			$actualSecuencia->carreraSecuencia = $postData['carrera'];
 
+        	$dbSecuencias = Secuencia::where('claveSecuencia', $actualSecuencia->claveSecuencia)->first(); //obtener el registro de la secuencia que se esta trabajando
 			$dbSubject = Subject::where('subjectName', $postData['materia'])
                 	->first(); //comprobacion que existe la materia ingresada por el usuario
                 	
         	if($dbSubject)//existe la materia?
         	{
-            	$dbSecuencias = Secuencia::where('claveSecuencia', $actualSecuencia->claveSecuencia)->first(); //obtener el registro de la secuencia que se esta trabajando
-				
-				$newRel = new Rel_Sec_Sub(); //nueva instancia de la clase de relacion
-				$newRel->idSecuencia = $dbSecuencias->idSecuencia;
-				$newRel->idSubject = $dbSubject->idSubject;
-				$newRel->save();
+				// Comprobar que no existe ya una relacion de la secuencia con esa materia
+				$flag = Rel_Sec_Sub::where('idSecuencia', $dbSecuencias->idSecuencia)
+				->where('idSubject', $dbSubject->idSubject)->first();
 
-				$auxPrintRel = []; //auxiliar para el arreglo a imprimir 
-				$auxRel = Rel_Sec_Sub::where('idSecuencia', $dbSecuencias->idSecuencia)->get(); //busca todos los registros de la secuencia actual
+				if(!$flag)//si no encuentra una relacion previa existente
+				{
+					$newRel = new Rel_Sec_Sub(); //nueva instancia de la clase de relacion
+					$newRel->idSecuencia = $dbSecuencias->idSecuencia;
+					$newRel->idSubject = $dbSubject->idSubject;
+					$newRel->save();
 
-				// foreach ($auxRel as $unit) {
-				// 	echo $unit->idSubject;
-				// }
-				$otroNombre = null;
-				foreach ($auxRel as $unit) {
-					$otroNombre = Subject::where('idSubject', $unit->idSubject)->first();
-					array_push($auxPrintRel, $otroNombre->subjectName);
+					//busca todos los registros de la secuencia actual
+					$auxRel = Rel_Sec_Sub::where('idSecuencia', $dbSecuencias->idSecuencia)->get();
+					
+					$auxPrintRel = []; //auxiliar para el arreglo a imprimir 
+					foreach ($auxRel as $unit) {
+						$auxMat = Subject::where('idSubject', $unit->idSubject)->first();
+						array_push($auxPrintRel, $auxMat->subjectName);
+					}
+
+					$responseMessage = 'Materia agregada';
+					return $this->renderHTML('adminSecuenciaAdd2.twig', [
+						'username' => $_SESSION['userName'],
+						'responseMessage' => $responseMessage, 
+						'actualSecuencia' => $actualSecuencia, 
+						'relSecSub' => $auxPrintRel, 
+						'subjects' => $dbAuxSubjects
+					]);
+				}else{
+					$auxRel = Rel_Sec_Sub::where('idSecuencia', $dbSecuencias->idSecuencia)->get();
+					
+					$auxPrintRel = []; //auxiliar para el arreglo a imprimir 
+					foreach ($auxRel as $unit) {
+						$auxMat = Subject::where('idSubject', $unit->idSubject)->first();
+						array_push($auxPrintRel, $auxMat->subjectName);
+					}
+					
+					$responseMessage = 'No se puede agregar la misma materia dos veces';
+					return $this->renderHTML('adminSecuenciaAdd2.twig', [
+						'username' => $_SESSION['userName'],
+						'responseMessage' => $responseMessage, 
+						'actualSecuencia' => $actualSecuencia, 
+						'relSecSub' => $auxPrintRel, 
+						'subjects' => $dbAuxSubjects
+					]);	
 				}
-				return $this->renderHTML('adminSecuenciaAdd2.twig', [
-					'username' => $_SESSION['userName'],
-					'responseMessage' => $responseMessage, 
-					'actualSecuencia' => $actualSecuencia, 
-					'relSecSub' => $auxPrintRel, 
-					'subjects' => $dbAuxSubjects
-				]);
         	}else
         	{
+        		$auxRel = Rel_Sec_Sub::where('idSecuencia', $dbSecuencias->idSecuencia)->get();
+					
+					$auxPrintRel = []; //auxiliar para el arreglo a imprimir 
+					foreach ($auxRel as $unit) {
+						$auxMat = Subject::where('idSubject', $unit->idSubject)->first();
+						array_push($auxPrintRel, $auxMat->subjectName);
+					}
         		$responseMessage = 'La materia que ingreso no existe';
 
         		return $this->renderHTML('adminSecuenciaAdd2.twig', [
 					'username' => $_SESSION['userName'],
-					'responseMessage' => $responseMessage, 
-					'actualSecuencia' => $actualSecuencia,
-					'subjects' => $dbAuxSubjects
+						'responseMessage' => $responseMessage, 
+						'actualSecuencia' => $actualSecuencia, 
+						'relSecSub' => $auxPrintRel, 
+						'subjects' => $dbAuxSubjects
 				]);
         	}
 		}
