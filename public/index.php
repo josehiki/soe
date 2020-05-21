@@ -53,7 +53,7 @@
 	$map = $routerContainer->getMap();
 
 	//ROUTES MAP
-	//GET METHOD 
+	// LOGIN & LOGOUT  
 	$map->get('Login', '/soe/', [
 		'controller' => 'App\Controllers\LoginController',
 		'action' => 'getLogin'
@@ -63,8 +63,14 @@
 		'action' => 'logout',
 		'auth' => true
 	]);
+	$map->post('PostLogin', '/soe/postLogin', [
+		'controller' => 'App\Controllers\LoginController',
+		'action' => 'postLogin'
+	]);
 
-	//ADMIN ROUTES
+
+	// ADMIN!!!!!!!!!!!!!!
+
 	// DASHBOARD
 	$map->get('adminDashboard', '/soe/dashboard', [
 		'controller' => 'App\Controllers\AdminDashController',
@@ -72,77 +78,96 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	$map->get('adminMateriaDash', '/soe/dashboard/materia', [
+
+
+	//	MATERIA
+	$map->get('a.materia.getDashboard', '/soe/dashboard/materia', [
 		'controller' => 'App\Controllers\AdminDashController',
 		'action' => 'getAdminMateriaDashboard',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	$map->get('adminSecuenciaDash', '/soe/dashboard/secuencia', [
-		'controller' => 'App\Controllers\AdminDashController',
-		'action' => 'getAdminSecuenciaDashboard',
-		'auth' => true, 
-		'userType' => getenv('USER_TYPE1')
-	]);
 
-	// ADMIN MATERIA 
-	$map->get('adminMateriaAddForm', '/soe/dashboard/materia/add', [
+
+	$map->get('a.materia.AddForm', '/soe/dashboard/materia/add', [
 		'controller' => 'App\Controllers\AdminMateriaController',
 		'action' => 'getAdminAddMateriaForm',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	$map->get('adminMateriaList', '/soe/dashboard/materia/list', [
+	$map->get('a.materia.List', '/soe/dashboard/materia/list', [
 		'controller' => 'App\Controllers\AdminMateriaController',
 		'action' => 'getAdminMaterias',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	$map->get('adminMateriaDeleteConfirmation', '/soe/dashboard/materia/list/{id}', [
+	$map->get('a.materia.DeleteConfirmation', '/soe/dashboard/materia/list/{id}', [
 		'controller' => 'App\Controllers\AdminMateriaController',
 		'action' => 'getAdminMateriasDeleteConfirmation',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	$map->get('adminMateriaDelete', '/soe/dashboard/materia/del/{id}', [
+	$map->get('a.materia.Delete', '/soe/dashboard/materia/del/{id}', [
 		'controller' => 'App\Controllers\AdminMateriaController',
 		'action' => 'getAdminMateriasDelete',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	$map->get('adminMateriaEditForm', '/soe/dashboard/materia/edit/{id}', [
+
+	$map->get('a.materia.EditForm', '/soe/dashboard/materia/edit/{id}', [
 		'controller' => 'App\Controllers\AdminMateriaController',
 		'action' => 'getAdminMateriasEditForm',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
 
-	// ADMIN SECUENCIA
-	$map->get('adminSecuenciaAddForm', '/soe/dashboard/secuencia/add', [
+	$map->post('a.materia.Add', '/soe/dashboard/materia/add', [
+		'controller' => 'App\Controllers\AdminMateriaController',
+		'action' => 'adminAddMateria',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->post('a.materia.Edit', '/soe/dashboard/materia/edit/', [
+		'controller' => 'App\Controllers\AdminMateriaController',
+		'action' => 'getAdminMateriasEdit',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+
+
+	// SECUENCIA
+	$map->get('a.secuencia.Dash', '/soe/dashboard/secuencia', [
+		'controller' => 'App\Controllers\AdminDashController',
+		'action' => 'getAdminSecuenciaDashboard',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+
+	$map->get('a.secuencia.AddForm', '/soe/dashboard/secuencia/add', [
 		'controller' => 'App\Controllers\AdminSecuenciaController',
 		'action' => 'getAdminAddSecuenciaForm',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	$map->get('adminSecuenciaList', '/soe/dashboard/secuencia/list', [
+	$map->get('a.secuencia.List', '/soe/dashboard/secuencia/list', [
 		'controller' => 'App\Controllers\AdminSecuenciaController',
 		'action' => 'getAdminSecuenciaList',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	$map->get('adminSecuenciaDetalle', '/soe/dashboard/secuencia/list/d/{clave}', [
+	$map->get('a.Secuencia.Detalle', '/soe/dashboard/secuencia/list/d/{clave}', [
 		'controller' => 'App\Controllers\AdminSecuenciaController',
 		'action' => 'getSecuenciaDetalle',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	$map->get('adminSecuenciaDelete', '/soe/dashboard/secuencia/list/del/{clave}', [
+	$map->get('a.secuencia.DeleteConfirmation', '/soe/dashboard/secuencia/list/del/{clave}', [
 		'controller' => 'App\Controllers\AdminSecuenciaController',
 		'action' => 'deleteSecuencia',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	$map->get('adminSecuenciaEditable', '/soe/dashboard/secuencia/list/e/{clave}', [
+	$map->get('a.secuencia.EditForm', '/soe/dashboard/secuencia/list/e/{clave}', [
 		'controller' => 'App\Controllers\AdminSecuenciaController',
 		'action' => 'getEditableSecuencia',
 		'auth' => true, 
@@ -150,7 +175,54 @@
 	]);
 
 
-	// TEACHER ROUTES
+	$map->post('a.secuencia.Add', '/soe/dashboard/secuencia/add/sec', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'getAdminAddSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->post('a.secuencia.AddContinue', '/soe/dashboard/secuencia/add/sec2', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'addMateriatoSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->post('a.secuencia.AddCanceled', '/soe/dashboard/secuencia/add/sec2/cancel', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'addSecuenciaCancel',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->post('a.secuencia.Delete', '/soe/dashboard/secuencia/list/del', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'getDeleteSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->post('a.secuencia.DeleteMateriafromSecuencia', '/soe/dashboard/secuencia/list/e/d', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'deletedMateriafromSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->post('a.secuencia.Rename', '/soe/dashboard/secuencia/list/e/r', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'renameSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->post('a.secuencia.addMateriatoSecuencia', '/soe/dashboard/secuencia/list/e/a', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'removeMateriaFromEditedSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+
+
+
+
+
+	// STUDENT!!!!!!!!!!!!!!	
 	$map->get('studentDashboard', '/soe/student', [
 		'controller' => 'App\Controllers\StudentDashController',
 		'action' => 'getStudentDashboard',
@@ -158,7 +230,7 @@
 		'userType' => getenv('USER_TYPE2')
 	]);
 
-	// ESTUDENT ROUTES
+	// tEACHER!!!!!!!!!!!!!!
 	$map->get('teacherDashboard', '/soe/teacher', [
 		'controller' => 'App\Controllers\TeacherDashController',
 		'action' => 'getTeacherDashboard',
@@ -168,71 +240,7 @@
 
 
 
-	// POST METHOD
-	$map->post('PostLogin', '/soe/postLogin', [
-		'controller' => 'App\Controllers\LoginController',
-		'action' => 'postLogin'
-	]);
-
-	// ADMIN ROUTES 
-
-	// ADMIN MATERIA 
-	$map->post('adminMateriaAdd', '/soe/dashboard/materia/add', [
-		'controller' => 'App\Controllers\AdminMateriaController',
-		'action' => 'adminAddMateria',
-		'auth' => true, 
-		'userType' => getenv('USER_TYPE1')
-	]);
-	$map->post('adminMateriaEdit', '/soe/dashboard/materia/edit/', [
-		'controller' => 'App\Controllers\AdminMateriaController',
-		'action' => 'getAdminMateriasEdit',
-		'auth' => true, 
-		'userType' => getenv('USER_TYPE1')
-	]);
-
-	// ADMIN SECUENCIA
-	$map->post('adminSecuenciaAdd', '/soe/dashboard/secuencia/add/sec', [
-		'controller' => 'App\Controllers\AdminSecuenciaController',
-		'action' => 'getAdminAddSecuencia',
-		'auth' => true, 
-		'userType' => getenv('USER_TYPE1')
-	]);
-	$map->post('adminSecuenciaAddMateria', '/soe/dashboard/secuencia/add/sec2', [
-		'controller' => 'App\Controllers\AdminSecuenciaController',
-		'action' => 'addMateriatoSecuencia',
-		'auth' => true, 
-		'userType' => getenv('USER_TYPE1')
-	]);
-	$map->post('adminSecuenciaAddMateriaCancel', '/soe/dashboard/secuencia/add/sec2/cancel', [
-		'controller' => 'App\Controllers\AdminSecuenciaController',
-		'action' => 'addSecuenciaCancel',
-		'auth' => true, 
-		'userType' => getenv('USER_TYPE1')
-	]);
-	$map->post('adminSecuenciaDeleted', '/soe/dashboard/secuencia/list/del', [
-		'controller' => 'App\Controllers\AdminSecuenciaController',
-		'action' => 'getDeleteSecuencia',
-		'auth' => true, 
-		'userType' => getenv('USER_TYPE1')
-	]);
-	$map->post('adminSecuenciaDeletedMateria', '/soe/dashboard/secuencia/list/e/d', [
-		'controller' => 'App\Controllers\AdminSecuenciaController',
-		'action' => 'deletedMateriafromSecuencia',
-		'auth' => true, 
-		'userType' => getenv('USER_TYPE1')
-	]);
-	$map->post('adminSecuenciaRename', '/soe/dashboard/secuencia/list/e/r', [
-		'controller' => 'App\Controllers\AdminSecuenciaController',
-		'action' => 'renameSecuencia',
-		'auth' => true, 
-		'userType' => getenv('USER_TYPE1')
-	]);
-	$map->post('adminMateriatoeditedSecuencia', '/soe/dashboard/secuencia/list/e/a', [
-		'controller' => 'App\Controllers\AdminSecuenciaController',
-		'action' => 'removeMateriaFromEditedSecuencia',
-		'auth' => true, 
-		'userType' => getenv('USER_TYPE1')
-	]);
+	
 
 	$matcher = $routerContainer->getMatcher();	
 	$route = $matcher->match($request);
