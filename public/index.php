@@ -221,7 +221,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-
+	$map->post('adminSecuenciaRename', '/soe/dashboard/secuencia/list/e/r', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'renameSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 
 	$matcher = $routerContainer->getMatcher();	

@@ -56,9 +56,11 @@
 						<a href="/soe/dashboard/secuencia/list">&times;</a>
 					</span>
 					<br>
-					<h4>{{actualSecuencia}}</h4>
+					<h4>{{actualSecuencia.claveSecuencia}}</h4>
+					<h5>{{actualSecuencia.carreraSecuencia}}</h5>
 					<span class="instrucciones">Materias:</span>
 					<ul class="lista_Materias_Secuencia">
+						
 						{% for list in listSubjects%}
 							<li class="">{{list.subjectName}}</li>
 						{% endfor %}
@@ -66,6 +68,23 @@
 				</div>
 			</div>
 		{% endif %}
+		{% if listSubjectsEmpty != null %}
+			<div  class="modal_This">
+				<div class="modal_Content">
+					<span class="close" >
+						<a href="/soe/dashboard/secuencia/list">&times;</a>
+					</span>
+					<br>
+					<h4>{{actualSecuencia.claveSecuencia}}</h4>
+					<h5>{{actualSecuencia.carreraSecuencia}}</h5>
+					<span class="instrucciones">Materias:</span>
+					<ul class="lista_Materias_Secuencia">
+						{{listSubjectsEmpty}}
+					</ul>
+				</div>
+			</div>
+		{% endif %}
+		
 
 		{% if deletedSubject != null %}
 			<div  class="modal_This">
@@ -105,9 +124,20 @@
 					<span class="instrucciones align-left" >Modifique la información que desea, cuando este listo cierre este mensaje o presione el boton X</span>
 					<br>
 					<span style="font-size: 1em;" class="align-left">Clave de la secuencia</span>
-					<form>
-						<input type="text" name="clave" class="input_Text input_Text_Admin align-left" value="{{editableSecuencia.claveSecuencia}}" style="width: 70%; display: inline;" placeholder="Clave secuencia (max. 5 caracteres)" required="true" onkeyup="this.value = this.value.toUpperCase();" autocomplete="off">
-						<button class="boton_To_A editar" >Cambiar</button>
+					<form method="post" action="/soe/dashboard/secuencia/list/e/r">
+						<input name="actualClave" value="{{editableSecuencia.claveSecuencia}}" style="display: none;">
+						<input type="text" name="clave" class="input_Text input_Text_Admin align-left" value="{{editableSecuencia.claveSecuencia}}" placeholder="Clave secuencia (max. 5 caracteres)" required="true" onkeyup="this.value = this.value.toUpperCase();" autocomplete="off">
+						<span style="font-size: 1em;" class="align-left">Carrera de la secuencia</span>
+						<input name="actualCarrera" value="{{editableSecuencia.carreraSecuencia}}" style="display: none;">
+						<select name="carrera" class="select input_Text" style="width: 100%;">
+							<option selected="true"  value="{{editableSecuencia.carreraSecuencia}}">{{editableSecuencia.carreraSecuencia}}</option>
+							<option value="Licenciatura en Administración industrial">Licenciatura en Administraci&oacuten industrial</option>
+							<option value="Licenciatura en Ciencias de la informática">Licenciatura en Ciencias de la inform&aacutetica</option>
+							<option value="Ingenieria en informática">Ingenier&iacutea en inform&aacutetica</option>
+							<option value="Ingeniería en Transporte">Ingenier&iacutea en Transporte</option>
+							<option value="Ingeniería Industrial">Ingenier&iacutea Industrial</option>
+						</select>
+						<button class="boton_To_A editar">Cambiar</button>
 					</form>
 
 					<span style="font-size: 1em;" class="align-left">Materias</span>

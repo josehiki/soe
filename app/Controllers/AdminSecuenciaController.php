@@ -31,7 +31,7 @@
 			];
 			$flag = false;
 
-			$validator = v::key('clave', v::notEmpty()->noWhitespace()->length(1,5)->uppercase()); 
+			$validator = v::key('clave', v::notEmpty()->noWhitespace()->length(5,5)->uppercase()); 
 
 			try {
 				$validator->assert($postData); //validacion para el formato de la clave
@@ -216,21 +216,32 @@
 			$dbSecuencia = Secuencia::where('claveSecuencia', $postData)->first(); //obtener la informacion de la secuencia solicitada
 			$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
 			
-			$listSubject = null;//Lista de ids de las materias
-			foreach ($dbRel_Sec_Sub as $rel) {
-				$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
-				$listSubject[] = $auxSubject->idSubject;
-			}
-			
-			$listSubjectNames = Subject::find($listSubject);
-			// echo $listSubjectNames;
+			if(!$dbRel_Sec_Sub->isEmpty()){
+				$listSubject = null;//Lista de ids de las materias
+				foreach ($dbRel_Sec_Sub as $rel) {
+					$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
+					$listSubject[] = $auxSubject->idSubject;
+				}
+				
+				$listSubjectNames = Subject::find($listSubject);
+				
+				return $this->renderHTML('adminSecuenciaList.twig', [
+					'username' => $_SESSION['userName'],
+					'secuencias' => $dbSecuencias, 
+					'listSubjects' => $listSubjectNames, 
+					'actualSecuencia' => $dbSecuencia 
 
-			return $this->renderHTML('adminSecuenciaList.twig', [
-				'username' => $_SESSION['userName'],
-				'secuencias' => $dbSecuencias, 
-				'listSubjects' => $listSubjectNames, 
-				'actualSecuencia' => $postData
-			]);
+				]);				
+			}else
+			{
+				return $this->renderHTML('adminSecuenciaList.twig', [
+					'username' => $_SESSION['userName'],
+					'secuencias' => $dbSecuencias, 
+					'listSubjectsEmpty' => 'No hay Agregadas', 
+					'actualSecuencia' => $dbSecuencia 
+
+				]);
+			}
 		}
 
 		function deleteSecuencia($request){
@@ -335,7 +346,7 @@
 				if($auxRelacion)
 				{
 					$auxRelacion->delete();
-					
+
 					// REECARGAR LA PAGINA DE EDITAR LA MATERIA
 					$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
 				
@@ -379,6 +390,144 @@
 				}
 			}else{
 				return new RedirectResponse('/soe/dashboard/secuencia/list');
+			}
+		}
+
+
+		function renameSecuencia($request)
+		{
+			$postData = $request->getParsedBody();
+			$dbSubjects = Subject::all(); //permite cargar las sugerencias de materia
+			$dbSecuencia = Secuencia::where('claveSecuencia', $postData['actualClave'])->first(); //obtener la informacion de la secuencia Actual
+
+			$carreras = [
+				'Licenciatura en Ciencias de la informática', 
+				'Ingenieria en informática', 
+				'Licenciatura en Administración industrial', 
+				'Ingeniería en Transporte', 
+				'Ingeniería Industrial'
+			];
+
+
+			$flag = false;
+
+			$validator = v::key('clave', v::notEmpty()->noWhitespace()->length(5,5)->uppercase()); 
+
+			try {
+				$validator->assert($postData); //validacion para el formato de la clave
+				
+				//verificar que no se haya insertado algo en el select de carrera
+				foreach ($carreras as $carr) {
+					if($postData['carrera'] == $carr)
+					{
+						$flag = true;
+						break;
+					}
+				}
+				if($flag) //accion si paso todas las validaciones 
+				{
+					// comprobacion de que no existe otra secuencia con la misma clave
+					$auxSecuencias = Secuencia::where('claveSecuencia', $postData['clave'])
+					->first();
+					if (!$auxSecuencias || $postData['actualClave'] == $postData['actualClave']) {
+
+						$dbSecuencia->claveSecuencia = $postData['clave'];
+						$dbSecuencia->carreraSecuencia = $postData['carrera'];
+						$dbSecuencia->save();
+
+						
+						$dbSecuencias = Secuencia::all(); //permite volver a cargar las demas secuencias
+			
+						// REECARGAR LA PAGINA DE EDITAR LA MATERIA
+						$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
+					
+						$listSubject = null;//Lista de ids de las materias
+						foreach ($dbRel_Sec_Sub as $rel) {
+							$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
+							$listSubject[] = $auxSubject->idSubject;
+						}
+						
+						$listSubjectNames = Subject::find($listSubject);
+						// echo $listSubjectNames;
+						return $this->renderHTML('adminSecuenciaList.twig', [
+							'username' => $_SESSION['userName'],
+							'secuencias' => $dbSecuencias,
+							'editableSecuencia' => $dbSecuencia,
+							'subjecNames' => $listSubjectNames,
+							'subjects' => $dbSubjects, 
+							'responseMessageEdit' => 'Secuencia actualizada'
+						]);	
+					
+					}else
+					{
+						$dbSecuencias = Secuencia::all(); //permite volver a cargar las demas secuencias
+			
+						// REECARGAR LA PAGINA DE EDITAR LA MATERIA
+						$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
+					
+						$listSubject = null;//Lista de ids de las materias
+						foreach ($dbRel_Sec_Sub as $rel) {
+							$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
+							$listSubject[] = $auxSubject->idSubject;
+						}
+						
+						$listSubjectNames = Subject::find($listSubject);
+						// echo $listSubjectNames;
+						return $this->renderHTML('adminSecuenciaList.twig', [
+							'username' => $_SESSION['userName'],
+							'secuencias' => $dbSecuencias,
+							'editableSecuencia' => $dbSecuencia,
+							'subjecNames' => $listSubjectNames,
+							'subjects' => $dbSubjects, 
+							'responseMessageEdit' => 'Ya existe esa clave'
+						]);	
+					} 
+				}else
+				{
+					$dbSecuencias = Secuencia::all(); //permite volver a cargar las demas secuencias
+			
+					// REECARGAR LA PAGINA DE EDITAR LA MATERIA
+					$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
+				
+					$listSubject = null;//Lista de ids de las materias
+					foreach ($dbRel_Sec_Sub as $rel) {
+						$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
+						$listSubject[] = $auxSubject->idSubject;
+					}
+					
+					$listSubjectNames = Subject::find($listSubject);
+					// echo $listSubjectNames;
+					return $this->renderHTML('adminSecuenciaList.twig', [
+						'username' => $_SESSION['userName'],
+						'secuencias' => $dbSecuencias,
+						'editableSecuencia' => $dbSecuencia,
+						'subjecNames' => $listSubjectNames,
+						'subjects' => $dbSubjects, 
+						'responseMessageEdit' => 'Revise su información'
+					]);	
+				}
+			} catch (\Exception $e) {
+				$dbSecuencias = Secuencia::all(); //permite volver a cargar las demas secuencias
+			
+				// REECARGAR LA PAGINA DE EDITAR LA MATERIA
+				$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
+			
+				$listSubject = null;//Lista de ids de las materias
+				foreach ($dbRel_Sec_Sub as $rel) {
+					$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
+					$listSubject[] = $auxSubject->idSubject;
+				}
+				
+				$listSubjectNames = Subject::find($listSubject);
+				// echo $listSubjectNames;
+				return $this->renderHTML('adminSecuenciaList.twig', [
+					'username' => $_SESSION['userName'],
+					'secuencias' => $dbSecuencias,
+					'editableSecuencia' => $dbSecuencia,
+					'subjecNames' => $listSubjectNames,
+					'subjects' => $dbSubjects, 
+					'responseMessageEdit' => 'Formato incorrecto en la clave'
+				]);	
 			}
 		}
 	}
