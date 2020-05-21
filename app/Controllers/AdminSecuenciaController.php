@@ -314,4 +314,71 @@
 				'subjects' => $dbSubjects
 			]);
 		}
+
+		function deletedMateriafromSecuencia($request)
+		{
+			$dbSecuencias = Secuencia::all(); //permite volver a cargar las demas secuencias
+			$dbSubjects = Subject::all(); //permite cargar las sugerencias de materia
+
+			
+			$postData = $request->getParsedBody();
+			
+			$dbSecuencia = Secuencia::where('claveSecuencia', $postData['claveSecuencia'])->first(); //obtener la informacion de la secuencia que se esta recibiendo
+			$dbSubject = Subject::where('subjectName', $postData['materia'])->first(); //obtener la informacion de la materia que se esta recibiendo
+
+			
+
+			if($dbSecuencia && $dbSubject)
+			{
+					$auxRelacion = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->where('idSubject', $dbSubject->idSubject)->first();
+				
+				if($auxRelacion)
+				{
+					$auxRelacion->delete();
+					
+					// REECARGAR LA PAGINA DE EDITAR LA MATERIA
+					$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
+				
+					$listSubject = null;//Lista de ids de las materias
+					foreach ($dbRel_Sec_Sub as $rel) {
+						$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
+						$listSubject[] = $auxSubject->idSubject;
+					}
+					
+					$listSubjectNames = Subject::find($listSubject);
+					// echo $listSubjectNames;
+					return $this->renderHTML('adminSecuenciaList.twig', [
+						'username' => $_SESSION['userName'],
+						'secuencias' => $dbSecuencias,
+						'editableSecuencia' => $dbSecuencia,
+						'subjecNames' => $listSubjectNames,
+						'subjects' => $dbSubjects, 
+						'responseMessageEdit' => 'Materia removida con exito'
+					]);	
+				}else
+				{
+					// REECARGAR LA PAGINA DE EDITAR LA MATERIA
+					$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
+				
+					$listSubject = null;//Lista de ids de las materias
+					foreach ($dbRel_Sec_Sub as $rel) {
+						$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
+						$listSubject[] = $auxSubject->idSubject;
+					}
+					
+					$listSubjectNames = Subject::find($listSubject);
+					// echo $listSubjectNames;
+					return $this->renderHTML('adminSecuenciaList.twig', [
+						'username' => $_SESSION['userName'],
+						'secuencias' => $dbSecuencias,
+						'editableSecuencia' => $dbSecuencia,
+						'subjecNames' => $listSubjectNames,
+						'subjects' => $dbSubjects, 
+						'responseMessageEdit' => 'No se ha encontrado la materia'
+					]);	
+				}
+			}else{
+				return new RedirectResponse('/soe/dashboard/secuencia/list');
+			}
+		}
 	}

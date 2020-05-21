@@ -99,7 +99,7 @@
 					<h4>{{editableSecuencia.claveSecuencia}}</h4>
 					{% if responseMessageEdit != null %}
 						<div class="alert alert-primary" role="alert">
-							{{ responseMessageEdite }}
+							{{responseMessageEdit}}
 						</div>
 					{% endif %}
 					<span class="instrucciones align-left" >Modifique la información que desea, cuando este listo cierre este mensaje o presione el boton X</span>
@@ -123,10 +123,13 @@
 					</form>
 					<ul class="lista_Materias_Secuencia">
 					{% for list in subjecNames%}
-							<li>{{list.subjectName}}
-								<a href="">
-									<span  class="icon_Opcion eliminar" >Eliminar</span>
-								</a>
+							<li>
+								<form method="post" action="/soe/dashboard/secuencia/list/e/d" class="form_Editable">
+									<span>{{list.subjectName}}</span>
+									<input type="text" name="claveSecuencia" value="{{editableSecuencia.claveSecuencia}}" style="display:none;">
+									<input type="text" name="materia" value="{{list.subjectName}}" style="display:none;">
+									<button class="boton_To_A eliminar">Eliminar</button>
+								</form>								
 							</li>
 						{% endfor %}
 					</ul>

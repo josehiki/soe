@@ -215,6 +215,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+	$map->post('adminSecuenciaDeletedMateria', '/soe/dashboard/secuencia/list/e/d', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'deletedMateriafromSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 
 
