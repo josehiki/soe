@@ -142,7 +142,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-
+	$map->get('adminSecuenciaEditable', '/soe/dashboard/secuencia/list/e/{clave}', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'getEditableSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 
 	// TEACHER ROUTES

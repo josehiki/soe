@@ -37,7 +37,7 @@
 					<a href="/soe/dashboard/secuencia/list/del/{{secuencia.claveSecuencia}}">
 						<span  class="icon_Opcion eliminar" >Eliminar</span>
 					</a>
-					<a href="">
+					<a href="/soe/dashboard/secuencia/list/e/{{secuencia.claveSecuencia}}">
 						<span  class="icon_Opcion editar">Editar</span>
 					</a>
 					<a href="/soe/dashboard/secuencia/list/d/{{secuencia.claveSecuencia}}">
@@ -84,6 +84,54 @@
 							Eliminar
 						</button>
 					</form>
+				</div>
+			</div>
+		{% endif %}
+
+		{% if editableSecuencia != null %}
+			<div  class="modal_This">
+				<div class="modal_Content modal_Secuencia_E">
+					<span class="close" >
+						<a href="/soe/dashboard/secuencia/list">&times;</a>
+					</span>
+					<br>
+					<h3>Editar secuencia</h3>
+					<h4>{{editableSecuencia.claveSecuencia}}</h4>
+					{% if responseMessageEdit != null %}
+						<div class="alert alert-primary" role="alert">
+							{{ responseMessageEdite }}
+						</div>
+					{% endif %}
+					<span class="instrucciones align-left" >Modifique la información que desea, cuando este listo cierre este mensaje o presione el boton X</span>
+					<br>
+					<span style="font-size: 1em;" class="align-left">Clave de la secuencia</span>
+					<form>
+						<input type="text" name="clave" class="input_Text input_Text_Admin align-left" value="{{editableSecuencia.claveSecuencia}}" style="width: 70%; display: inline;" placeholder="Clave secuencia (max. 5 caracteres)" required="true" onkeyup="this.value = this.value.toUpperCase();" autocomplete="off">
+						<button class="boton_To_A editar" >Cambiar</button>
+					</form>
+
+					<span style="font-size: 1em;" class="align-left">Materias</span>
+					<span style="font-size: .9em;" class="align-left">Agregar Materias</span>
+					<form>
+						<input type="text" name="clave" class="input_Text input_Text_Admin" style="width: 70%; display: inline;" placeholder="Ingresa el nomre de la materia a agregar" list="subjectsList" autocomplete="off" />
+						<datalist id="subjectsList" >
+							{% for subject in subjects %}
+								<option value="{{subject.subjectName}}">
+							{% endfor %}
+						</datalist>
+						<button class="boton_To_A editar" >Agregar</button>
+					</form>
+					<ul class="lista_Materias_Secuencia">
+					{% for list in subjecNames%}
+							<li>{{list.subjectName}}
+								<a href="">
+									<span  class="icon_Opcion eliminar" >Eliminar</span>
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+					<br>
+					<a href="/soe/dashboard/secuencia/list" class="boton boton_Modal a_Edit_Secuencia" style="color: white;">Terminar</a>
 				</div>
 			</div>
 		{% endif %}
