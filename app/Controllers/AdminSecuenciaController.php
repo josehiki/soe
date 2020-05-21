@@ -530,4 +530,97 @@
 				]);	
 			}
 		}
+
+		function removeMateriaFromEditedSecuencia($request)
+		{
+			$dbSubjects = Subject::all(); //permite cargar las sugerencias de materia
+			$postData = $request->getParsedBody();
+
+			$dbSecuencia = Secuencia::where('claveSecuencia', $postData['actualClave'])->first(); //obtener la informacion de la secuencia Actual
+			$dbSubject = Subject::where('subjectName', $postData['subject'])
+                	->first(); //comprobacion que existe la materia ingresada por el usuario
+                	
+        	if($dbSubject)//existe la materia?
+        	{
+				// Comprobar que no existe ya una relacion de la secuencia con esa materia
+				$flag = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)
+				->where('idSubject', $dbSubject->idSubject)->first();
+
+				if(!$flag)//si no encuentra una relacion previa existente
+				{
+					$newRel = new Rel_Sec_Sub(); //nueva instancia de la clase de relacion
+					$newRel->idSecuencia = $dbSecuencia->idSecuencia;
+					$newRel->idSubject = $dbSubject->idSubject;
+					$newRel->save();
+
+					$dbSecuencias = Secuencia::all(); //permite volver a cargar las demas secuencias
+				
+					// REECARGAR LA PAGINA DE EDITAR LA MATERIA
+					$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
+				
+					$listSubject = null;//Lista de ids de las materias
+					foreach ($dbRel_Sec_Sub as $rel) {
+						$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
+						$listSubject[] = $auxSubject->idSubject;
+					}
+					
+					$listSubjectNames = Subject::find($listSubject);
+					// echo $listSubjectNames;
+					return $this->renderHTML('adminSecuenciaList.twig', [
+						'username' => $_SESSION['userName'],
+						'secuencias' => $dbSecuencias,
+						'editableSecuencia' => $dbSecuencia,
+						'subjecNames' => $listSubjectNames,
+						'subjects' => $dbSubjects, 
+						'responseMessageEdit' => 'Materia agregada correctamente'
+					]);	
+				}else //si si encuentra una relacion previa
+				{
+					$dbSecuencias = Secuencia::all(); //permite volver a cargar las demas secuencias
+			
+					// REECARGAR LA PAGINA DE EDITAR LA MATERIA
+					$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
+				
+					$listSubject = null;//Lista de ids de las materias
+					foreach ($dbRel_Sec_Sub as $rel) {
+						$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
+						$listSubject[] = $auxSubject->idSubject;
+					}
+					
+					$listSubjectNames = Subject::find($listSubject);
+					// echo $listSubjectNames;
+					return $this->renderHTML('adminSecuenciaList.twig', [
+						'username' => $_SESSION['userName'],
+						'secuencias' => $dbSecuencias,
+						'editableSecuencia' => $dbSecuencia,
+						'subjecNames' => $listSubjectNames,
+						'subjects' => $dbSubjects, 
+						'responseMessageEdit' => 'No se puede agregar la misma materia'
+					]);	
+				}
+        	}else //no existe la materia
+        	{
+        		$dbSecuencias = Secuencia::all(); //permite volver a cargar las demas secuencias
+			
+				// REECARGAR LA PAGINA DE EDITAR LA MATERIA
+				$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
+			
+				$listSubject = null;//Lista de ids de las materias
+				foreach ($dbRel_Sec_Sub as $rel) {
+					$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
+					$listSubject[] = $auxSubject->idSubject;
+				}
+				
+				$listSubjectNames = Subject::find($listSubject);
+				// echo $listSubjectNames;
+				return $this->renderHTML('adminSecuenciaList.twig', [
+					'username' => $_SESSION['userName'],
+					'secuencias' => $dbSecuencias,
+					'editableSecuencia' => $dbSecuencia,
+					'subjecNames' => $listSubjectNames,
+					'subjects' => $dbSubjects, 
+					'responseMessageEdit' => 'No existe esa materia'
+				]);	
+        	}
+		}
 	}

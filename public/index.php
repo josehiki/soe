@@ -227,7 +227,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-
+	$map->post('adminMateriatoeditedSecuencia', '/soe/dashboard/secuencia/list/e/a', [
+		'controller' => 'App\Controllers\AdminSecuenciaController',
+		'action' => 'removeMateriaFromEditedSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 	$matcher = $routerContainer->getMatcher();	
 	$route = $matcher->match($request);

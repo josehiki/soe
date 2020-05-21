@@ -142,8 +142,9 @@
 
 					<span style="font-size: 1em;" class="align-left">Materias</span>
 					<span style="font-size: .9em;" class="align-left">Agregar Materias</span>
-					<form>
-						<input type="text" name="clave" class="input_Text input_Text_Admin" style="width: 70%; display: inline;" placeholder="Ingresa el nomre de la materia a agregar" list="subjectsList" autocomplete="off" />
+					<form method="post" action="/soe/dashboard/secuencia/list/e/a">
+						<input name="actualClave" value="{{editableSecuencia.claveSecuencia}}" style="display: none;">
+						<input type="text" name="subject" class="input_Text input_Text_Admin" style="width: 70%; display: inline;" placeholder="Ingresa el nombre de la materia a agregar" list="subjectsList" autocomplete="off" required />
 						<datalist id="subjectsList" >
 							{% for subject in subjects %}
 								<option value="{{subject.subjectName}}">
