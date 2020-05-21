@@ -30,4 +30,11 @@
 				'username' => $_SESSION['userName']
 			]);
 		}
+
+		function getAdminProfesorDashboard($request)
+		{
+			return $this->renderHTML('adminProfesorDash.twig', [
+				'username' => $_SESSION['userName']	
+			]); 
+		}
 	}

@@ -219,7 +219,13 @@
 	]);
 
 
-
+	// PROFESOR
+	$map->get('a.profesor.Dash', '/soe/dashboard/profesor', [
+		'controller' => 'App\Controllers\AdminDashController',
+		'action' => 'getAdminProfesorDashboard',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 
 	// STUDENT!!!!!!!!!!!!!!	
@@ -230,7 +236,7 @@
 		'userType' => getenv('USER_TYPE2')
 	]);
 
-	// tEACHER!!!!!!!!!!!!!!
+	// TEACHER!!!!!!!!!!!!!!
 	$map->get('teacherDashboard', '/soe/teacher', [
 		'controller' => 'App\Controllers\TeacherDashController',
 		'action' => 'getTeacherDashboard',
