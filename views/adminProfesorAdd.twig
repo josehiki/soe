@@ -1,0 +1,54 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/administrador_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Add Secuencia</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+		{% block estilo %}{% endblock %}
+		{% block administrador_css %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+			<a href="/soe/dashboard/profesor" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+		<div class="content">
+			<h1 class="content_Title_Menus">Nuevo Profesor</h1>	
+			<br>		
+			<h5>Ingrese la informaci&oacuten requerida</h5>
+			{% if responseMessage != null %}
+				<div class="alert alert-primary" role="alert">
+					{{ responseMessage }}
+				</div>
+			{% endif %}
+			<br>
+			<form method="post" action="/soe/dashboard/profesor/add">
+				<span class="instrucciones">Nombre del profesor</span>
+				<input type="text" name="nombreProfesor" class="input_Text input_Text_Admin" placeholder="Ingrese el nombre del profesor" required="true" /><br>
+				<span class="instrucciones">Correo electr&oacutenico del profesor</span>
+				<input type="email" name="emailProfesor" class="input_Text input_Text_Admin" placeholder="Ingrese el email del profesor" required="true" /><br>
+				<span class="instrucciones">Contraseña para el profesor (m&iacutenimo 6 car&aacutecteres)</span>
+				<input type="password" name="contraProfesor" class="input_Text input_Text_Admin" placeholder="Ingrese una contraseña (mínimo 6 carácteres)" required="true" /><br>
+				<span class="instrucciones">Repita la contraseña</span>
+				<input type="password" name="recontraProfesor" class="input_Text input_Text_Admin" placeholder="Repita la contraseña " required="true" /><br>
+				<span class="instrucciones">Tel&eacutefono</span>
+				<input type="text" name="telefonoProfesor" class="input_Text input_Text_Admin" placeholder="Ingrese el número de teléfono (10 dígitos)" required /><br>
+				<span class="instrucciones">Oficina (Opcional)</span><br>
+				<select name="academiaProfesor" class="select inline">
+					<option selected disabled>Selecciona una academia</option>
+					<option value="Informatica">Inform&aacutetica</option>
+					<option value="Computacion">Computaci&oacuten</option>		
+				</select>
+				<input type="text" name="cubiculoProfesor" class="input_Text inline" placeholder="Cubículo" style="margin-left: 1cm;">
+				<button class="boton boton_Admin">Continuar</button>
+			</form>
+		</div>
+	</body>
+</html>

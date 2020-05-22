@@ -227,6 +227,41 @@
 		'userType' => getenv('USER_TYPE1')
 	]);
 
+	$map->get('a.profesor.AddForm', '/soe/dashboard/profesor/a', [
+		'controller' => 'App\Controllers\AdminProfesorController',
+		'action' => 'getProfesorAddForm',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);	
+	$map->get('a.profesor.List', '/soe/dashboard/profesor/l', [
+		'controller' => 'App\Controllers\AdminProfesorController',
+		'action' => 'getProfesorList',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+
+
+	$map->post('a.profesor.Add', '/soe/dashboard/profesor/add', [
+		'controller' => 'App\Controllers\AdminProfesorController',
+		'action' => 'addProfesor',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);	
+	$map->post('a.profesor.Add.getMateriasfromSecuencia', '/soe/dashboard/profesor/add/sec', [
+		'controller' => 'App\Controllers\AdminProfesorController',
+		'action' => 'getMateriasfromSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);	
+	$map->post('a.profesor.Add.materiaSecuencia', '/soe/dashboard/profesor/add/mS', [
+		'controller' => 'App\Controllers\AdminProfesorController',
+		'action' => 'addMateriaSecuenciatoProfesor',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+
+
+
 
 	// STUDENT!!!!!!!!!!!!!!	
 	$map->get('studentDashboard', '/soe/student', [
