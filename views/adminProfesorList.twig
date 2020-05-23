@@ -135,7 +135,6 @@
 				            <input type="text" name="cubiculoProfesor" value="{{editableProfesor.office}}"  class="input_Text" placeholder="Cubículo">
                             <button class="boton_To_A editar">Cambiar</button>
                         </form>
-                        
                         <h4 class="top_Border">Clases:</h4>
                         <form method="post" class="no_Margin align-left" action="/soe/dashboard/profesor/e/m">
                             <span class="span align-left">Seleccione una secuencia para mostrar sus materias</span>
@@ -152,7 +151,7 @@
                         {% if listMaterias != null %}
                             <form method="post" action="">
                                 <span class="instrucciones align-left"> Secuencia: {{secuencia}}</span>
-                                <input type="" name="email" value="{{actualProfesor.email}}" style="display: none;">
+                                <input type="" name="email" value="" style="display: none;">
                                 <input type="" name="clave" value="{{secuencia}}" style="display: none;">
                                 <select class="input_Text input_Text_Admin inline align-left" name="materia" required style="width: 80%;">
                                     <option selected disabled>Seleccione una opción</option>
@@ -172,9 +171,10 @@
                             {% if listClases != null %}
                                 {% for list in listClases %}
                                     <li style="margin: 0;"> 
-                                        <form method="post" action="" class="form_Editable">
+                                        <form method="post" action="/soe/dashboard/profesor/edit/r" class="form_Editable">
                                             <span>{{list.nombreRel}}</span>
-                                            <input name="" value="" style="display:none;">
+                                            <input name="email" value="{{editableProfesor.email}}" style="display:none;">
+                                            <input name="nombreRel" value="{{list.nombreRel}}" style="display:none;">
                                             <button class="boton_To_A eliminar">Eliminar</button>
                                         </form>	
                                     </li>

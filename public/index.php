@@ -301,7 +301,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-
+	$map->post('a.profesor.edit.removeClase', '/soe/dashboard/profesor/edit/r', [
+		'controller' => 'App\Controllers\AdminProfesorController',
+		'action' => 'removeClasefromProfesor',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 	// STUDENT!!!!!!!!!!!!!!	
 	$map->get('studentDashboard', '/soe/student', [

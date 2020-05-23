@@ -635,5 +635,43 @@
 					]);
 				}
 			}
-		}
+		} //editProfesor
+
+		function removeClasefromProfesor($request)
+		{
+			$postData = $request->getParsedBody();
+			$dbUser = User::where('email', $postData)->first();
+			$auxdbUser_Rel = User_Rel::where('nombreRel', $postData['nombreRel'])->first();
+			
+			if($auxdbUser_Rel) //Existe la clase
+			{
+				$auxdbUser_Rel->delete();
+				
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				$listSecuencias = Secuencia::all();
+				$listProfesores = User::where('userType', 'teacher')->get();
+				return $this->renderHTML('adminProfesorList.twig', [
+					'username' => $_SESSION['userName'],
+					'listProfesores' => $listProfesores,
+					'editableProfesor' => $dbUser,
+					'listClases' => $dbUser_Rel, 
+					'listSecuencias' => $listSecuencias,
+					'responseMessageEdit' => 'Profesor eliminado de la clase'
+				]);
+			}else // no existe la clase
+			{
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				$listSecuencias = Secuencia::all();
+				$listProfesores = User::where('userType', 'teacher')->get();
+				return $this->renderHTML('adminProfesorList.twig', [
+					'username' => $_SESSION['userName'],
+					'listProfesores' => $listProfesores,
+					'editableProfesor' => $dbUser,
+					'listClases' => $dbUser_Rel, 
+					'listSecuencias' => $listSecuencias,
+					'responseMessageEdit' => 'Error no se encuentra la clase'
+				]);
+			}
+			
+		}// removeClasefromProfesor
 	}
