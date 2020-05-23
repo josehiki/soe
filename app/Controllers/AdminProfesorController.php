@@ -458,4 +458,182 @@
 			
 		} // getMatformSecEdit
 
+		function editProfesor($request)
+		{
+			$postData = $request->getParsedBody();
+			$dbUser = User::where('email', $postData)->first();
+			$validator = v::key('nombreProfesor', v::notEmpty()->stringType())
+						->key('emailProfesor', v::notEmpty()->email())
+						->key('telefonoProfesor', v::length(10,10)->number()); //validador de los paramtros recibidos
+			try
+			{
+				$validator->assert($postData); //validacion de postData
+				$auxUser = User::where('email', $postData['emailProfesor'])->first();
+				
+				if(!$auxUser || $dbUser->email == $postData['emailProfesor']){ //el email no esta registrado
+					if($postData['contraProfesor'] != '') // ingresaron
+					{
+						if(v::length(6,null)->validate($postData['contraProfesor'])) //la contraseña tiene mas de seir caracteres
+						{ 
+							$newUser = User::find($dbUser->idUser);
+							$newUser->userName = $postData['nombreProfesor'];
+							$newUser->email = $postData['emailProfesor'];
+							$newUser->userPassword = password_hash($postData['contraProfesor'], PASSWORD_DEFAULT);
+							$newUser->phone = $postData['telefonoProfesor'];
+							$newUser->office = $postData['cubiculoProfesor'];
+							if(isset($postData['academiaProfesor']))
+							{
+								$newUser->academy = $postData['academiaProfesor'];
+							}	
+							$newUser->save();
+							$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+							$dbUser = User::where('email', $postData)->first();
+							if(!$dbUser_Rel->isEmpty()) //el profesor tiene clases
+							{
+								$listSecuencias = Secuencia::all();
+								$listProfesores = User::where('userType', 'teacher')->get();
+								return $this->renderHTML('adminProfesorList.twig', [
+									'username' => $_SESSION['userName'],
+									'listProfesores' => $listProfesores,
+									'editableProfesor' => $dbUser,
+									'listClases' => $dbUser_Rel, 
+									'listSecuencias' => $listSecuencias,
+									'responseMessageEdit' => 'Profesor actualizado'
+								]);
+							}else //no tiene
+							{
+								$listSecuencias = Secuencia::all();
+								$listProfesores = User::where('userType', 'teacher')->get();
+								return $this->renderHTML('adminProfesorList.twig', [
+									'username' => $_SESSION['userName'],
+									'listProfesores' => $listProfesores,
+									'editableProfesor' => $dbUser, 
+									'listSecuencias' => $listSecuencias,
+									'responseMessageEdit' => 'Profesor actualizado'
+								]);
+							}
+						}else // la contraseña no cumple la validacion 
+						{
+							$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+							$dbUser = User::where('email', $postData)->first();
+							if(!$dbUser_Rel->isEmpty()) //el profesor tiene clases
+							{
+								$listSecuencias = Secuencia::all();
+								$listProfesores = User::where('userType', 'teacher')->get();
+								return $this->renderHTML('adminProfesorList.twig', [
+									'username' => $_SESSION['userName'],
+									'listProfesores' => $listProfesores,
+									'editableProfesor' => $dbUser,
+									'listClases' => $dbUser_Rel, 
+									'listSecuencias' => $listSecuencias,
+									'responseMessageEdit' => 'Formato incorrecto en la contraseña'
+								]);
+							}else //no tiene
+							{
+								$listSecuencias = Secuencia::all();
+								$listProfesores = User::where('userType', 'teacher')->get();
+								return $this->renderHTML('adminProfesorList.twig', [
+									'username' => $_SESSION['userName'],
+									'listProfesores' => $listProfesores,
+									'editableProfesor' => $dbUser, 
+									'listSecuencias' => $listSecuencias,
+									'responseMessageEdit' => 'Formato incorrecto en la contraseña'
+								]);
+							}
+						}
+					}else{ // no ingresaron un cambio de contraseña
+						$newUser = User::find($dbUser->idUser);
+						$newUser->userName = $postData['nombreProfesor'];
+						$newUser->email = $postData['emailProfesor'];
+						$newUser->phone = $postData['telefonoProfesor'];
+						$newUser->office = $postData['cubiculoProfesor'];
+						if(isset($postData['academiaProfesor']))
+						{
+							$newUser->academy = $postData['academiaProfesor'];
+						}	
+						$newUser->save();
+						$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+						$dbUser = User::where('email', $postData)->first();
+						if(!$dbUser_Rel->isEmpty()) //el profesor tiene clases
+						{
+							$listSecuencias = Secuencia::all();
+							$listProfesores = User::where('userType', 'teacher')->get();
+							return $this->renderHTML('adminProfesorList.twig', [
+								'username' => $_SESSION['userName'],
+								'listProfesores' => $listProfesores,
+								'editableProfesor' => $dbUser,
+								'listClases' => $dbUser_Rel, 
+								'listSecuencias' => $listSecuencias,
+								'responseMessageEdit' => 'Profesor actualizado'
+							]);
+						}else //no tiene
+						{
+							$listSecuencias = Secuencia::all();
+							$listProfesores = User::where('userType', 'teacher')->get();
+							return $this->renderHTML('adminProfesorList.twig', [
+								'username' => $_SESSION['userName'],
+								'listProfesores' => $listProfesores,
+								'editableProfesor' => $dbUser, 
+								'listSecuencias' => $listSecuencias,
+								'responseMessageEdit' => 'Profesor actualizado'
+							]);
+						}
+					}
+					}else{ //el email ya esta registrado
+						$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+						if(!$dbUser_Rel->isEmpty()) //el profesor tiene clases
+						{
+							$listSecuencias = Secuencia::all();
+							$listProfesores = User::where('userType', 'teacher')->get();
+							return $this->renderHTML('adminProfesorList.twig', [
+								'username' => $_SESSION['userName'],
+								'listProfesores' => $listProfesores,
+								'editableProfesor' => $dbUser,
+								'listClases' => $dbUser_Rel, 
+								'listSecuencias' => $listSecuencias,
+								'responseMessageEdit' => 'El correo registrado ya existe'
+							]);
+						}else //no tiene
+						{
+							$listSecuencias = Secuencia::all();
+							$listProfesores = User::where('userType', 'teacher')->get();
+							return $this->renderHTML('adminProfesorList.twig', [
+								'username' => $_SESSION['userName'],
+								'listProfesores' => $listProfesores,
+								'editableProfesor' => $dbUser, 
+								'listSecuencias' => $listSecuencias,
+								'responseMessageEdit' => 'El correo registrado ya existe'
+							]);
+						}
+					}
+			}catch(\Exception $e) // no pasa la validacion
+			{
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				
+				if(!$dbUser_Rel->isEmpty()) //el profesor tiene clases
+				{
+					$listSecuencias = Secuencia::all();
+					$listProfesores = User::where('userType', 'teacher')->get();
+					return $this->renderHTML('adminProfesorList.twig', [
+						'username' => $_SESSION['userName'],
+						'listProfesores' => $listProfesores,
+						'editableProfesor' => $dbUser,
+						'listClases' => $dbUser_Rel, 
+						'listSecuencias' => $listSecuencias,
+						'responseMessageEdit' => 'Algo salio mal, por favor revisa tu información'
+					]);
+				}else //no tiene
+				{
+					$listSecuencias = Secuencia::all();
+					$listProfesores = User::where('userType', 'teacher')->get();
+					return $this->renderHTML('adminProfesorList.twig', [
+						'username' => $_SESSION['userName'],
+						'listProfesores' => $listProfesores,
+						'editableProfesor' => $dbUser, 
+						'listSecuencias' => $listSecuencias,
+						'responseMessageEdit' => 'Algo salio mal, por favor revisa tu información'
+					]);
+				}
+			}
+		}
 	}

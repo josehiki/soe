@@ -116,7 +116,8 @@
                                 {{responseMessageEdit}}
                             </div>
                         {% endif %}
-                        <form>
+                        <form method="post" action="/soe/dashboard/profesor/edit">
+				            <input name="email" value="{{editableProfesor.email}}" style="display: none;"/>
                             <span class="span align-left">Nombre</span>
         				    <input type="text" name="nombreProfesor" value="{{editableProfesor.userName}}" class="input_Text input_Text_Admin" placeholder="Ingrese el nombre del profesor" required="true" />
                             <span class="span align-left">Email</span>

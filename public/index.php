@@ -295,6 +295,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+	$map->post('a.profesor.edit.generalInformation', '/soe/dashboard/profesor/edit', [
+		'controller' => 'App\Controllers\AdminProfesorController',
+		'action' => 'editProfesor',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 
 	// STUDENT!!!!!!!!!!!!!!	
