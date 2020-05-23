@@ -250,4 +250,50 @@
 			$dbUser->delete();
 			return new RedirectResponse('/soe/dashboard/alumno/a');
 		}//addAlumnoCanceled
+
+		function getAlumnoDeleteConfirmation($request)
+		{
+			$postData = $request->getAttribute('email');
+
+			$deleteAlumno = User::where('email', $postData)->first();
+			$listAlumnos = User::where('userType', 'student')->get();
+			return $this->renderHTML('adminAlumnoList.twig', [
+				'username' => $_SESSION['userName'],
+				'listAlumnos' => $listAlumnos,
+				'deleteAlumno' => $deleteAlumno
+			]);
+		}//getAlumnoDeleteConfirmation
+
+		function deleteAlumno($request)
+		{
+			$postData = $request->getParsedBody();
+			$dbUser = User::where('email', $postData['email'])->first();
+
+			if($dbUser) // existe el usuario
+			{
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				if(!$dbUser_Rel->isEmpty())
+				{
+					foreach ($dbUser_Rel as $rel) {
+						$auxUser_Rel = User_Rel::find($rel->_id);
+						$auxUser_Rel->delete();
+					}
+				}
+				$dbUser->delete();
+				$listAlumnos = User::where('userType', 'student')->get();
+				return $this->renderHTML('adminAlumnoList.twig', [
+					'username' => $_SESSION['userName'],
+					'listAlumnos' => $listAlumnos,
+					'responseMessage' => 'Alumno eliminado con exito'
+				]);
+			}else // no existe el usuario
+			{
+				$listAlumnos = User::where('userType', 'student')->get();
+				return $this->renderHTML('adminAlumnoList.twig', [
+					'username' => $_SESSION['userName'],
+					'listAlumnos' => $listAlumnos,
+					'responseMessage' => 'El alumno no existe'
+				]);
+			}
+		}//deleteAlumno
     }

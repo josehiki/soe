@@ -1,1 +1,71 @@
-<h1>list
+{% include 'css/estilos.twig' %}
+{% include 'css/administrador_CSS.twig' %}
+<html>
+	<head>	
+		<title>Lista Profesores</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+		{% block estilo %}{% endblock %}
+		{% block administrador_css %}{% endblock %}
+	</head>
+    <body>
+        <div class="header header_Usuario" >
+			<a href="/soe/dashboard/alumno" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+        <div class="content">
+            <h1 class="content_Title_Menus" >Alumnos registrados</h1>
+			<br>
+			<p class="instrucciones">Posicionese sobre un alumno para conocer las opciones</p>
+			{% if responseMessage != null %}
+				<div class="alert alert-primary" role="alert">
+					{{ responseMessage }}
+				</div>
+			{% endif %}
+            <ul class="lista_Materias">
+				{% for alumno in listAlumnos %}
+				<li class="instrucciones">
+					<span>{{alumno.userName}}</span>
+					<a href="/soe/dashboard/alumno/d/{{alumno.email}}">
+						<span  class="icon_Opcion eliminar" >Eliminar</span>
+					</a>
+					<a href="">
+						<span  class="icon_Opcion editar">Editar</span>
+					</a>
+					<a href="">
+						<span  class="icon_Opcion editar">Mostrar detalles</span>
+					</a>
+				</li>
+				{% endfor %}
+			</ul>
+
+            {% if deleteAlumno != null %}
+                <div  class="modal_This">
+                    <div class="modal_Content">
+                        <span class="close" >
+                            <a href="/soe/dashboard/alumno/l">&times;</a>
+                        </span>
+                        <br>
+                        <h3>¿Seguro desea eliminar este alumno?</h3>
+                        <form method="post" action="/soe/dashboard/alumno/del">
+                            <h5>{{deleteAlumno.userName}}</h5>
+                            <br>
+                            <input name="email" value="{{deleteAlumno.email}}" style="display: none;">
+                            <a class="boton_Cancelar boton_Modal a_Boton_Secuencia" href="/soe/dashboard/alumno/l">Cancelar</a>
+                            <button class="boton boton_Modal">
+                                Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+
+            
+        </div>
+    </body>
+<html>

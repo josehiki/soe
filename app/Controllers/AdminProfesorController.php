@@ -234,7 +234,7 @@
 				'listProfesores' => $listProfesores,
 				'deleteProfesor' => $deleteProfesor
 			]);
-		}
+		} //getProfesorDeleteConfirmation
 
 		function deleteProfesor($request)
 		{
