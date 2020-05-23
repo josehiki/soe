@@ -1,0 +1,111 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/administrador_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Add Alumno</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+		{% block estilo %}{% endblock %}
+		{% block administrador_css %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+			
+			<p class="header_p p_Secuencia"  id="nombreUsuario">{{username}}</p>
+			
+		</div>
+        <div class="content">
+            <h1 class="content_Title_Menus">Crear horario del alumno</h1>			
+			<span class="instrucciones">Alumno</span>
+			<h3>{{actualAlumno.userName}}</h3>
+			<span class="instrucciones">Email</span>
+			<h5>{{actualAlumno.email}}</h5><br>
+			{% if responseMessage != null %}
+				<div class="alert alert-primary" role="alert">
+					{{ responseMessage }}
+				</div>
+			{% endif %}
+			<span>A continuaci&oacuten podr&aacute agregar clases a este alumno. Tambi&eacuten puede hacerlo despu&eacutes presionando "Finalizar"</span>
+			<br><br>
+			<span class="instrucciones">Seleccione la secuencia para visualizar sus materias</span>
+            <form method="post" action="/soe/dashboard/alumno/add/sec">
+				<input type="" name="email" value="{{actualAlumno.email}}" style="display: none;">
+				<input type="text" class="input_Text input_Text_Admin inline" name="clave" placeholder="Ingrese la secuencia" list="auxSecuencias" required autocomplete="off" onkeyup="this.value = this.value.toUpperCase();">
+
+				<datalist id="auxSecuencias">
+					{% for secuencia in listSecuencias %}
+						<option value="{{secuencia.claveSecuencia}}">
+					{% endfor %}
+				</datalist>
+				<button class="boton_To_A editar inline">Seleccionar</button>
+			</form>
+			{% if listMaterias != null %}
+				<form method="post" action="/soe/dashboard/alumno/add/sec/c">
+					<span class="instrucciones"> Secuencia: {{secuencia}}</span>
+					<br>
+					<input type="" name="email" value="{{actualAlumno.email}}" style="display: none;">
+					<input type="" name="clave" value="{{secuencia}}" style="display: none;">
+					<select class="input_Text input_Text_Admin inline" name="materia" required>
+						<option selected disabled>Seleccione una opción</option>
+						{% for materia in listMaterias %}
+							<option value="{{materia.subjectName}}">
+							{{materia.subjectName}}</option>
+						{% endfor %}
+					</select>
+					<button class="boton_To_A editar inline">Agregar</button>		
+				</form>
+			{% endif %}
+			{% if messageList != null %}
+				<br>
+				<span class="instrucciones"> Secuencia: {{secuencia}}</span>
+				<h6>{{messageList}}</h6>
+			{% endif %}	
+			<h5 class="input_Text_Admin" style="border-top: 1px #333 solid;">Materias seleccionadas</h5>
+			<ul>
+				{% if listRelNames != null %}
+					{% for list in listRelNames %}
+						<li>{{list.nombreRel}}</li>
+					{% endfor %}
+				{% endif %}
+			</ul>
+			<div class="boton_Footer">
+				<button type="submit" class="boton_Cancelar boton_Modal cancelar_Secuencia" onclick="showModalCancel()">
+					Cancelar
+				</button>
+				<a href="/soe/dashboard/alumno/a" style="color: white;" class="boton boton_Modal">
+						Finalizar
+				</a>
+				<div id="modalSecuenciaCancel" class="modal_This modal_Secuencia">
+					<div class="modal_Content">
+						<span class="close" >
+							<a onclick="hideModalCancel()">&times;</a>
+						</span>
+						<h4>¿Está seguro de cancelar ahora?</h4>
+						<span class="instrucciones">Si cancela ahora se perderá todo lo que ha hecho, el alumno y las clases que le haya asignado se perderán</span>
+						<br><br>
+						<form method="post" action="/soe/dashboard/alumno/add/cancel">
+							<input type="" name="email" value="{{actualAlumno.email}}" style="display: none;">
+							<a class="boton_Cancelar boton_Modal cancelar_Secuencia" onclick="hideModalCancel()">
+								Continuar
+							</a>
+							<button type="submit" class="boton boton_Modal">
+									Cancelar
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+        </div>
+    </body>
+    <script type="text/javascript">
+        function showModalCancel()
+        {
+            document.getElementById('modalSecuenciaCancel').style.display = 'block';
+        }
+        function hideModalCancel()
+        {
+            document.getElementById('modalSecuenciaCancel').style.display = 'none';
+        }
+    </script>
+</html>

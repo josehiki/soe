@@ -1,0 +1,35 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/administrador_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Estudiante Dashboard</title>
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+		{% block estilo %}{% endblock %}
+		{% block administrador_css %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+			<a href="/soe/dashboard" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+		<div class="content">
+			<h1 class="content_Title_Menus" >Gestión de alumnos</h1>
+			<div class="menu_Opciones menu_Materias">
+				<div class="fila">
+					<div class="columna">
+						<span class="menu_Item"><a href="/soe/dashboard/alumno/a">Nuevo Alumno</a></span>
+					</div>
+					<div class="columna">
+						<span class="menu_Item"><a href="/soe/dashboard/alumno/l">Listar Alumno</a></span>
+					</div>
+				</div>
+			</div>			
+		</div>
+    </body>
+</html>

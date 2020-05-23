@@ -1,0 +1,58 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/administrador_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Add Alumno</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+		{% block estilo %}{% endblock %}
+		{% block administrador_css %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+			<a href="/soe/dashboard/alumno" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+        <div class="content">
+            <h1 class="content_Title_Menus">Nuevo Alumno</h1>	
+			<br>		
+			<h5>Ingrese la informaci&oacuten requerida</h5>
+			{% if responseMessage != null %}
+				<div class="alert alert-primary" role="alert">
+					{{ responseMessage }}
+				</div>
+			{% endif %}
+			<br>
+            <form method="post" action="/soe/dashboard/alumno/add">
+				<span class="instrucciones">Nombre del alumno</span>
+				<input type="text" name="nombreAlumno" class="input_Text input_Text_Admin" placeholder="Ingrese el nombre del alumno" required="true" /><br>
+				<span class="instrucciones">Correo electr&oacutenico del alumno</span>
+				<input type="email" name="emailAlumno" class="input_Text input_Text_Admin" placeholder="Ingrese el email del alumno" required="true" /><br>
+				<span class="instrucciones">Contraseña para el alumno (m&iacutenimo 6 car&aacutecteres)</span>
+				<input type="password" name="contraAlumno" class="input_Text input_Text_Admin" placeholder="Ingrese una contraseña (mínimo 6 carácteres)" required="true" /><br>
+				<span class="instrucciones">Repita la contraseña</span>
+				<input type="password" name="recontraAlumno" class="input_Text input_Text_Admin" placeholder="Repita la contraseña " required="true" /><br>
+				<span class="instrucciones">Tel&eacutefono</span>
+				<input type="text" name="telefonoAlumno" class="input_Text input_Text_Admin" placeholder="Ingrese el número de teléfono (10 dígitos)" required /><br>
+				<span class="instrucciones">Boleta</span>
+				<input type="text" name="boletaAlumno" class="input_Text input_Text_Admin" placeholder="Ingrese el número de boleta (10 dígitos)" required /><br>
+				<span class="instrucciones">Carrera</span>
+                <select name="carreraAlumno" class="input_Text input_Text_Admin" required>
+					<option selected="true" disabled >Selecciona una Carrera</option>
+					<option value="Licenciatura en Administración industrial">Licenciatura en Administraci&oacuten industrial</option>
+					<option value="Licenciatura en Ciencias de la informática">Licenciatura en Ciencias de la inform&aacutetica</option>
+					<option value="Ingenieria en informática">Ingenier&iacutea en inform&aacutetica</option>
+					<option value="Ingeniería en Transporte">Ingenier&iacutea en Transporte</option>
+					<option value="Ingeniería Industrial">Ingenier&iacutea Industrial</option>	
+				</select>
+				<button class="boton boton_Admin">Continuar</button>
+			</form>
+        </div>
+    </body>
+</html>

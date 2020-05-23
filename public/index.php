@@ -143,6 +143,7 @@
 		'userType' => getenv('USER_TYPE1')
 	]);
 
+
 	$map->get('a.secuencia.AddForm', '/soe/dashboard/secuencia/add', [
 		'controller' => 'App\Controllers\AdminSecuenciaController',
 		'action' => 'getAdminAddSecuenciaForm',
@@ -226,6 +227,7 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+
 
 	$map->get('a.profesor.AddForm', '/soe/dashboard/profesor/a', [
 		'controller' => 'App\Controllers\AdminProfesorController',
@@ -313,6 +315,57 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+
+
+	// ESTUDIANTE
+	$map->get('a.alumno.Dash', '/soe/dashboard/alumno', [
+		'controller' => 'App\Controllers\AdminDashController',
+		'action' => 'getAdminAlumnoDashboard',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);	
+
+	
+	$map->get('a.alumno.AddForm', '/soe/dashboard/alumno/a', [
+		'controller' => 'App\Controllers\AdminAlumnoController',
+		'action' => 'getAlumnoAddForm',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);	
+	$map->get('a.alumno.List', '/soe/dashboard/alumno/l', [
+		'controller' => 'App\Controllers\AdminAlumnoController',
+		'action' => 'getAlumnoList',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);	
+
+
+	$map->post('a.alumno.Add', '/soe/dashboard/alumno/add', [
+		'controller' => 'App\Controllers\AdminAlumnoController',
+		'action' => 'addAlumno',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->post('a.alumno.Add.getMateriafSecuencia', '/soe/dashboard/alumno/add/sec', [
+		'controller' => 'App\Controllers\AdminAlumnoController',
+		'action' => 'getMateriasfromSecuencia',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->post('a.alumno.Add.claseToAlumno', '/soe/dashboard/alumno/add/sec/c', [
+		'controller' => 'App\Controllers\AdminAlumnoController',
+		'action' => 'addClasetoAlumno',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->post('a.alumno.Add.cancel', '/soe/dashboard/alumno/add/cancel', [
+		'controller' => 'App\Controllers\AdminAlumnoController',
+		'action' => 'addAlumnoCanceled',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+
+
 
 	// STUDENT!!!!!!!!!!!!!!	
 	$map->get('studentDashboard', '/soe/student', [

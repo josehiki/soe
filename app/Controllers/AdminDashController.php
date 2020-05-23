@@ -37,4 +37,10 @@
 				'username' => $_SESSION['userName']	
 			]); 
 		}
+		function getAdminAlumnoDashboard($request)
+		{
+			return $this->renderHTML('adminAlumnoDash.twig', [
+				'username' => $_SESSION['userName']	
+			]); 
+		}
 	}
