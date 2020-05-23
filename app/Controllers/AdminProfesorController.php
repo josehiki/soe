@@ -295,14 +295,49 @@
 						'detailProfesor' => $dbUser
 					]);
 				}
-				
+			}else //el usuario no existe
+			{
 				$listProfesores = User::where('userType', 'teacher')->get();
-				// return $this->renderHTML('adminProfesorList.twig', [
-				// 	'username' => $_SESSION['userName'],
-				// 	'listProfesores' => $listProfesores,
-				// 	'responseMessage' => 'Profesor eliminado con exito'
-				// ]);
-			}else
+				return $this->renderHTML('adminProfesorList.twig', [
+					'username' => $_SESSION['userName'],
+					'listProfesores' => $listProfesores,
+					'responseMessage' => 'El profesor no existe'
+				]);
+			}			
+		} //getProfesorDetail
+
+		function getProfesorEditForm($request)
+		{
+			$postData = $request->getAttribute('email');
+			$dbUser = User::where('email', $postData)->first();
+			
+			if($dbUser) // existe el usuario
+			{
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				
+				if(!$dbUser_Rel->isEmpty()) //el profesor tiene clases
+				{
+					$listSecuencias = Secuencia::all();
+					$listProfesores = User::where('userType', 'teacher')->get();
+					return $this->renderHTML('adminProfesorList.twig', [
+						'username' => $_SESSION['userName'],
+						'listProfesores' => $listProfesores,
+						'editableProfesor' => $dbUser,
+						'listClases' => $dbUser_Rel, 
+						'listSecuencias' => $listSecuencias
+					]);
+				}else //no tiene
+				{
+					$listSecuencias = Secuencia::all();
+					$listProfesores = User::where('userType', 'teacher')->get();
+					return $this->renderHTML('adminProfesorList.twig', [
+						'username' => $_SESSION['userName'],
+						'listProfesores' => $listProfesores,
+						'editableProfesor' => $dbUser, 
+						'listSecuencias' => $listSecuencias
+					]);
+				}
+			}else //el usuario no existe
 			{
 				$listProfesores = User::where('userType', 'teacher')->get();
 				return $this->renderHTML('adminProfesorList.twig', [
@@ -311,7 +346,116 @@
 					'responseMessage' => 'El profesor no existe'
 				]);
 			}
+		} //getProfesorEditForm
+
+		function getMatformSecEdit($request)
+		{
+			$postData = $request->getParsedBody();
+			$dbUser = User::where('email', $postData['email'])->first(); //obtener el usuario con el que se esta trabajando
+
+			$dbSecuencia = Secuencia::where('claveSecuencia', $postData['clave'])->first(); //obtener la informacion de la secuencia solicitada
+
+			if($dbSecuencia) //La secuencia existe			
+			{ 
+				$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
+				if(!$dbRel_Sec_Sub->isEmpty()) //La secuencia tiene materias
+				{
+					$listSubject = null;
+					foreach ($dbRel_Sec_Sub as $rel) {
+						$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
+						$listSubject[] = $auxSubject->idSubject;
+					}
+					$listSubjectNames = Subject::find($listSubject);
+					$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				
+					if(!$dbUser_Rel->isEmpty()) //si el profesor tiene clases
+					{
+						$listSecuencias = Secuencia::all();
+						$listProfesores = User::where('userType', 'teacher')->get();
+						return $this->renderHTML('adminProfesorList.twig', [
+							'username' => $_SESSION['userName'],
+							'listProfesores' => $listProfesores,
+							'editableProfesor' => $dbUser,
+							'listClases' => $dbUser_Rel, 
+							'listSecuencias' => $listSecuencias,
+							'secuencia' => $postData['clave'],
+							'listMaterias' => $listSubjectNames,
+						]);
+					}else //no tiene
+					{
+						$listSecuencias = Secuencia::all();
+						$listProfesores = User::where('userType', 'teacher')->get();
+						return $this->renderHTML('adminProfesorList.twig', [
+							'username' => $_SESSION['userName'],
+							'listProfesores' => $listProfesores,
+							'editableProfesor' => $dbUser, 
+							'listSecuencias' => $listSecuencias,
+							'secuencia' => $postData['clave'],
+							'listMaterias' => $listSubjectNames,
+						]);
+					}
+					
+				}else // la secuencia no tiene materias
+				{
+					$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				
+					if(!$dbUser_Rel->isEmpty()) //si el profesor tiene clases
+					{
+						$listSecuencias = Secuencia::all();
+						$listProfesores = User::where('userType', 'teacher')->get();
+						return $this->renderHTML('adminProfesorList.twig', [
+							'username' => $_SESSION['userName'],
+							'listProfesores' => $listProfesores,
+							'editableProfesor' => $dbUser,
+							'listClases' => $dbUser_Rel, 
+							'listSecuencias' => $listSecuencias,
+							'secuencia' => $postData['clave'],
+							'messageList' => 'Esta secuencia no tiene materias registradas'
+						]);
+					}else //no tiene
+					{
+						$listSecuencias = Secuencia::all();
+						$listProfesores = User::where('userType', 'teacher')->get();
+						return $this->renderHTML('adminProfesorList.twig', [
+							'username' => $_SESSION['userName'],
+							'listProfesores' => $listProfesores,
+							'editableProfesor' => $dbUser, 
+							'listSecuencias' => $listSecuencias,
+							'secuencia' => $postData['clave'],
+							'messageList' => 'Esta secuencia no tiene materias registradas'
+						]);
+					}
+				}
+			}else // La secuencia no existe
+			{
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				
+				if(!$dbUser_Rel->isEmpty()) //si el profesor tiene clases
+				{
+					$listSecuencias = Secuencia::all();
+					$listProfesores = User::where('userType', 'teacher')->get();
+					return $this->renderHTML('adminProfesorList.twig', [
+						'username' => $_SESSION['userName'],
+						'listProfesores' => $listProfesores,
+						'editableProfesor' => $dbUser,
+						'listClases' => $dbUser_Rel, 
+						'listSecuencias' => $listSecuencias,
+						'responseMessageEdit' => 'No existe esa secuencia'
+					]);
+				}else //no tiene
+				{
+					$listSecuencias = Secuencia::all();
+					$listProfesores = User::where('userType', 'teacher')->get();
+					return $this->renderHTML('adminProfesorList.twig', [
+						'username' => $_SESSION['userName'],
+						'listProfesores' => $listProfesores,
+						'editableProfesor' => $dbUser, 
+						'listSecuencias' => $listSecuencias,
+						'responseMessageEdit' => 'No existe esa secuencia'
+					]);
+				}
+			}
 			
-			
-		}
+		} // getMatformSecEdit
+
 	}

@@ -154,15 +154,15 @@
 					</form>
 					<ul class="lista_Materias_Secuencia">
 					{% for list in subjecNames%}
-							<li>
-								<form method="post" action="/soe/dashboard/secuencia/list/e/d" class="form_Editable">
-									<span>{{list.subjectName}}</span>
-									<input type="text" name="claveSecuencia" value="{{editableSecuencia.claveSecuencia}}" style="display:none;">
-									<input type="text" name="materia" value="{{list.subjectName}}" style="display:none;">
-									<button class="boton_To_A eliminar">Eliminar</button>
-								</form>								
-							</li>
-						{% endfor %}
+						<li>
+							<form method="post" action="/soe/dashboard/secuencia/list/e/d" class="form_Editable">
+								<span>{{list.subjectName}}</span>
+								<input type="text" name="claveSecuencia" value="{{editableSecuencia.claveSecuencia}}" style="display:none;">
+								<input type="text" name="materia" value="{{list.subjectName}}" style="display:none;">
+								<button class="boton_To_A eliminar">Eliminar</button>
+							</form>								
+						</li>
+					{% endfor %}
 					</ul>
 					<br>
 					<a href="/soe/dashboard/secuencia/list" class="boton boton_Modal a_Edit_Secuencia" style="color: white;">Terminar</a>

@@ -251,6 +251,13 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+	$map->get('a.profesor.EditForm', '/soe/dashboard/profesor/e/{email}', [
+		'controller' => 'App\Controllers\AdminProfesorController',
+		'action' => 'getProfesorEditForm',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+
 
 	$map->post('a.profesor.Add', '/soe/dashboard/profesor/add', [
 		'controller' => 'App\Controllers\AdminProfesorController',
@@ -276,14 +283,18 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	$map->post('a.profesor.delete', '/soe/dashboard/profesor/add/del', [
+	$map->post('a.profesor.delete', '/soe/dashboard/profesor/del', [
 		'controller' => 'App\Controllers\AdminProfesorController',
 		'action' => 'deleteProfesor',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-
-
+	$map->post('a.profesor.edit.getMatfromSec', '/soe/dashboard/profesor/e/m', [
+		'controller' => 'App\Controllers\AdminProfesorController',
+		'action' => 'getMatformSecEdit',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 
 	// STUDENT!!!!!!!!!!!!!!	
