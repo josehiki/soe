@@ -239,7 +239,18 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-
+	$map->get('a.profesor.DeleteConfirmation', '/soe/dashboard/profesor/d/{email}', [
+		'controller' => 'App\Controllers\AdminProfesorController',
+		'action' => 'getProfesorDeleteConfirmation',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->get('a.profesor.Detail', '/soe/dashboard/profesor/detail/{email}', [
+		'controller' => 'App\Controllers\AdminProfesorController',
+		'action' => 'getProfesorDetail',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 	$map->post('a.profesor.Add', '/soe/dashboard/profesor/add', [
 		'controller' => 'App\Controllers\AdminProfesorController',
@@ -262,6 +273,12 @@
 	$map->post('a.profesor.Add.canceled', '/soe/dashboard/profesor/add/canceled', [
 		'controller' => 'App\Controllers\AdminProfesorController',
 		'action' => 'addProfesorCanceled',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->post('a.profesor.delete', '/soe/dashboard/profesor/add/del', [
+		'controller' => 'App\Controllers\AdminProfesorController',
+		'action' => 'deleteProfesor',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);

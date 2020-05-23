@@ -23,8 +23,10 @@
 
 		function getProfesorList($request) // Imprime la lista de profesores registrados
 		{
+			$listProfesores = User::where('userType', 'teacher')->get();
 			return $this->renderHTML('adminProfesorList.twig', [
-				'username' => $_SESSION['userName']
+				'username' => $_SESSION['userName'],
+				'listProfesores' => $listProfesores
 			]);
 		}
 
@@ -219,4 +221,97 @@
 			return new RedirectResponse('/soe/dashboard/profesor/a');
 
 		} //addProfesorCanceled
+
+		function getProfesorDeleteConfirmation($request)
+		{
+			$postData = $request->getAttribute('email');
+
+			$deleteProfesor = User::where('email', $postData)->first();
+			$listProfesores = User::where('userType', 'teacher')->get();
+			return $this->renderHTML('adminProfesorList.twig', [
+				'username' => $_SESSION['userName'],
+				'listProfesores' => $listProfesores,
+				'deleteProfesor' => $deleteProfesor
+			]);
+		}
+
+		function deleteProfesor($request)
+		{
+			$postData = $request->getParsedBody();
+			$dbUser = User::where('email', $postData['email'])->first();
+
+			if($dbUser) // existe el usuario
+			{
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				if(!$dbUser_Rel->isEmpty())
+				{
+					foreach ($dbUser_Rel as $rel) {
+						$auxUser_Rel = User_Rel::find($rel->_id);
+						$auxUser_Rel->delete();
+					}
+				}
+				$dbUser->delete();
+				$listProfesores = User::where('userType', 'teacher')->get();
+				return $this->renderHTML('adminProfesorList.twig', [
+					'username' => $_SESSION['userName'],
+					'listProfesores' => $listProfesores,
+					'responseMessage' => 'Profesor eliminado con exito'
+				]);
+			}else // no existe el usuario
+			{
+				$listProfesores = User::where('userType', 'teacher')->get();
+				return $this->renderHTML('adminProfesorList.twig', [
+					'username' => $_SESSION['userName'],
+					'listProfesores' => $listProfesores,
+					'responseMessage' => 'El profesor no existe'
+				]);
+			}
+		} //deleteProfesor
+
+		function getProfesorDetail($request)
+		{
+			$postData = $request->getAttribute('email');
+			$dbUser = User::where('email', $postData)->first();
+			
+			if($dbUser) // existe el usuario
+			{
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				
+				if(!$dbUser_Rel->isEmpty()) //el profesor tiene clases
+				{
+					$listProfesores = User::where('userType', 'teacher')->get();
+					return $this->renderHTML('adminProfesorList.twig', [
+						'username' => $_SESSION['userName'],
+						'listProfesores' => $listProfesores,
+						'detailProfesor' => $dbUser,
+						'listClases' => $dbUser_Rel
+					]);
+				}else //no tiene
+				{
+					$listProfesores = User::where('userType', 'teacher')->get();
+					return $this->renderHTML('adminProfesorList.twig', [
+						'username' => $_SESSION['userName'],
+						'listProfesores' => $listProfesores,
+						'detailProfesor' => $dbUser
+					]);
+				}
+				
+				$listProfesores = User::where('userType', 'teacher')->get();
+				// return $this->renderHTML('adminProfesorList.twig', [
+				// 	'username' => $_SESSION['userName'],
+				// 	'listProfesores' => $listProfesores,
+				// 	'responseMessage' => 'Profesor eliminado con exito'
+				// ]);
+			}else
+			{
+				$listProfesores = User::where('userType', 'teacher')->get();
+				return $this->renderHTML('adminProfesorList.twig', [
+					'username' => $_SESSION['userName'],
+					'listProfesores' => $listProfesores,
+					'responseMessage' => 'El profesor no existe'
+				]);
+			}
+			
+			
+		}
 	}

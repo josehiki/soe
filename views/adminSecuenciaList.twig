@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 	<head>	
-		<title>Add Materia</title>
+		<title>Lista Secuencias</title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
 		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 		{% block estilo %}{% endblock %}
@@ -23,7 +23,7 @@
 		<div class="content">
 			<h1 class="content_Title_Menus" >Secuencias registradas</h1>
 			<br>
-			<p class="instrucciones">Posicionese sobre una materia para conocer las opciones</p>
+			<p class="instrucciones">Posicionese sobre una secuencia para conocer las opciones</p>
 			{% if responseMessage != null %}
 				<div class="alert alert-primary" role="alert">
 					{{ responseMessage }}
@@ -61,7 +61,7 @@
 					<span class="instrucciones">Materias:</span>
 					<ul class="lista_Materias_Secuencia">
 						
-						{% for list in listSubjects%}
+						{% for list in listSubjects %}
 							<li class="">{{list.subjectName}}</li>
 						{% endfor %}
 					</ul>

@@ -1,1 +1,106 @@
-<h1>list</h1>
+{% include 'css/estilos.twig' %}
+{% include 'css/administrador_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Lista Profesores</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+		{% block estilo %}{% endblock %}
+		{% block administrador_css %}{% endblock %}
+	</head>
+    <body>
+        <div class="header header_Usuario" >
+			<a href="/soe/dashboard/profesor" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+        <div class="content">
+             <h1 class="content_Title_Menus" >Profesores registrados</h1>
+			<br>
+			<p class="instrucciones">Posicionese sobre una secuencia para conocer las opciones</p>
+			{% if responseMessage != null %}
+				<div class="alert alert-primary" role="alert">
+					{{ responseMessage }}
+				</div>
+			{% endif %}
+
+            <ul class="lista_Materias">
+				{% for profesor in listProfesores %}
+				<li class="instrucciones">
+					<span>{{profesor.userName}}</span>
+					<a href="/soe/dashboard/profesor/d/{{profesor.email}}">
+						<span  class="icon_Opcion eliminar" >Eliminar</span>
+					</a>
+					<a href="">
+						<span  class="icon_Opcion editar">Editar</span>
+					</a>
+					<a href="/soe/dashboard/profesor/detail/{{profesor.email}}">
+						<span  class="icon_Opcion editar">Mostrar detalles</span>
+					</a>
+
+				</li>
+				{% endfor %}
+			</ul>
+
+            {% if deleteProfesor != null %}
+                <div  class="modal_This">
+                    <div class="modal_Content">
+                        <span class="close" >
+                            <a href="/soe/dashboard/profesor/l">&times;</a>
+                        </span>
+                        <br>
+                        <h3>¿Seguro desea eliminar este profesor?</h3>
+                        <form method="post" action="/soe/dashboard/profesor/add/del">
+                            <h5>{{deleteProfesor.userName}}</h5>
+                            <br>
+                            <input name="email" value="{{deleteProfesor.email}}" style="display: none;">
+                            <a class="boton_Cancelar boton_Modal a_Boton_Secuencia" href="/soe/dashboard/profesor/l">Cancelar</a>
+                            <button class="boton boton_Modal">
+                                Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if detailProfesor != null %}
+                <div  class="modal_This">
+                    <div class="modal_Content modal_Secuencia_E">
+                        <span class="close" >
+                            <a href="/soe/dashboard/profesor/l">&times;</a>
+                        </span>
+                        <br>
+                        <h2>Detalle Profesor</h2>
+                        <span class="span align-left">Nombre</span>
+                        <h4 class="align-left">{{detailProfesor.userName}}</h4>
+                        <span class="span align-left">Email</span>
+                        <h5 class="align-left ">{{detailProfesor.email}}</h5>
+                        <span class="span align-left">Tel&eacutefono</span>
+                        <h5 class="align-left ">{{detailProfesor.phone}}</h5>   
+                        <span class="span align-left">Academia</span>
+                        <h5 class="align-left ">{{detailProfesor.academy}}</h5>   
+                        <span class="span align-left">Cubiculo</span>
+                        <h5 class="align-left ">{{detailProfesor.office}}</h5>   
+                        <span class="instrucciones top_Border">Clases:</span>
+                        <ul class="lista_Materias_Secuencia">
+                            {% if listClases != null %}
+                                {% for list in listClases %}
+                                    <li class="">{{list.nombreRel}}</li>
+                                {% endfor %}
+                            {% endif %}
+                            {% if listClases == null %}
+                                <h5 class="">Este profesor no tiene clases asignadas</h5>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </body>
+</html>
