@@ -26,9 +26,9 @@
 					{{ responseMessage }}
 				</div>
 			{% endif %}
-			<span>A continuaci&oacuten podr&aacute agregar materias a este profesor. Tambi&eacuten puede hacerlo despu&eacutes presionando "Finalizar"</span>
+			<span>A continuaci&oacuten podr&aacute agregar clases a este profesor. Tambi&eacuten puede hacerlo despu&eacutes presionando "Finalizar"</span>
 			<br><br>
-			<span class="instrucciones">Seleccione la secuencia a la cual pertenece la materia</span>
+			<span class="instrucciones">Seleccione la secuencia para visualizar sus materias</span>
 			<form method="post" action="/soe/dashboard/profesor/add/sec">
 				<input type="" name="email" value="{{actualProfesor.email}}" style="display: none;">
 				<input type="text" class="input_Text input_Text_Admin inline" name="clave" placeholder="Ingrese la secuencia" list="auxSecuencias" required autocomplete="off" onkeyup="this.value = this.value.toUpperCase();">
@@ -74,7 +74,7 @@
 					Cancelar
 				</button>
 				<a href="/soe/dashboard/profesor/a" style="color: white;" class="boton boton_Modal">
-						Terminar
+						Finalizar
 				</a>
 				<div id="modalSecuenciaCancel" class="modal_This modal_Secuencia">
 					<div class="modal_Content">

@@ -154,11 +154,11 @@
 			{
 				$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)
 				->where('idSubject', $dbSubject->idSubject)->first(); //busca a relacion de materia-secuencia
-				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)
-				->where('rel_id', $dbRel_Sec_Sub->id)
+				
+				$dbUser_Rel = User_Rel::where('rel_id', $dbRel_Sec_Sub->id)
 				->first(); // busca la relacion 
 				
-				if (!$dbUser_Rel) //si la relacion no existe, es nueva
+				if (!$dbUser_Rel) //si clase no tiene asignado un profesor
 				{
 					$newUser_Rel = new User_Rel();
 					$newUser_Rel->user_id = $dbUser->idUser;
@@ -173,9 +173,9 @@
 						'actualProfesor' => $dbUser, 
 						'listSecuencias' => $listSecuencias,
 						'listRelNames' => $listRelNames,
-						'responseMessage' => 'Materia agregada correctamente'
+						'responseMessage' => 'Clase agregada correctamente'
 					]);
-				}else //
+				}else //si nadie ha sido asignado a esa clase
 				{
 					$listRelNames = User_Rel::where('user_id', $dbUser->idUser)->get();
 					$listSecuencias = Secuencia::all();
@@ -184,7 +184,7 @@
 						'actualProfesor' => $dbUser, 
 						'listSecuencias' => $listSecuencias,
 						'listRelNames' => $listRelNames,
-						'responseMessage' => 'No se puede agregar dos veces la misma materia de la misma secuencia'
+						'responseMessage' => 'Ya existe un profesor asignado a esa clase'
 					]);
 				}
 				

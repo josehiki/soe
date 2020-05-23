@@ -3,7 +3,7 @@
 
 	use Illuminate\Database\Eloquent\Model;	
 	/**
-	 * 
+	 * Esta seran las clases
 	 */
 	class User_Rel extends Model
 	{
