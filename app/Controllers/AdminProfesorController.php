@@ -30,7 +30,8 @@
 			]);
 		}
 
-		function addProfesor($request){
+		function addProfesor($request) // Agrega la informacion general de un profesor
+		{
 			$postData = $request->getParsedBody();
 
 			$validator = v::key('nombreProfesor', v::notEmpty()->stringType())
@@ -85,9 +86,9 @@
 				]);
 			}
 
-		}
+		} //addProfesor
 
-		function getMateriasfromSecuencia($request)
+		function getMateriasfromSecuencia($request)// imprime las materias segun la secuencia seleccionada
 		{
 			$postData = $request->getParsedBody();
 			$dbUser = User::where('email', $postData['email'])->first(); //obtener el usuario con el que se esta trabajando
@@ -144,7 +145,7 @@
 				
 		} // getMateriasfromSecuencia
 
-		function addMateriaSecuenciatoProfesor($request)
+		function addMateriaSecuenciatoProfesor($request) // agrega la clase al profesor
 		{
 			$postData = $request->getParsedBody();
 			$dbUser = User::where('email', $postData['email'])->first(); //Informacion del profesor
@@ -674,4 +675,71 @@
 			}
 			
 		}// removeClasefromProfesor
+
+		function addClasetoProfesorinEdit($request) // agrega clases al profesor desde el menu editar
+		{
+			$postData = $request->getParsedBody();
+			$dbUser = User::where('email', $postData['email'])->first(); //Informacion del profesor
+			$dbSecuencia = Secuencia::where('claveSecuencia', $postData['clave'])->first(); //informacion de la secuencia
+			$dbSubject = Subject::where('subjectName', $postData['materia'])->first();
+
+			if($dbSecuencia && $dbSubject) //si existen tanto la secuencia como la materia
+			{
+				$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)
+				->where('idSubject', $dbSubject->idSubject)->first(); //busca a relacion de materia-secuencia
+				
+				$dbUser_Rel = User_Rel::where('rel_id', $dbRel_Sec_Sub->id)
+				->first(); // busca la relacion entre clase-profesor
+				
+				if (!$dbUser_Rel) //si la clase no tiene asignado un profesor
+				{
+					$newUser_Rel = new User_Rel();
+					$newUser_Rel->user_id = $dbUser->idUser;
+					$newUser_Rel->rel_id = $dbRel_Sec_Sub->id;
+					$newUser_Rel->nombreRel = $dbSecuencia->claveSecuencia.' - '.$dbSubject->subjectName;
+					$newUser_Rel->save();
+
+					$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+					$listSecuencias = Secuencia::all();
+					$listProfesores = User::where('userType', 'teacher')->get();
+					return $this->renderHTML('adminProfesorList.twig', [
+						'username' => $_SESSION['userName'],
+						'listProfesores' => $listProfesores,
+						'editableProfesor' => $dbUser,
+						'listClases' => $dbUser_Rel, 
+						'listSecuencias' => $listSecuencias,
+						'responseMessageEdit' => 'Clase agregada correctamente'
+					]);
+
+				}else //si la clase ya tiene un profesor asignado
+				{
+					$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+					$listSecuencias = Secuencia::all();
+					$listProfesores = User::where('userType', 'teacher')->get();
+					return $this->renderHTML('adminProfesorList.twig', [
+						'username' => $_SESSION['userName'],
+						'listProfesores' => $listProfesores,
+						'editableProfesor' => $dbUser,
+						'listClases' => $dbUser_Rel, 
+						'listSecuencias' => $listSecuencias,
+						'responseMessageEdit' => 'La clase ya tiene un profesor asignado'
+					]);
+				}
+				
+			}else // si no existe la materia o la secuencia
+			{
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				$listSecuencias = Secuencia::all();
+				$listProfesores = User::where('userType', 'teacher')->get();
+				return $this->renderHTML('adminProfesorList.twig', [
+					'username' => $_SESSION['userName'],
+					'listProfesores' => $listProfesores,
+					'editableProfesor' => $dbUser,
+					'listClases' => $dbUser_Rel, 
+					'listSecuencias' => $listSecuencias,
+					'responseMessageEdit' => 'Error no se encuentra la materia'
+				]);	
+			}			
+		}//addClasetoProfesorinEdit
+
 	}

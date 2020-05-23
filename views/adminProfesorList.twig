@@ -149,9 +149,9 @@
                             <button class="boton_To_A editar inline">Seleccionar</button>
                         </form>
                         {% if listMaterias != null %}
-                            <form method="post" action="">
+                            <form method="post" action="/soe/dashboard/profesor/edit/aM">
                                 <span class="instrucciones align-left"> Secuencia: {{secuencia}}</span>
-                                <input type="" name="email" value="" style="display: none;">
+                                <input type="" name="email" value="{{editableProfesor.email}}" style="display: none;">
                                 <input type="" name="clave" value="{{secuencia}}" style="display: none;">
                                 <select class="input_Text input_Text_Admin inline align-left" name="materia" required style="width: 80%;">
                                     <option selected disabled>Seleccione una opción</option>
