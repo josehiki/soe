@@ -44,7 +44,9 @@
 				<form method="post" action="/soe/dashboard/profesor/add/mS">
 					<span class="instrucciones"> Secuencia: {{secuencia}}</span>
 					<br>
-					<select class="input_Text input_Text_Admin inline" required>
+					<input type="" name="email" value="{{actualProfesor.email}}" style="display: none;">
+					<input type="" name="clave" value="{{secuencia}}" style="display: none;">
+					<select class="input_Text input_Text_Admin inline" name="materia" required>
 						<option selected disabled>Seleccione una opción</option>
 						{% for materia in listMaterias %}
 							<option value="{{materia.subjectName}}">
@@ -59,7 +61,52 @@
 				<span class="instrucciones"> Secuencia: {{secuencia}}</span>
 				<h6>{{messageList}}</h6>
 			{% endif %}	
-			<h5 class="input_Text_Admin" style="border-top: 1px #333 solid;">Materias seleccionadas</h5>	
+			<h5 class="input_Text_Admin" style="border-top: 1px #333 solid;">Materias seleccionadas</h5>
+			<ul>
+				{% if listRelNames != null %}
+					{% for list in listRelNames %}
+						<li>{{list.nombreRel}}</li>
+					{% endfor %}
+				{% endif %}
+			</ul>
+			<div class="boton_Footer">
+				<button type="submit" class="boton_Cancelar boton_Modal cancelar_Secuencia" onclick="showModalCancel()">
+					Cancelar
+				</button>
+				<a href="/soe/dashboard/profesor/a" style="color: white;" class="boton boton_Modal">
+						Terminar
+				</a>
+				<div id="modalSecuenciaCancel" class="modal_This modal_Secuencia">
+					<div class="modal_Content">
+						<span class="close" >
+							<a onclick="hideModalCancel()">&times;</a>
+						</span>
+						<h4>¿Está seguro de cancelar ahora?</h4>
+						<span class="instrucciones">Si cancela ahora se perderá todo lo que ha hecho, el profesor y las materias que haya agregado se perderán</span>
+						<br><br>
+						<form method="post" action="/soe/dashboard/profesor/add/canceled">
+							<input type="" name="email" value="{{actualProfesor.email}}" style="display: none;">
+							<a class="boton_Cancelar boton_Modal cancelar_Secuencia" onclick="hideModalCancel()">
+								Continuar
+							</a>
+							<button type="submit" class="boton boton_Modal">
+									Cancelar
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>	
 		</div>
+		
 	</body>
+	<script type="text/javascript">
+			function showModalCancel()
+			{
+				document.getElementById('modalSecuenciaCancel').style.display = 'block';
+			}
+			function hideModalCancel()
+			{
+				document.getElementById('modalSecuenciaCancel').style.display = 'none';
+			}
+		</script>
 </html>

@@ -259,6 +259,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+	$map->post('a.profesor.Add.canceled', '/soe/dashboard/profesor/add/canceled', [
+		'controller' => 'App\Controllers\AdminProfesorController',
+		'action' => 'addProfesorCanceled',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 
 

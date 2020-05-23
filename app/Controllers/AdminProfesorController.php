@@ -6,6 +6,8 @@
 	use App\Models\Secuencia;
 	use App\Models\Subject;
 	use App\Models\Rel_Sec_Sub;
+	use App\Models\User_Rel;
+	use Laminas\Diactoros\Response\RedirectResponse;
 	/**
 	 * Controlador para la gestion de profesores
 	 */
@@ -101,22 +103,26 @@
 						$listSubject[] = $auxSubject->idSubject;
 					}
 					
+					$listRelNames = User_Rel::where('user_id', $dbUser->idUser)->get();
 					$listSubjectNames = Subject::find($listSubject);
 					$listSecuencias = Secuencia::all();
 					return $this->renderHTML('adminProfesorAddHorario.twig', [
 						'username' => $_SESSION['userName'],
 						'actualProfesor' => $dbUser, 
 						'listSecuencias' => $listSecuencias,
+						'listRelNames' => $listRelNames,
 						'listMaterias' => $listSubjectNames,
 						'secuencia' => $postData['clave']
 					]);							
 				}else // la secuencia no tiene materias
 				{
 					$listSecuencias = Secuencia::all();
+					$listRelNames = User_Rel::where('user_id', $dbUser->idUser)->get();
 					return $this->renderHTML('adminProfesorAddHorario.twig', [
 						'username' => $_SESSION['userName'],
 						'actualProfesor' => $dbUser, 
 						'listSecuencias' => $listSecuencias,
+						'listRelNames' => $listRelNames,
 						'secuencia' => $postData['clave'],
 						'messageList' => 'Esta secuencia no tiene materias registradas'
 					]);
@@ -124,9 +130,11 @@
 			}else // La secuencia no existe
 			{
 				$listSecuencias = Secuencia::all();
+				$listRelNames = User_Rel::where('user_id', $dbUser->idUser)->get();
 				return $this->renderHTML('adminProfesorAddHorario.twig', [
 					'username' => $_SESSION['userName'],
 					'actualProfesor' => $dbUser, 
+					'listRelNames' => $listRelNames,
 					'listSecuencias' => $listSecuencias,
 					'responseMessage' => 'No existe esa secuencia'
 				]);
@@ -136,6 +144,79 @@
 
 		function addMateriaSecuenciatoProfesor($request)
 		{
+			$postData = $request->getParsedBody();
+			$dbUser = User::where('email', $postData['email'])->first(); //Informacion del profesor
+			$dbSecuencia = Secuencia::where('claveSecuencia', $postData['clave'])->first(); //informacion de la secuencia
+			$dbSubject = Subject::where('subjectName', $postData['materia'])->first();
 			
-		} //addMateriaSecuenciatoProfesor
+
+			if($dbSecuencia && $dbSubject) //si existen tanto la secuencia como la materia
+			{
+				$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)
+				->where('idSubject', $dbSubject->idSubject)->first(); //busca a relacion de materia-secuencia
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)
+				->where('rel_id', $dbRel_Sec_Sub->id)
+				->first(); // busca la relacion 
+				
+				if (!$dbUser_Rel) //si la relacion no existe, es nueva
+				{
+					$newUser_Rel = new User_Rel();
+					$newUser_Rel->user_id = $dbUser->idUser;
+					$newUser_Rel->rel_id = $dbRel_Sec_Sub->id;
+					$newUser_Rel->nombreRel = $dbSecuencia->claveSecuencia.' - '.$dbSubject->subjectName;
+					$newUser_Rel->save();
+
+					$listRelNames = User_Rel::where('user_id', $dbUser->idUser)->get();
+					$listSecuencias = Secuencia::all();
+					return $this->renderHTML('adminProfesorAddHorario.twig', [
+						'username' => $_SESSION['userName'],
+						'actualProfesor' => $dbUser, 
+						'listSecuencias' => $listSecuencias,
+						'listRelNames' => $listRelNames,
+						'responseMessage' => 'Materia agregada correctamente'
+					]);
+				}else //
+				{
+					$listRelNames = User_Rel::where('user_id', $dbUser->idUser)->get();
+					$listSecuencias = Secuencia::all();
+					return $this->renderHTML('adminProfesorAddHorario.twig', [
+						'username' => $_SESSION['userName'],
+						'actualProfesor' => $dbUser, 
+						'listSecuencias' => $listSecuencias,
+						'listRelNames' => $listRelNames,
+						'responseMessage' => 'No se puede agregar dos veces la misma materia de la misma secuencia'
+					]);
+				}
+				
+			}else // si no existe la materia o la secuencia
+			{
+				$listRelNames = User_Rel::where('user_id', $dbUser->idUser)->get();
+				$listSecuencias = Secuencia::all();
+				return $this->renderHTML('adminProfesorAddHorario.twig', [
+					'username' => $_SESSION['userName'],
+					'actualProfesor' => $dbUser, 
+					'listSecuencias' => $listSecuencias,
+					'listRelNames' => $listRelNames,
+					'responseMessage' => 'Ha ocurrido un error'
+				]);
+			}
+		} /* addMateriaSecuenciatoProfesor */
+
+		function addProfesorCanceled($request)
+		{
+			$postData = $request->getParsedBody();
+			$dbUser = User::where('email', $postData['email'])->first();
+
+			$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+			if(!$dbUser_Rel->isEmpty())
+			{
+				foreach ($dbUser_Rel as $rel) {
+					$auxUser_Rel = User_Rel::find($rel->_id);
+					$auxUser_Rel->delete();
+				}
+			}
+			$dbUser->delete();
+			return new RedirectResponse('/soe/dashboard/profesor/a');
+
+		} //addProfesorCanceled
 	}
