@@ -296,4 +296,42 @@
 				]);
 			}
 		}//deleteAlumno
+
+		function getAlumnoDetail($request)
+		{
+			$postData = $request->getAttribute('email');
+			$dbUser = User::where('email', $postData)->first();
+			
+			if($dbUser) // existe el usuario
+			{
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				
+				if(!$dbUser_Rel->isEmpty()) //el profesor tiene clases
+				{
+					$listAlumnos = User::where('userType', 'student')->get();
+					return $this->renderHTML('adminAlumnoList.twig', [
+						'username' => $_SESSION['userName'],
+						'listAlumnos' => $listAlumnos,
+						'detailAlumno' => $dbUser,
+						'listClases' => $dbUser_Rel
+					]);
+				}else //no tiene
+				{
+					$listAlumnos = User::where('userType', 'student')->get();
+					return $this->renderHTML('adminAlumnoList.twig', [
+						'username' => $_SESSION['userName'],
+						'listAlumnos' => $listAlumnos,
+						'detailAlumno' => $dbUser
+					]);
+				}
+			}else //el usuario no existe
+			{
+				$listAlumnos = User::where('userType', 'student')->get();
+				return $this->renderHTML('adminAlumnoList.twig', [
+					'username' => $_SESSION['userName'],
+					'listAlumnos' => $listAlumnos,
+					'responseMessage' => 'El alumno no existe'
+				]);
+			}		
+		}//getAlumnoDetail
     }

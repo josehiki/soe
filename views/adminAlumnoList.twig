@@ -37,7 +37,7 @@
 					<a href="">
 						<span  class="icon_Opcion editar">Editar</span>
 					</a>
-					<a href="">
+					<a href="/soe/dashboard/alumno/detail/{{alumno.email}}">
 						<span  class="icon_Opcion editar">Mostrar detalles</span>
 					</a>
 				</li>
@@ -65,7 +65,38 @@
                 </div>
             {% endif %}
 
-            
+            {% if detailAlumno != null %}
+                <div  class="modal_This">
+                    <div class="modal_Content modal_Secuencia_E">
+                        <span class="close" >
+                            <a href="/soe/dashboard/alumno/l">&times;</a>
+                        </span>
+                        <br>
+                        <h2>Detalle Alumno</h2>
+                        <span class="span align-left">Nombre</span>
+                        <h4 class="align-left">{{detailAlumno.userName}}</h4>
+                        <span class="span align-left">Email</span>
+                        <h5 class="align-left ">{{detailAlumno.email}}</h5>
+                        <span class="span align-left">Tel&eacutefono</span>
+                        <h5 class="align-left ">{{detailAlumno.phone}}</h5>   
+                        <span class="span align-left">Boleta</span>
+                        <h5 class="align-left ">{{detailAlumno.boleta}}</h5>   
+                        <span class="span align-left">Carrera</span>
+                        <h5 class="align-left ">{{detailAlumno.carrera}}</h5>   
+                        <span class="instrucciones top_Border">Clases:</span>
+                        <ul class="lista_Materias_Secuencia">
+                            {% if listClases != null %}
+                                {% for list in listClases %}
+                                    <li class="">{{list.nombreRel}}</li>
+                                {% endfor %}
+                            {% endif %}
+                            {% if listClases == null %}
+                                <h5 class="">Este alumno no tiene clases asignadas</h5>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </body>
 <html>

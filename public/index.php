@@ -344,6 +344,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);	
+	$map->get('a.alumno.List.detail', '/soe/dashboard/alumno/detail/{email}', [
+		'controller' => 'App\Controllers\AdminAlumnoController',
+		'action' => 'getAlumnoDetail',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);	
 
 
 	$map->post('a.alumno.Add', '/soe/dashboard/alumno/add', [
