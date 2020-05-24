@@ -34,7 +34,7 @@
 					<a href="/soe/dashboard/alumno/d/{{alumno.email}}">
 						<span  class="icon_Opcion eliminar" >Eliminar</span>
 					</a>
-					<a href="">
+					<a href="/soe/dashboard/alumno/edit/{{alumno.email}}">
 						<span  class="icon_Opcion editar">Editar</span>
 					</a>
 					<a href="/soe/dashboard/alumno/detail/{{alumno.email}}">
@@ -94,6 +94,99 @@
                                 <h5 class="">Este alumno no tiene clases asignadas</h5>
                             {% endif %}
                         </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if editableAlumno != null %}
+                <div  class="modal_This">
+                    <div class="modal_Content modal_Secuencia_E">
+                        <span class="close" >
+                            <a href="/soe/dashboard/alumno/l">&times;</a>
+                        </span>
+                        <br>
+                        <h2>Editar Alumno</h2>
+	    				<span class="instrucciones align-left" >Modifique la información que desea, cuando este listo presione "Terminar" o "x"</span>
+
+                        {% if responseMessageEdit != null %}
+                            <div class="alert alert-primary" role="alert">
+                                {{responseMessageEdit}}
+                            </div>
+                        {% endif %}
+                        <form method="post" action="/soe/dashboard/alumno/edit/e">
+				            <input name="email" value="{{editableAlumno.email}}" style="display: none;"/>
+                            <span class="span align-left">Nombre</span>
+        				    <input type="text" name="nombreAlumno" value="{{editableAlumno.userName}}" class="input_Text input_Text_Admin" placeholder="Ingrese el nombre del profesor" required="true" />
+                            <span class="span align-left">Email</span>
+				            <input type="email" name="emailAlumno" value="{{editableAlumno.email}}" class="input_Text input_Text_Admin" placeholder="Ingrese el email del profesor" required="true" />
+                            <span class="span align-left">Contraseña</span>
+				            <input type="password" name="contraAlumno" class="input_Text input_Text_Admin" placeholder="Ingrese una contraseña (mínimo 6 carácteres)" />
+                            <span class="span align-left">Tel&eacutefono</span>
+				            <input type="text" name="telefonoAlumno" value="{{editableAlumno.phone}}" class="input_Text input_Text_Admin" placeholder="Ingrese el número de teléfono (10 dígitos)" required />
+                            <span class="span align-left">Boleta</span>
+                            <input type="text" name="boletaAlumno" value="{{editableAlumno.boleta}}" class="input_Text input_Text_Admin" placeholder="Ingrese el número de boleta (10 dígitos)" required />
+                            <span class="span align-left">Carrera</span>
+                            <select name="carreraAlumno" class="input_Text" style="width: 100%;" required>
+                                <option selected disabled value="{{editableAlumno.carrera}}">{{editableAlumno.carrera}}</option>
+                                <option value="Licenciatura en Administración industrial">Licenciatura en Administraci&oacuten industrial</option>
+                                <option value="Licenciatura en Ciencias de la informática">Licenciatura en Ciencias de la inform&aacutetica</option>
+                                <option value="Ingenieria en informática">Ingenier&iacutea en inform&aacutetica</option>
+                                <option value="Ingeniería en Transporte">Ingenier&iacutea en Transporte</option>
+                                <option value="Ingeniería Industrial">Ingenier&iacutea Industrial</option>	
+                            </select>
+                            <button class="boton_To_A editar">Cambiar</button>
+                        </form>
+                        <h4 class="top_Border">Clases:</h4>
+                        <form method="post" class="no_Margin align-left" action="/soe/dashboard/alumno/edit/m">
+                            <span class="span align-left">Seleccione una secuencia para mostrar sus materias</span>
+				            <input name="email" value="{{editableAlumno.email}}" style="display: none;"/>
+                            <input type="text" class="input_Text input_Text_Admin inline align-left" name="clave" style="width: 80%;" placeholder="Ingrese la secuencia" list="auxSecuencias" required autocomplete="off" onkeyup="this.value = this.value.toUpperCase();">
+
+                            <datalist id="auxSecuencias">
+                                {% for secuencia in listSecuencias %}
+                                    <option value="{{secuencia.claveSecuencia}}">
+                                {% endfor %}
+                            </datalist>
+                            <button class="boton_To_A editar inline">Seleccionar</button>
+                        </form>
+                        {% if listMaterias != null %}
+                            <form method="post" action="/soe/dashboard/profesor/edit/aM">
+                                <span class="instrucciones align-left"> Secuencia: {{secuencia}}</span>
+                                <input type="" name="email" value="{{editableProfesor.email}}" style="display: none;">
+                                <input type="" name="clave" value="{{secuencia}}" style="display: none;">
+                                <select class="input_Text input_Text_Admin inline align-left" name="materia" required style="width: 80%;">
+                                    <option selected disabled>Seleccione una opción</option>
+                                    {% for materia in listMaterias %}
+                                        <option value="{{materia.subjectName}}">
+                                        {{materia.subjectName}}</option>
+                                    {% endfor %}
+                                </select>
+                                <button class="boton_To_A editar inline">Agregar</button>		
+                            </form>
+                        {% endif %}
+                        {% if messageList != null %}
+                            <span class="instrucciones align-left"> Secuencia: {{secuencia}}</span>
+                            <h6 class="align-left">{{messageList}}</h6>
+                        {% endif %}	
+                        <ul class="lista_Materias_Secuencia top_Border">
+                            {% if listClases != null %}
+                                {% for list in listClases %}
+                                    <li style="margin: 0;"> 
+                                        <form method="post" action="/soe/dashboard/profesor/edit/r" class="form_Editable">
+                                            <span>{{list.nombreRel}}</span>
+                                            <input name="email" value="{{editableProfesor.email}}" style="display:none;">
+                                            <input name="nombreRel" value="{{list.nombreRel}}" style="display:none;">
+                                            <button class="boton_To_A eliminar">Eliminar</button>
+                                        </form>	
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                            {% if listClases == null %}
+                                <h5 class="">Este profesor no tiene clases asignadas</h5>
+                            {% endif %}
+                        </ul>
+                        <br>
+                        <a href="/soe/dashboard/alumno/l" class="boton boton_Modal a_Edit_Secuencia" style="color: white;">Terminar</a>
                     </div>
                 </div>
             {% endif %}

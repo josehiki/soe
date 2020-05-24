@@ -334,4 +334,339 @@
 				]);
 			}		
 		}//getAlumnoDetail
+
+		function getAlumnoEditForm($request)
+		{
+			$postData = $request->getAttribute('email');
+			$dbUser = User::where('email', $postData)->first();
+			
+			if($dbUser) // existe el usuario
+			{
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				
+				if(!$dbUser_Rel->isEmpty()) //el alumno tiene clases
+				{
+					$listSecuencias = Secuencia::all();
+					$listAlumnos = User::where('userType', 'student')->get();
+					return $this->renderHTML('adminAlumnoList.twig', [
+						'username' => $_SESSION['userName'],
+						'listAlumnos' => $listAlumnos,
+						'editableAlumno' => $dbUser,
+						'listClases' => $dbUser_Rel,  
+						'listSecuencias' => $listSecuencias
+					]);
+				}else //no tiene
+				{
+					$listSecuencias = Secuencia::all();
+					$listAlumnos = User::where('userType', 'student')->get();
+					return $this->renderHTML('adminAlumnoList.twig', [
+						'username' => $_SESSION['userName'],
+						'listAlumnos' => $listAlumnos,
+						'editableAlumno' => $dbUser, 
+						'listSecuencias' => $listSecuencias
+					]);
+				}
+			}else //el usuario no existe
+			{
+				$listAlumnos = User::where('userType', 'student')->get();
+				return $this->renderHTML('adminAlumnoList.twig', [
+					'username' => $_SESSION['userName'],
+					'listAlumnos' => $listAlumnos,
+					'responseMessage' => 'El alumno no existe'
+				]);
+			}
+		}// getAlumnoEditForm
+
+		function getMatfromSecEditForm($request)
+		{
+			$postData = $request->getParsedBody();
+			$dbUser = User::where('email', $postData['email'])->first(); //obtener el usuario con el que se esta trabajando
+
+			$dbSecuencia = Secuencia::where('claveSecuencia', $postData['clave'])->first(); //obtener la informacion de la secuencia solicitada
+
+			if($dbSecuencia) //La secuencia existe			
+			{ 
+				$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)->get(); //obtener los id de las materias relacionadas a esa secuencia
+				if(!$dbRel_Sec_Sub->isEmpty()) //La secuencia tiene materias
+				{
+					$listSubject = null;
+					foreach ($dbRel_Sec_Sub as $rel) {
+						$auxSubject = Subject::where('idSubject', $rel->idSubject)->first();
+						$listSubject[] = $auxSubject->idSubject;
+					}
+					$listSubjectNames = Subject::find($listSubject);
+					$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+					if(!$dbUser_Rel->isEmpty()) //el alumno tiene clases
+					{
+						$listSecuencias = Secuencia::all();
+						$listAlumnos = User::where('userType', 'student')->get();
+						return $this->renderHTML('adminAlumnoList.twig', [
+							'username' => $_SESSION['userName'],
+							'listAlumnos' => $listAlumnos,
+							'editableAlumno' => $dbUser,
+							'listClases' => $dbUser_Rel,  
+							'listSecuencias' => $listSecuencias,
+							'secuencia' => $postData['clave'],
+							'listMaterias' => $listSubjectNames,
+						]);
+					}else //no tiene
+					{
+						$listSecuencias = Secuencia::all();
+						$listAlumnos = User::where('userType', 'student')->get();
+						return $this->renderHTML('adminAlumnoList.twig', [
+							'username' => $_SESSION['userName'],
+							'listAlumnos' => $listAlumnos,
+							'editableAlumno' => $dbUser, 
+							'listSecuencias' => $listSecuencias,
+							'secuencia' => $postData['clave'],
+							'listMaterias' => $listSubjectNames,
+						]);
+					}
+					
+				}else // la secuencia no tiene materias
+				{
+					$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+					if(!$dbUser_Rel->isEmpty()) //el alumno tiene clases
+					{
+						$listSecuencias = Secuencia::all();
+						$listAlumnos = User::where('userType', 'student')->get();
+						return $this->renderHTML('adminAlumnoList.twig', [
+							'username' => $_SESSION['userName'],
+							'listAlumnos' => $listAlumnos,
+							'editableAlumno' => $dbUser,
+							'listClases' => $dbUser_Rel,  
+							'listSecuencias' => $listSecuencias,
+							'secuencia' => $postData['clave'],
+							'messageList' => 'Esta secuencia no tiene materias registradas'
+						]);
+					}else //no tiene
+					{
+						$listSecuencias = Secuencia::all();
+						$listAlumnos = User::where('userType', 'student')->get();
+						return $this->renderHTML('adminAlumnoList.twig', [
+							'username' => $_SESSION['userName'],
+							'listAlumnos' => $listAlumnos,
+							'editableAlumno' => $dbUser, 
+							'listSecuencias' => $listSecuencias,
+							'secuencia' => $postData['clave'],
+							'messageList' => 'Esta secuencia no tiene materias registradas'
+						]);
+					}
+				}
+			}else // La secuencia no existe
+			{
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				if(!$dbUser_Rel->isEmpty()) //el alumno tiene clases
+				{
+					$listSecuencias = Secuencia::all();
+					$listAlumnos = User::where('userType', 'student')->get();
+					return $this->renderHTML('adminAlumnoList.twig', [
+						'username' => $_SESSION['userName'],
+						'listAlumnos' => $listAlumnos,
+						'editableAlumno' => $dbUser,
+						'listClases' => $dbUser_Rel,  
+						'listSecuencias' => $listSecuencias,
+						'responseMessageEdit' => 'No existe esa secuencia'
+					]);
+				}else //no tiene
+				{
+					$listSecuencias = Secuencia::all();
+					$listAlumnos = User::where('userType', 'student')->get();
+					return $this->renderHTML('adminAlumnoList.twig', [
+						'username' => $_SESSION['userName'],
+						'listAlumnos' => $listAlumnos,
+						'editableAlumno' => $dbUser, 
+						'listSecuencias' => $listSecuencias,
+						'responseMessageEdit' => 'No existe esa secuencia'
+					]);
+				}
+			}
+		}// getMatfromSecEditForm
+
+		function editAlumno($request)
+		{
+			$postData = $request->getParsedBody();
+			$dbUser = User::where('email', $postData['email'])->first();
+            $carreras = [
+				'Licenciatura en Ciencias de la informática', 
+				'Ingenieria en informática', 
+				'Licenciatura en Administración industrial', 
+				'Ingeniería en Transporte', 
+				'Ingeniería Industrial'
+            ];
+            
+            $validator = v::key('nombreAlumno', v::notEmpty()->stringType())
+            ->key('emailAlumno', v::notEmpty()->email())
+            ->key('telefonoAlumno', v::notEmpty()->length(10,10)->number())
+            ->key('boletaAlumno', v::notEmpty()->length(10,10)->number()); //validador de los paramtros recibidos
+			
+			try {
+				$validator->assert($postData); //validacion de postData
+				$auxUser = User::where('email', $postData['emailAlumno'])->first();
+				if(!$auxUser || $dbUser->email == $postData['emailAlumno']) //el email no esta registrado
+				{
+					if($postData['contraAlumno'] != '') // ingresaron una nueva contraseña
+					{
+						if(v::length(6,null)->validate($postData['contraAlumno'])) //la contraseña tiene mas de seir caracteres
+						{
+							$newUser = User::find($dbUser->idUser);
+							$newUser->userName = $postData['nombreAlumno'];
+							$newUser->email = $postData['emailAlumno'];
+							$newUser->userPassword = password_hash($postData['contraAlumno'], PASSWORD_DEFAULT);
+							$newUser->phone = $postData['telefonoAlumno'];
+							$newUser->boleta = $postData['boletaAlumno'];
+							if(isset($postData['carreraAlumno']))
+							{
+								$newUser->carrera = $postData['carreraAlumno'];
+							}	
+							$newUser->save();
+							$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+							$dbUser = User::where('email', $newUser->email)->first();
+							if(!$dbUser_Rel->isEmpty()) //el alumno tiene clases
+							{
+								$listSecuencias = Secuencia::all();
+								$listAlumnos = User::where('userType', 'student')->get();
+								return $this->renderHTML('adminAlumnoList.twig', [
+									'username' => $_SESSION['userName'],
+									'listAlumnos' => $listAlumnos,
+									'editableAlumno' => $dbUser,
+									'listClases' => $dbUser_Rel,  
+									'listSecuencias' => $listSecuencias,
+									'responseMessageEdit' => 'Alumno actualizado'
+								]);
+							}else //no tiene
+							{
+								$listSecuencias = Secuencia::all();
+								$listAlumnos = User::where('userType', 'student')->get();
+								return $this->renderHTML('adminAlumnoList.twig', [
+									'username' => $_SESSION['userName'],
+									'listAlumnos' => $listAlumnos,
+									'editableAlumno' => $dbUser, 
+									'listSecuencias' => $listSecuencias,
+									'responseMessageEdit' => 'Alumno actualizado'
+								]);
+							}
+						}else //la contraseña no pasa la validacion
+						{
+							$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+							if(!$dbUser_Rel->isEmpty()) //el alumno tiene clases
+							{
+								$listSecuencias = Secuencia::all();
+								$listAlumnos = User::where('userType', 'student')->get();
+								return $this->renderHTML('adminAlumnoList.twig', [
+									'username' => $_SESSION['userName'],
+									'listAlumnos' => $listAlumnos,
+									'editableAlumno' => $dbUser,
+									'listClases' => $dbUser_Rel,  
+									'listSecuencias' => $listSecuencias,
+									'responseMessageEdit' => 'La contraseña no cumple el formato'
+								]);
+							}else //no tiene
+							{
+								$listSecuencias = Secuencia::all();
+								$listAlumnos = User::where('userType', 'student')->get();
+								return $this->renderHTML('adminAlumnoList.twig', [
+									'username' => $_SESSION['userName'],
+									'listAlumnos' => $listAlumnos,
+									'editableAlumno' => $dbUser, 
+									'listSecuencias' => $listSecuencias,
+									'responseMessageEdit' => 'La contraseña no cumple el formato'
+								]);
+							}
+						}
+					}else //la contraseña no cambia
+					{
+						$newUser = User::find($dbUser->idUser);
+						$newUser->userName = $postData['nombreAlumno'];
+						$newUser->email = $postData['emailAlumno'];
+						$newUser->phone = $postData['telefonoAlumno'];
+						$newUser->boleta = $postData['boletaAlumno'];
+						if(isset($postData['carreraAlumno']))
+						{
+							$newUser->carrera = $postData['carreraAlumno'];
+						}	
+						$newUser->save();
+						$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+						$dbUser = User::where('email', $newUser->email)->first();
+						if(!$dbUser_Rel->isEmpty()) //el alumno tiene clases
+						{
+							$listSecuencias = Secuencia::all();
+							$listAlumnos = User::where('userType', 'student')->get();
+							return $this->renderHTML('adminAlumnoList.twig', [
+								'username' => $_SESSION['userName'],
+								'listAlumnos' => $listAlumnos,
+								'editableAlumno' => $dbUser,
+								'listClases' => $dbUser_Rel,  
+								'listSecuencias' => $listSecuencias,
+								'responseMessageEdit' => 'Alumno actualizado'
+							]);
+						}else //no tiene
+						{
+							$listSecuencias = Secuencia::all();
+							$listAlumnos = User::where('userType', 'student')->get();
+							return $this->renderHTML('adminAlumnoList.twig', [
+								'username' => $_SESSION['userName'],
+								'listAlumnos' => $listAlumnos,
+								'editableAlumno' => $dbUser, 
+								'listSecuencias' => $listSecuencias,
+								'responseMessageEdit' => 'Alumno actualizado'
+							]);
+						}
+					}
+				}else // el email ya esta registrado
+				{
+					$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+					if(!$dbUser_Rel->isEmpty()) //el alumno tiene clases
+					{
+						$listSecuencias = Secuencia::all();
+						$listAlumnos = User::where('userType', 'student')->get();
+						return $this->renderHTML('adminAlumnoList.twig', [
+							'username' => $_SESSION['userName'],
+							'listAlumnos' => $listAlumnos,
+							'editableAlumno' => $dbUser,
+							'listClases' => $dbUser_Rel,  
+							'listSecuencias' => $listSecuencias,
+							'responseMessageEdit' => 'El correo registrado ya existe'
+						]);
+					}else //no tiene
+					{
+						$listSecuencias = Secuencia::all();
+						$listAlumnos = User::where('userType', 'student')->get();
+						return $this->renderHTML('adminAlumnoList.twig', [
+							'username' => $_SESSION['userName'],
+							'listAlumnos' => $listAlumnos,
+							'editableAlumno' => $dbUser, 
+							'listSecuencias' => $listSecuencias,
+							'responseMessageEdit' => 'El correo registrado ya existe'
+						]);
+					}
+				}
+			} catch (\Exception $e) {
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				if(!$dbUser_Rel->isEmpty()) //el alumno tiene clases
+				{
+					$listSecuencias = Secuencia::all();
+					$listAlumnos = User::where('userType', 'student')->get();
+					return $this->renderHTML('adminAlumnoList.twig', [
+						'username' => $_SESSION['userName'],
+						'listAlumnos' => $listAlumnos,
+						'editableAlumno' => $dbUser,
+						'listClases' => $dbUser_Rel,  
+						'listSecuencias' => $listSecuencias,
+						'responseMessageEdit' => 'Algo salio mal, por favor revisa tu información'
+					]);
+				}else //no tiene
+				{
+					$listSecuencias = Secuencia::all();
+					$listAlumnos = User::where('userType', 'student')->get();
+					return $this->renderHTML('adminAlumnoList.twig', [
+						'username' => $_SESSION['userName'],
+						'listAlumnos' => $listAlumnos,
+						'editableAlumno' => $dbUser, 
+						'listSecuencias' => $listSecuencias,
+						'responseMessageEdit' => 'Algo salio mal, por favor revisa tu información'
+					]);
+				}
+			}
+		}// editAlumno
     }

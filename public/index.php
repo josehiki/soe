@@ -338,15 +338,21 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);	
-	$map->get('a.alumno.List.deleteConfirmation', '/soe/dashboard/alumno/d/{email}', [
+	$map->get('a.alumno.DeleteConfirmation', '/soe/dashboard/alumno/d/{email}', [
 		'controller' => 'App\Controllers\AdminAlumnoController',
 		'action' => 'getAlumnoDeleteConfirmation',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);	
-	$map->get('a.alumno.List.detail', '/soe/dashboard/alumno/detail/{email}', [
+	$map->get('a.alumno.Detail', '/soe/dashboard/alumno/detail/{email}', [
 		'controller' => 'App\Controllers\AdminAlumnoController',
 		'action' => 'getAlumnoDetail',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);	
+	$map->get('a.alumno.EditForm', '/soe/dashboard/alumno/edit/{email}', [
+		'controller' => 'App\Controllers\AdminAlumnoController',
+		'action' => 'getAlumnoEditForm',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);	
@@ -376,13 +382,24 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-	$map->post('a.alumno.List.Delete', '/soe/dashboard/alumno/del', [
+	$map->post('a.alumno.Delete', '/soe/dashboard/alumno/del', [
 		'controller' => 'App\Controllers\AdminAlumnoController',
 		'action' => 'deleteAlumno',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
-
+	$map->post('a.alumno.Edit.getMatformSec', '/soe/dashboard/alumno/edit/m', [
+		'controller' => 'App\Controllers\AdminAlumnoController',
+		'action' => 'getMatfromSecEditForm',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->post('a.alumno.Edit', '/soe/dashboard/alumno/edit/e', [
+		'controller' => 'App\Controllers\AdminAlumnoController',
+		'action' => 'editAlumno',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 
 	// STUDENT!!!!!!!!!!!!!!	

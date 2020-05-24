@@ -205,7 +205,7 @@
 			}
 		} /* addMateriaSecuenciatoProfesor */
 
-		function addProfesorCanceled($request)
+		function addProfesorCanceled($request) //cancela el alta de un profesor
 		{
 			$postData = $request->getParsedBody();
 			$dbUser = User::where('email', $postData['email'])->first();
@@ -223,7 +223,7 @@
 
 		} //addProfesorCanceled
 
-		function getProfesorDeleteConfirmation($request)
+		function getProfesorDeleteConfirmation($request) // carga solicitud de confirmacion para eliminar un profesor
 		{
 			$postData = $request->getAttribute('email');
 
@@ -462,7 +462,7 @@
 		function editProfesor($request)
 		{
 			$postData = $request->getParsedBody();
-			$dbUser = User::where('email', $postData)->first();
+			$dbUser = User::where('email', $postData['email'])->first();
 			$validator = v::key('nombreProfesor', v::notEmpty()->stringType())
 						->key('emailProfesor', v::notEmpty()->email())
 						->key('telefonoProfesor', v::length(10,10)->number()); //validador de los paramtros recibidos
@@ -472,7 +472,7 @@
 				$auxUser = User::where('email', $postData['emailProfesor'])->first();
 				
 				if(!$auxUser || $dbUser->email == $postData['emailProfesor']){ //el email no esta registrado
-					if($postData['contraProfesor'] != '') // ingresaron
+					if($postData['contraProfesor'] != '') // ingresaron una nueva contraseña
 					{
 						if(v::length(6,null)->validate($postData['contraProfesor'])) //la contraseña tiene mas de seir caracteres
 						{ 
@@ -488,7 +488,7 @@
 							}	
 							$newUser->save();
 							$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
-							$dbUser = User::where('email', $postData)->first();
+							$dbUser = User::where('email',$newUser->email)->first();
 							if(!$dbUser_Rel->isEmpty()) //el profesor tiene clases
 							{
 								$listSecuencias = Secuencia::all();
@@ -516,7 +516,6 @@
 						}else // la contraseña no cumple la validacion 
 						{
 							$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
-							$dbUser = User::where('email', $postData)->first();
 							if(!$dbUser_Rel->isEmpty()) //el profesor tiene clases
 							{
 								$listSecuencias = Secuencia::all();
@@ -554,7 +553,7 @@
 						}	
 						$newUser->save();
 						$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
-						$dbUser = User::where('email', $postData)->first();
+						$dbUser = User::where('email', $newUser->email)->first();
 						if(!$dbUser_Rel->isEmpty()) //el profesor tiene clases
 						{
 							$listSecuencias = Secuencia::all();
@@ -580,33 +579,33 @@
 							]);
 						}
 					}
-					}else{ //el email ya esta registrado
-						$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
-						if(!$dbUser_Rel->isEmpty()) //el profesor tiene clases
-						{
-							$listSecuencias = Secuencia::all();
-							$listProfesores = User::where('userType', 'teacher')->get();
-							return $this->renderHTML('adminProfesorList.twig', [
-								'username' => $_SESSION['userName'],
-								'listProfesores' => $listProfesores,
-								'editableProfesor' => $dbUser,
-								'listClases' => $dbUser_Rel, 
-								'listSecuencias' => $listSecuencias,
-								'responseMessageEdit' => 'El correo registrado ya existe'
-							]);
-						}else //no tiene
-						{
-							$listSecuencias = Secuencia::all();
-							$listProfesores = User::where('userType', 'teacher')->get();
-							return $this->renderHTML('adminProfesorList.twig', [
-								'username' => $_SESSION['userName'],
-								'listProfesores' => $listProfesores,
-								'editableProfesor' => $dbUser, 
-								'listSecuencias' => $listSecuencias,
-								'responseMessageEdit' => 'El correo registrado ya existe'
-							]);
-						}
+				}else{ //el email ya esta registrado
+					$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+					if(!$dbUser_Rel->isEmpty()) //el profesor tiene clases
+					{
+						$listSecuencias = Secuencia::all();
+						$listProfesores = User::where('userType', 'teacher')->get();
+						return $this->renderHTML('adminProfesorList.twig', [
+							'username' => $_SESSION['userName'],
+							'listProfesores' => $listProfesores,
+							'editableProfesor' => $dbUser,
+							'listClases' => $dbUser_Rel, 
+							'listSecuencias' => $listSecuencias,
+							'responseMessageEdit' => 'El correo registrado ya existe'
+						]);
+					}else //no tiene
+					{
+						$listSecuencias = Secuencia::all();
+						$listProfesores = User::where('userType', 'teacher')->get();
+						return $this->renderHTML('adminProfesorList.twig', [
+							'username' => $_SESSION['userName'],
+							'listProfesores' => $listProfesores,
+							'editableProfesor' => $dbUser, 
+							'listSecuencias' => $listSecuencias,
+							'responseMessageEdit' => 'El correo registrado ya existe'
+						]);
 					}
+				}
 			}catch(\Exception $e) // no pasa la validacion
 			{
 				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
