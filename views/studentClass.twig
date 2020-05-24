@@ -1,0 +1,51 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/profesor_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Soe</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+		{% block estilo %}{% endblock %}
+        {% block profesor_CSS %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+            <a href="/soe/alumno" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+        <div class="content content_Clase">
+            <h1 class="content_Title_Clase">{{nombreMateria}} <span class="secuencia_title">Secuencia: {{secuencia}}</span></h1>
+            <div class="menu_Actividad">
+                <span class="tag_Menu_Actividad">
+                    <a href="">Actividad Extracurricular</a>
+                </span>
+                {# <span class="tag_Menu_Actividad">
+                    <a href="">Nueva Proyecto</a>
+                </span> #}
+            </div>
+            {% for tarea in listTareas %}
+                {% if tarea.tipo == 'tarea' %}
+                    <div class="tarea"><br>
+                        <h6>Nueva Tarea</h6>
+                        <h3><a class="tarea_Link" href="">{{tarea.nombre}}</a></h3>
+                        <span class="tarea_span">Fecha límite: {{tarea.fechaLimite}}</span>
+                    </div>
+                {% endif %}
+                {% if tarea.tipo == 'anuncio' %}
+                    <div class="tarea" style="overflow: hidden;"><br>
+                        <h6>Anuncio</h6>
+                        <h3><a class="tarea_Link" href="">{{tarea.nombre}}</a></h3><br>
+                        <span class="">{{tarea.descripcion}}</span>
+                    </div>
+                {% endif %}
+                
+            {% endfor %}
+        </div>
+    </body>
+</html>

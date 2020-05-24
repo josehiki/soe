@@ -1,5 +1,6 @@
 <?php
     namespace App\Controllers;
+    
     use App\Models\User;
 	use App\Models\User_Rel;
 	use App\Models\Rel_Sec_Sub;
@@ -31,15 +32,13 @@
 
         function getMateriaName($idClase) // recupera el nombre de la materia a partir del id de clase
         {
-            $clase = User_Rel::find($idClase);
-            $dbRel_Sec_Sub = Rel_Sec_Sub::find($clase->rel_id);
+            $dbRel_Sec_Sub = Rel_Sec_Sub::find($idClase);
             $dbMateria = Subject::find($dbRel_Sec_Sub->idSubject);
             return $dbMateria;
         }
         function getSecuenciaClave($idClase)// recupera la secuencia a partir del id de clase
         {
-            $clase = User_Rel::find($idClase);
-            $dbRel_Sec_Sub = Rel_Sec_Sub::find($clase->rel_id);
+            $dbRel_Sec_Sub = Rel_Sec_Sub::find($idClase);
             $dbSecuencia = Secuencia::find($dbRel_Sec_Sub->idSecuencia);
             return $dbSecuencia;
         }

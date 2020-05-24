@@ -21,7 +21,7 @@
 				$auxSecuencia = Secuencia::find($dbRel_Sec_Sub->idSecuencia);
 				$auxSubject = Subject::find($dbRel_Sec_Sub->idSubject);
 				$auxList = [
-					'idClase' => $clase->_id,
+					'idClase' => $clase->rel_id,
 					'materia' => $auxSubject->subjectName,
 					'secuencia' => $auxSecuencia->claveSecuencia
 				];

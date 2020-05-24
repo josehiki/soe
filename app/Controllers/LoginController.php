@@ -41,7 +41,7 @@
 							return new RedirectResponse('/soe/dashboard');
 
 						}elseif ($user->userType == 'student') {
-							return new RedirectResponse('/soe/student');
+							return new RedirectResponse('/soe/alumno');
 
 						}elseif($user->userType == 'teacher') {
 							return new RedirectResponse('/soe/profesor');

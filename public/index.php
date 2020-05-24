@@ -500,14 +500,19 @@
 
 
 	// STUDENT!!!!!!!!!!!!!!	
-	$map->get('studentDashboard', '/soe/student', [
+	$map->get('studentDashboard', '/soe/alumno', [
 		'controller' => 'App\Controllers\StudentDashController',
 		'action' => 'getStudentDashboard',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE2')
 	]);
 
-
+	$map->get('a.getClaseDetail', '/soe/alumno/{idClase}', [
+		'controller' => 'App\Controllers\StudentDashController',
+		'action' => 'getClaseDetail',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE2')
+	]);
 	
 
 	$matcher = $routerContainer->getMatcher();	
