@@ -447,6 +447,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE3')
 	]);
+	$map->get('t.tarea.Edit.Form', '/soe/profesor/tarea/{idClase}/edit/{idTarea}', [
+		'controller' => 'App\Controllers\TeacherClassController',
+		'action' => 'editTareaForm',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE3')
+	]);
 
 
 	$map->post('t.tarea.add', '/soe/profesor/tarea/n', [
@@ -455,7 +461,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE3')
 	]);
-
+	$map->post('t.tarea.Edit', '/soe/profesor/tarea/e', [
+		'controller' => 'App\Controllers\TeacherClassController',
+		'action' => 'editTarea',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE3')
+	]);
 
 
 	// STUDENT!!!!!!!!!!!!!!	
