@@ -89,7 +89,7 @@
 .tarea h3{
     margin: 1rem 0 0 0;
 }
-.tarea span{
+.tarea_span{
     float: right;
     margin-right: 2em;
     margin-bottom: 1em;
@@ -97,6 +97,83 @@
     bottom: 0;
     right: 0;
 }
-
+.tarea_Link:hover{
+    color: #aaa6a6;
+}
+.eliminar{
+    color: red;
+    cursor: pointer;
+}
+.eliminar:link, .eliminar:visited, .eliminar:active{
+    color: red;
+}
+.menu_Actividad_Detail{
+    text-align: right;
+}
+.tag_Tarea_Detail{
+    margin: 0 5em 0 0;
+}
+.tarea_Detail{
+    border: 0;
+    padding-left: 1cm;
+}
+.descripcion_Tarea{
+    text-align: left;
+    font-size: 1.2em;
+    margin: 1em 0 2em 1em;
+    display: block;
+}
+.span_Detail{
+    display: block;
+    text-align: left;
+    
+}
+.modal_This{
+	display: block;
+	position: fixed;
+	z-index: 10;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4);
+}
+.modal_Content{
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: .5cm;
+	border: 1px solid #333;
+	width: 50%;
+	text-align: center;
+}
+.close{
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+.close:hover, .close:focus{
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+.boton_Modal{
+	display: inline;
+}
+.modal_Content form{
+	clear: both;
+	margin-top: .5cm;
+}
+.modal_Content input{
+	width: 100%;
+	margin: .5cm auto; 
+}
+.boton_Modal a, .boton_Modal a:link,
+.boton_Modal a:hover, .boton_Modal a:active, .boton_Modal a:visited{
+    color: white;
+    text-decoration: none; 
+}
 </style>
 {% endblock %}

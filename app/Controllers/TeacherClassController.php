@@ -69,4 +69,35 @@
             $newTarea->save();
             return new RedirectResponse('/soe/profesor/'.$postData['idClase']);
         }//addTarea
+
+        function getTareaDetail($request)
+        {
+            $idClase = $request->getAttribute('idClase');;
+            $idTarea = $request->getAttribute('idTarea');
+            $dbMateria = $this->getMateriaName($idClase);
+            $dbSecuencia = $this->getSecuenciaClave($idClase);
+            $dbTarea = Tarea::find($idTarea);
+            return $this->renderHTML('teacherTareaDetail.twig', [
+                'username' => $_SESSION['userName'],
+                'idClase' => $idClase,
+                'nombreMateria' => $dbMateria->subjectName,
+                'secuencia' => $dbSecuencia->claveSecuencia,
+                'tarea' => $dbTarea
+			]);
+        }//getTareaDetail
+
+        function deleteTarea($request)
+        {
+            $idClase = $request->getAttribute('idClase');
+            $idTarea = $request->getAttribute('idTarea');
+            $dbTarea = Tarea::find($idTarea);
+            if($dbTarea)//la tarea existe
+            {
+                $dbTarea->delete();
+                return new RedirectResponse('/soe/profesor/'.$idClase);
+            }else{
+                return new RedirectResponse('/soe/profesor/'.$idClase);
+            }
+        }
+
     }

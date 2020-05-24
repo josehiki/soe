@@ -34,8 +34,8 @@
             </div>
             {% for tarea in listTareas %}
                 <div class="tarea">
-                    <h3><a href="">{{tarea.nombre}}</a></h3>
-                    <span>Fecha límite: {{tarea.fechaLimite}}</span>
+                    <h3><a class="tarea_Link" href="/soe/profesor/tarea/{{idClase}}/d/{{tarea._id}}">{{tarea.nombre}}</a></h3>
+                    <span class="tarea_span">Fecha límite: {{tarea.fechaLimite}}</span>
                 </div>
             {% endfor %}
         </div>

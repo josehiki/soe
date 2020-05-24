@@ -435,6 +435,18 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE3')
 	]);
+	$map->get('t.tarea.Detail', '/soe/profesor/tarea/{idClase}/d/{idTarea}', [
+		'controller' => 'App\Controllers\TeacherClassController',
+		'action' => 'getTareaDetail',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE3')
+	]);
+	$map->get('t.tarea.Delete', '/soe/profesor/tarea/{idClase}/del/{idTarea}', [
+		'controller' => 'App\Controllers\TeacherClassController',
+		'action' => 'deleteTarea',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE3')
+	]);
 
 
 	$map->post('t.tarea.add', '/soe/profesor/tarea/n', [

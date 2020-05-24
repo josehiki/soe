@@ -1,0 +1,69 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/profesor_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Soe</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+		{% block estilo %}{% endblock %}
+        {% block profesor_CSS %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+            <a href="/soe/profesor/{{idClase}}" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+        <div class="content content_Clase">
+            <h1 class="content_Title_Clase">{{nombreMateria}} <span class="secuencia_title">Secuencia: {{secuencia}}</span></h1>
+            <div class="menu_Actividad menu_Actividad_Detail">
+                <span class="tag_Menu_Actividad tag_Tarea_Detail">
+                    <a href="">Editar</a>
+                </span>
+                <span class="tag_Menu_Actividad tag_Tarea_Detail eliminar" onclick="showModal()">
+                    Eliminar
+                </span>
+            </div>
+            <div class="tarea tarea_Detail">
+                <h3>{{tarea.nombre}}</h3>
+                <span class="span span_Detail ">Descripcion:</span>
+                <p class="instrucciones descripcion_Tarea">{{tarea.descripcion}}</p>
+                <span class="span span_Detail">Valor:</span>
+                <h5 class="align-left descripcion_Tarea">{{tarea.valor}}</h4>
+                <span class="span span_Detail">Fecha límite: </span>
+                <h5 class="align-left descripcion_Tarea">{{tarea.fechaLimite}}</h5>
+
+            </div>
+            <div id="modalSecuenciaCancel" class="modal_This modal_Secuencia" style="display: none;">
+                <div class="modal_Content">
+                    <span class="close" >
+                        <a onclick="hideModal()">&times;</a>
+                    </span>
+                    <h4>¿Está seguro de eliminar esta tarea?</h4>
+                    <br><br><br>
+                    <span class="boton_Cancelar boton_Modal" onclick="hideModa()">
+                        Cancelar
+                    </span>
+                    <span class="boton boton_Modal">
+                        <a href="/soe/profesor/tarea/{{idClase}}/del/{{tarea._id}}">Eliminar</a>
+                    </span>
+                </div>
+            </div>
+		</div>
+        <script>
+            function showModal()
+			{
+				document.getElementById('modalSecuenciaCancel').style.display = 'block';
+			}
+			function hideModal()
+			{
+				document.getElementById('modalSecuenciaCancel').style.display = 'none';
+			}
+        </script>
+    </body>
+</html>
