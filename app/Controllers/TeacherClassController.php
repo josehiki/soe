@@ -63,6 +63,7 @@
             $newTarea->clase_id = $postData['idClase'];
             $newTarea->nombre = $postData['nombreTarea'];
             $newTarea->descripcion = $postData['descripcionTarea'];
+            $newTarea->tipo = 'tarea';
             $newTarea->valor = $postData['valor'];
             $newTarea->fecha = date("Y-m-d");
             $newTarea->fechaLimite = $postData['fechaLimite'];
@@ -123,4 +124,29 @@
             $editedTarea->save();
             return new RedirectResponse('/soe/profesor/tarea/'.$postData['idClase'].'/d/'.$postData['idTarea']);
         }//editTarea
+
+        function getNuevoAnuncioForm($request)
+        {
+            $postData = $request->getAttribute('idClase');
+            $dbMateria = $this->getMateriaName($postData);
+            return $this->renderHTML('teacherAnuncioAdd.twig', [
+                'username' => $_SESSION['userName'],
+                'idClase' => $postData,
+                'materia' => $dbMateria
+			]);
+        }//getNuevoAnuncioForm
+
+        function addAnuncio($request)
+        {
+            $postData = $request->getParsedBody();
+            
+            $newTarea = new Tarea();
+            $newTarea->clase_id = $postData['idClase'];
+            $newTarea->nombre = $postData['nombreAnuncio'];
+            $newTarea->descripcion = $postData['descripcionAnuncio'];
+            $newTarea->tipo = 'anuncio';
+            $newTarea->fecha = date("Y-m-d");
+            $newTarea->save();
+            return new RedirectResponse('/soe/profesor/'.$postData['idClase']);
+        }//addAnuncio
     }

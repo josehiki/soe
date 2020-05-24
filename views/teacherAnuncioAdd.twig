@@ -20,18 +20,14 @@
 			</span>
 		</div>
         <div class="content content_Clase">
-            <h2 class="content_Title_Menus">Nueva Tarea</h2>
-			<form class="nueva_Tarea" method="post" action="/soe/profesor/tarea/n">
+            <h2 class="content_Title_Menus">Nuevo Anuncio</h2>
+			<form class="nueva_Tarea" method="post" action="/soe/profesor/anuncio/n">
 				<span class="instrucciones">Ingrese los siguientes datos</span><br><br>
 				<input name="idClase" value="{{idClase}}" style="display: none;" />
-				<span class="span">Nombre tarea</span>
-				<input type="text" name="nombreTarea" class="input_Text input_Text_Teacher" placeholder="Ingrese el nombre de la tarea" required/><br>
+				<span class="span">Título Anuncio</span>
+				<input type="text" name="nombreAnuncio" class="input_Text input_Text_Teacher" placeholder="Ingrese un título para el anuncio" required/><br>
 				<span class="span">Descripción</span>
-				<textarea name="descripcionTarea" class="text_Area input_Text_Teacher" placeholder="Describe la tarea" rows="4" cols="50" required></textarea><br>
-				<span class="span">Valor</span><br>
-				<input type="text" name="valor" class="input_Text input_Text_Teacher" placeholder="Ingrese un valor para la tarea (númerico)" style="display: inline;"/><span>&nbsp;Ptos.</span><br><br>
-				<span class="span">Fecha límite</span><br>
-				<input type="date" id="myDate" name="fechaLimite" required/>
+				<textarea name="descripcionAnuncio" class="text_Area input_Text_Teacher" placeholder="Escriba el anuncio" rows="4" cols="50" required></textarea><br>
 				<button class="boton boton_Usuario">Enviar</button>
 			</form>
 		</div>

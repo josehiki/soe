@@ -29,15 +29,25 @@
                     <a href="">Nueva Proyecto</a>
                 </span> #}
                 <span class="tag_Menu_Actividad">
-                    <a href="">Nuevo Anuncio</a>
+                    <a href="/soe/profesor/anuncio/{{idClase}}">Nuevo Anuncio</a>
                 </span>
             </div>
             {% for tarea in listTareas %}
-                <div class="tarea"><br>
-                    <h6>Nueva Tarea</h6>
-                    <h3><a class="tarea_Link" href="/soe/profesor/tarea/{{idClase}}/d/{{tarea._id}}">{{tarea.nombre}}</a></h3>
-                    <span class="tarea_span">Fecha límite: {{tarea.fechaLimite}}</span>
-                </div>
+                {% if tarea.tipo == 'tarea' %}
+                    <div class="tarea"><br>
+                        <h6>Nueva Tarea</h6>
+                        <h3><a class="tarea_Link" href="/soe/profesor/tarea/{{idClase}}/d/{{tarea._id}}">{{tarea.nombre}}</a></h3>
+                        <span class="tarea_span">Fecha límite: {{tarea.fechaLimite}}</span>
+                    </div>
+                {% endif %}
+                {% if tarea.tipo == 'anuncio' %}
+                    <div class="tarea" style="overflow: hidden;"><br>
+                        <h6>Anuncio</h6>
+                        <h3><a class="tarea_Link" href="/soe/profesor/tarea/{{idClase}}/d/{{tarea._id}}">{{tarea.nombre}}</a></h3><br>
+                        <span class="">{{tarea.descripcion}}</span>
+                    </div>
+                {% endif %}
+                
             {% endfor %}
         </div>
     </body>
