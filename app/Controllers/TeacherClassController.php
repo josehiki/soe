@@ -149,4 +149,43 @@
             $newTarea->save();
             return new RedirectResponse('/soe/profesor/'.$postData['idClase']);
         }//addAnuncio
+
+        function getAnucioDetail($request)
+        {
+            $idClase = $request->getAttribute('idClase');
+            $idTarea = $request->getAttribute('idTarea');
+            $dbMateria = $this->getMateriaName($idClase);
+            $dbSecuencia = $this->getSecuenciaClave($idClase);
+            $dbTarea = Tarea::find($idTarea);
+            return $this->renderHTML('teacherAnuncioDetail.twig', [
+                'username' => $_SESSION['userName'],
+                'idClase' => $idClase,
+                'nombreMateria' => $dbMateria->subjectName,
+                'secuencia' => $dbSecuencia->claveSecuencia,
+                'tarea' => $dbTarea
+			]);
+        }
+
+        function editAnuncioForm($request)
+        {
+            $idClase = $request->getAttribute('idClase');
+            $idTarea = $request->getAttribute('idTarea');
+            $dbTarea = Tarea::find($idTarea);
+            return $this->renderHTML('teacherAnuncioEdit.twig', [
+                'username' => $_SESSION['userName'],
+                'idClase' => $idClase,
+                'tarea' => $dbTarea
+			]); 
+        }// editAnuncioForm
+
+        function editAnuncio($request)
+        {
+            $postData = $request->getParsedBody();
+            
+            $editedTarea = Tarea::find($postData['idTarea']);
+            $editedTarea->nombre = $postData['nombreTarea'];
+            $editedTarea->descripcion = $postData['descripcionTarea'];
+            $editedTarea->save();
+            return new RedirectResponse('/soe/profesor/anuncio/'.$postData['idClase'].'/d/'.$postData['idTarea']);
+        }//editAnuncio
     }

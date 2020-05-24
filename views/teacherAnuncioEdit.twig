@@ -1,0 +1,44 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/profesor_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Soe</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+		{% block estilo %}{% endblock %}
+        {% block profesor_CSS %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+            <a href="/soe/profesor/anuncio/{{idClase}}/d/{{tarea._id}}" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+        <div class="content content_Clase">
+            <h2 class="content_Title_Menus">Editar Anuncio</h2>
+			<form class="nueva_Tarea" method="post" action="/soe/profesor/anuncio/e">
+				<span class="instrucciones">Ingrese los siguientes datos</span><br><br>
+				<input name="idClase" value="{{idClase}}" style="display: none;" />
+				<input name="idTarea" value="{{tarea._id}}" style="display: none;" />
+				<span class="span">Nombre Anuncio</span>
+				<input type="text" name="nombreTarea" value="{{tarea.nombre}}" class="input_Text input_Text_Teacher" placeholder="Ingrese el nombre de la materia" required/><br>
+				<span class="span">Descripción</span>
+				<textarea name="descripcionTarea" class="text_Area input_Text_Teacher" placeholder="Describe la tarea" rows="4" cols="50" required>{{tarea.descripcion}}</textarea><br>
+				<button class="boton boton_Usuario">Actualizar</button>
+			</form>
+		</div>
+    </body>
+	<script>
+		var today = new Date();
+		var dd = String(today.getDate()).padStart(2, '0');
+		var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+		var yyyy = today.getFullYear();
+		today = yyyy + '-' + mm + '-' + dd;
+		document.getElementById("myDate").min = today;
+	</script>
+</html>

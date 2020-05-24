@@ -23,7 +23,7 @@
             <h1 class="content_Title_Clase">{{nombreMateria}} <span class="secuencia_title">Secuencia: {{secuencia}}</span></h1>
             <div class="menu_Actividad menu_Actividad_Detail">
                 <span class="tag_Menu_Actividad tag_Tarea_Detail">
-                    <a href="/soe/profesor/tarea/{{idClase}}/edit/{{tarea._id}}">Editar</a>
+                    <a href="/soe/profesor/anuncio/{{idClase}}/edit/{{tarea._id}}">Editar</a>
                 </span>
                 <span class="tag_Menu_Actividad tag_Tarea_Detail eliminar" onclick="showModal()">
                     Eliminar
@@ -33,10 +33,6 @@
                 <h3>{{tarea.nombre}}</h3>
                 <span class="span span_Detail ">Descripcion:</span>
                 <p class="instrucciones descripcion_Tarea">{{tarea.descripcion}}</p>
-                <span class="span span_Detail">Valor:</span>
-                <h5 class="align-left descripcion_Tarea">{{tarea.valor}}</h4>
-                <span class="span span_Detail">Fecha límite: </span>
-                <h5 class="align-left descripcion_Tarea">{{tarea.fechaLimite}}</h5>
 
             </div>
             <div id="modalSecuenciaCancel" class="modal_This modal_Secuencia" style="display: none;">
@@ -44,7 +40,7 @@
                     <span class="close" >
                         <a onclick="hideModal()">&times;</a>
                     </span>
-                    <h4>¿Está seguro de eliminar esta tarea?</h4>
+                    <h4>¿Está seguro de eliminar este anuncio?</h4>
                     <br><br><br>
                     <span class="boton_Cancelar boton_Modal" onclick="hideModal()">
                         Cancelar

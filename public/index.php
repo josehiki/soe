@@ -459,6 +459,18 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE3')
 	]);
+	$map->get('t.anuncio.Detail', '/soe/profesor/anuncio/{idClase}/d/{idTarea}', [
+		'controller' => 'App\Controllers\TeacherClassController',
+		'action' => 'getAnucioDetail',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE3')
+	]);
+	$map->get('t.anuncio.Edit.Form', '/soe/profesor/anuncio/{idClase}/edit/{idTarea}', [
+		'controller' => 'App\Controllers\TeacherClassController',
+		'action' => 'editAnuncioForm',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE3')
+	]);
 
 
 	$map->post('t.tarea.add', '/soe/profesor/tarea/n', [
@@ -476,6 +488,12 @@
 	$map->post('t.anuncio.add', '/soe/profesor/anuncio/n', [
 		'controller' => 'App\Controllers\TeacherClassController',
 		'action' => 'addAnuncio',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE3')
+	]);
+	$map->post('t.anuncio.Edit', '/soe/profesor/anuncio/e', [
+		'controller' => 'App\Controllers\TeacherClassController',
+		'action' => 'editAnuncio',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE3')
 	]);
