@@ -669,4 +669,108 @@
 				}
 			}
 		}// editAlumno
+
+		function removeClaseFromAlumno($request)
+		{
+			$postData = $request->getParsedBody();
+			$dbUser = User::where('email', $postData['email'])->first();
+			$auxdbUser_Rel = User_Rel::where('nombreRel', $postData['nombreRel'])->first();
+			
+			if($auxdbUser_Rel) //Existe la clase
+			{
+				$auxdbUser_Rel->delete();
+				
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				$listSecuencias = Secuencia::all();
+				$listAlumnos = User::where('userType', 'student')->get();
+				return $this->renderHTML('adminAlumnoList.twig', [
+					'username' => $_SESSION['userName'],
+					'listAlumnos' => $listAlumnos,
+					'editableAlumno' => $dbUser, 
+					'listSecuencias' => $listSecuencias,
+					'listClases' => $dbUser_Rel,
+					'responseMessageEdit' => 'Alumno eliminado de la clase'
+				]);
+			}else // no existe la clase
+			{
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				$listSecuencias = Secuencia::all();
+				$listAlumnos = User::where('userType', 'student')->get();
+				return $this->renderHTML('adminAlumnoList.twig', [
+					'username' => $_SESSION['userName'],
+					'listAlumnos' => $listAlumnos,
+					'editableAlumno' => $dbUser, 
+					'listSecuencias' => $listSecuencias,
+					'listClases' => $dbUser_Rel,
+					'responseMessageEdit' => 'Error no se encuentra la clase'
+				]);
+			}
+		}// removeClaseFromAlumno
+
+		function addClasetoAlumnoEdit($request)
+		{
+			$postData = $request->getParsedBody();
+			$dbUser = User::where('email', $postData['email'])->first(); //Informacion del profesor
+			$dbSecuencia = Secuencia::where('claveSecuencia', $postData['clave'])->first(); //informacion de la secuencia
+			$dbSubject = Subject::where('subjectName', $postData['materia'])->first();
+
+			if($dbSecuencia && $dbSubject) //si existen tanto la secuencia como la materia
+			{
+				$dbRel_Sec_Sub = Rel_Sec_Sub::where('idSecuencia', $dbSecuencia->idSecuencia)
+				->where('idSubject', $dbSubject->idSubject)->first(); //busca a relacion de materia-secuencia
+				
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)
+				->where('rel_id', $dbRel_Sec_Sub->id)
+				->first(); // busca la relacion entre clase-alumno
+				
+				if (!$dbUser_Rel) //si el alumno ya tiene esa clase
+				{
+					$newUser_Rel = new User_Rel();
+					$newUser_Rel->user_id = $dbUser->idUser;
+					$newUser_Rel->rel_id = $dbRel_Sec_Sub->id;
+					$newUser_Rel->nombreRel = $dbSecuencia->claveSecuencia.' - '.$dbSubject->subjectName;
+					$newUser_Rel->save();
+
+					$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+					$listSecuencias = Secuencia::all();
+					$listAlumnos = User::where('userType', 'student')->get();
+					return $this->renderHTML('adminAlumnoList.twig', [
+						'username' => $_SESSION['userName'],
+						'listAlumnos' => $listAlumnos,
+						'editableAlumno' => $dbUser,
+						'listClases' => $dbUser_Rel, 
+						'listSecuencias' => $listSecuencias,
+						'responseMessageEdit' => 'Clase agregada correctamente'
+					]);	
+
+				}else //si el alumno ya esta en esa clase
+				{
+					$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+					$listSecuencias = Secuencia::all();
+					$listAlumnos = User::where('userType', 'student')->get();
+					return $this->renderHTML('adminAlumnoList.twig', [
+						'username' => $_SESSION['userName'],
+						'listAlumnos' => $listAlumnos,
+						'editableAlumno' => $dbUser,
+						'listClases' => $dbUser_Rel, 
+						'listSecuencias' => $listSecuencias,
+						'responseMessageEdit' => 'El alumno ya se encuentra en la clase'
+					]);	
+				}
+			}else //no existe materia o secuencia 
+			{
+				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
+				$listSecuencias = Secuencia::all();
+				$listAlumnos = User::where('userType', 'student')->get();
+				return $this->renderHTML('adminAlumnoList.twig', [
+					'username' => $_SESSION['userName'],
+					'listAlumnos' => $listAlumnos,
+					'editableAlumno' => $dbUser,
+					'listClases' => $dbUser_Rel, 
+					'listSecuencias' => $listSecuencias,
+					'responseMessageEdit' => 'Error no se encuentra la materia'
+				]);	
+			}
+
+		}//addClasetoAlumnoEdit
     }

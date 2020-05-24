@@ -400,6 +400,18 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE1')
 	]);
+	$map->post('a.alumno.Edit.RemoveClass', '/soe/dashboard/alumno/edit/r', [
+		'controller' => 'App\Controllers\AdminAlumnoController',
+		'action' => 'removeClaseFromAlumno',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
+	$map->post('a.alumno.Edit.AddClass', '/soe/dashboard/alumno/edit/a', [
+		'controller' => 'App\Controllers\AdminAlumnoController',
+		'action' => 'addClasetoAlumnoEdit',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE1')
+	]);
 
 
 	// STUDENT!!!!!!!!!!!!!!	
