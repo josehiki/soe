@@ -33,14 +33,14 @@
                 {% if tarea.tipo == 'tarea' %}
                     <div class="tarea"><br>
                         <h6>Nueva Tarea</h6>
-                        <h3><a class="tarea_Link" href="">{{tarea.nombre}}</a></h3>
+                        <h3><a class="tarea_Link" href="/soe/alumno/{{idClase}}/d/{{tarea._id}}">{{tarea.nombre}}</a></h3>
                         <span class="tarea_span">Fecha límite: {{tarea.fechaLimite}}</span>
                     </div>
                 {% endif %}
                 {% if tarea.tipo == 'anuncio' %}
                     <div class="tarea" style="overflow: hidden;"><br>
                         <h6>Anuncio</h6>
-                        <h3><a class="tarea_Link" href="">{{tarea.nombre}}</a></h3><br>
+                        <h3><a class="tarea_Link" href="/soe/alumno/{{idClase}}/a/{{tarea._id}}">{{tarea.nombre}}</a></h3><br>
                         <span class="">{{tarea.descripcion}}</span>
                     </div>
                 {% endif %}

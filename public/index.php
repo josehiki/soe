@@ -513,7 +513,18 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE2')
 	]);
-	
+	$map->get('a.tarea.Detail', '/soe/alumno/{idClase}/d/{idTarea}', [
+		'controller' => 'App\Controllers\StudentDashController',
+		'action' => 'getTareaDetail',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE2')
+	]);
+	$map->get('a.anuncio.Detail', '/soe/alumno/{idClase}/a/{idTarea}', [
+		'controller' => 'App\Controllers\StudentDashController',
+		'action' => 'getAnuncioDetail',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE2')
+	]);
 
 	$matcher = $routerContainer->getMatcher();	
 	$route = $matcher->match($request);

@@ -66,4 +66,36 @@
                 'listTareas' => $dbTareas
 			]);
 		}//getClaseDetail
+
+		function getTareaDetail($request)
+		{
+			$idClase = $request->getAttribute('idClase');
+            $idTarea = $request->getAttribute('idTarea');
+            $dbMateria = $this->getMateriaName($idClase);
+            $dbSecuencia = $this->getSecuenciaClave($idClase);
+            $dbTarea = Tarea::find($idTarea);
+            return $this->renderHTML('studentTareaDetail.twig', [
+                'username' => $_SESSION['userName'],
+                'idClase' => $idClase,
+                'nombreMateria' => $dbMateria->subjectName,
+                'secuencia' => $dbSecuencia->claveSecuencia,
+                'tarea' => $dbTarea
+			]);
+		}//getTareaDetail
+
+		function getAnuncioDetail($request)
+		{
+			$idClase = $request->getAttribute('idClase');
+            $idTarea = $request->getAttribute('idTarea');
+            $dbMateria = $this->getMateriaName($idClase);
+            $dbSecuencia = $this->getSecuenciaClave($idClase);
+            $dbTarea = Tarea::find($idTarea);
+            return $this->renderHTML('studentAnuncioDetail.twig', [
+                'username' => $_SESSION['userName'],
+                'idClase' => $idClase,
+                'nombreMateria' => $dbMateria->subjectName,
+                'secuencia' => $dbSecuencia->claveSecuencia,
+                'tarea' => $dbTarea
+			]);
+		}//getAnuncioDetail
 	}
