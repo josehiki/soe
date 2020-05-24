@@ -44,7 +44,7 @@
 							return new RedirectResponse('/soe/student');
 
 						}elseif($user->userType == 'teacher') {
-							return new RedirectResponse('/soe/teacher');
+							return new RedirectResponse('/soe/profesor');
 						}
 					}catch (\Exception $e)
 					{

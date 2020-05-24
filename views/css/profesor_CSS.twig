@@ -1,0 +1,102 @@
+{% block profesor_Css %}
+<style>
+
+.content_Clase{
+    padding: 0;
+    width: 100%;
+}
+
+.list_Clases{
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 1.5rem;
+    padding-top: 1.5rem;
+}
+.list_Clases li{
+    display: flex;
+    border: 1px #333 solid;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+    width: 18.75rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    margin: 1rem;
+}
+.name_Subject{
+    font-size: 1.375rem;
+    font-weight: 400;
+    line-height: 1.75rem;
+    padding: .5cm;
+}
+.name_Subject a:hover{
+    text-decoration: underline;
+}
+.name_Secuencia{
+    font-size: 1rem;
+    font-weight: 250;
+    line-height: 1.75rem;
+    padding: .5cm;
+}
+.content_Title_Clase{
+   
+    padding-left: 1em;
+}
+.secuencia_title{
+    font-size: .5em;
+    float: right;
+    margin-top: .75em;
+    margin-right: 1em;
+}
+.menu_Actividad{
+    border-top: 1px #333 solid;
+    border-bottom: 2px #333 solid;
+    text-align: center;
+    padding: .5em 0;
+}
+.tag_Menu_Actividad{
+    margin: 0 5em;
+}
+.tag_Menu_Actividad a:hover{
+    color: #aaa6a6;
+}
+.nueva_Tarea{
+    padding-left: 3em;
+}
+.input_Text_Teacher{
+    width: 50%
+}
+.text_Area{
+    display: block;
+	border-radius: 5px;
+	border: 1px solid #b9b9b9; 
+	font-size: 1em;
+	padding: 10px;
+    resize: none;
+}
+.boton_Usuario{
+    margin: 1rem auto;
+}
+.tarea{
+    width: 100%;
+    height: 50%;
+    border-bottom: 1px #333 solid;
+    text-align: center; 
+    position: relative;
+}
+.tarea h3{
+    margin: 1rem 0 0 0;
+}
+.tarea span{
+    float: right;
+    margin-right: 2em;
+    margin-bottom: 1em;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+</style>
+{% endblock %}

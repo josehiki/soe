@@ -414,6 +414,38 @@
 	]);
 
 
+	
+	// TEACHER!!!!!!!!!!!!!!
+	$map->get('teacherDashboard', '/soe/profesor', [
+		'controller' => 'App\Controllers\TeacherDashController',
+		'action' => 'getTeacherDashboard',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE3')
+	]);
+
+	$map->get('t.getClaseDetail', '/soe/profesor/{idClase}', [
+		'controller' => 'App\Controllers\TeacherClassController',
+		'action' => 'getClaseDetail',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE3')
+	]);
+	$map->get('t.tarea.getForm', '/soe/profesor/tarea/{idClase}', [
+		'controller' => 'App\Controllers\TeacherClassController',
+		'action' => 'getNuevaTareaForm',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE3')
+	]);
+
+
+	$map->post('t.tarea.add', '/soe/profesor/tarea/n', [
+		'controller' => 'App\Controllers\TeacherClassController',
+		'action' => 'addTarea',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE3')
+	]);
+
+
+
 	// STUDENT!!!!!!!!!!!!!!	
 	$map->get('studentDashboard', '/soe/student', [
 		'controller' => 'App\Controllers\StudentDashController',
@@ -421,15 +453,6 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE2')
 	]);
-
-	// TEACHER!!!!!!!!!!!!!!
-	$map->get('teacherDashboard', '/soe/teacher', [
-		'controller' => 'App\Controllers\TeacherDashController',
-		'action' => 'getTeacherDashboard',
-		'auth' => true, 
-		'userType' => getenv('USER_TYPE3')
-	]);
-
 
 
 	

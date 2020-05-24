@@ -1,1 +1,29 @@
-<h1>teacher page</h1>
+{% include 'css/estilos.twig' %}
+{% include 'css/profesor_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Soe</title>
+		{% block estilo %}{% endblock %}
+        {% block profesor_CSS %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+        <div class="content">
+            <h4 class="content_Title_Menus red">Clases</h4>
+            <ul class="list_Clases">
+                {% for subject in listSubject %}
+                    <li>
+                        <span class="name_Subject"><a href="/soe/profesor/{{subject.idClase}}"/>{{subject.materia}}</a></span>
+                        <span class="name_Secuencia">{{subject.secuencia}}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </body>
+</html>
