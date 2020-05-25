@@ -8,5 +8,5 @@
 	 */
 	class Rel_Sec_Sub extends Model
 	{
-		protected $table = 'rel_Secuencias_Subjects';
+		protected $table = 'rel_secuencias_subjects';
 	}
