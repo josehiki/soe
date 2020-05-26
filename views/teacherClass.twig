@@ -21,7 +21,7 @@
 		</div>
         <div class="content content_Clase">
             <h1 class="content_Title_Clase">{{nombreMateria}} <span class="secuencia_title">Secuencia: {{secuencia}}</span></h1>
-            <div class="menu_Actividad">
+            <div class="menu_Actividad" style="text-align: center;">
                 <span class="tag_Menu_Actividad">
                     <a href="/soe/profesor/tarea/{{idClase}}">Nueva Tarea</a>
                 </span>
@@ -30,6 +30,9 @@
                 </span> #}
                 <span class="tag_Menu_Actividad">
                     <a href="/soe/profesor/anuncio/{{idClase}}">Nuevo Anuncio</a>
+                </span>
+                <span class="tag_Menu_Actividad" style="float: right; margin-right: 2em;">
+                    <a href="/soe/profesor/list/{{idClase}}" >Lista de alumnos</a>
                 </span>
             </div>
             {% for tarea in listTareas %}

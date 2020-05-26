@@ -187,4 +187,33 @@
             $editedTarea->save();
             return new RedirectResponse('/soe/profesor/anuncio/'.$postData['idClase'].'/d/'.$postData['idTarea']);
         }//editAnuncio
+
+        function getStudentsList($request)
+        {
+            $postData = $request->getAttribute('idClase');
+            $dbMateria = $this->getMateriaName($postData);
+            $dbSecuencia = $this->getSecuenciaClave($postData);
+            $auxlistStudent = User_Rel::where('rel_id', $postData)->get();
+            $listStudent;
+            $alumno;
+            foreach ($auxlistStudent as $student) 
+            {
+                if ($student->user_id != $_SESSION['userId']) {
+                    $auxAlumno = User::find($student->user_id);
+                    $alumno=[
+                        'nombreAlumno' => $auxAlumno->userName,
+                        'boleta' => $auxAlumno->boleta
+                    ];
+                    $listStudent[] = $alumno;
+                }
+            }
+            return $this->renderHTML('teacherStudentsList.twig', [
+                'username' => $_SESSION['userName'],
+                'nombreMateria' => $dbMateria->subjectName,
+                'secuencia' => $dbSecuencia->claveSecuencia,
+                'idClase' => $postData,
+                'listAlumnos' => $listStudent
+            ]);
+
+        }
     }
