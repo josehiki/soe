@@ -33,8 +33,6 @@
 		function addProfesor($request) // Agrega la informacion general de un profesor
 		{
 			$postData = $request->getParsedBody();
-			$flag = true;
-			$responseMessage='';
 			
 			// $validator = v::key('nombreProfesor', v::notEmpty()->stringType())
 			// 			->key('emailProfesor', v::notEmpty()->email())
@@ -42,6 +40,8 @@
 			// 			->key('recontraProfesor', v::notEmpty()->length(6,null))
 			// 			->key('telefonoProfesor', v::length(10,10)->number()); //validador de los paramtros recibidos
 			
+			$flag = true;
+			$responseMessage='';
 			if(v::notEmpty()->number()->validate($postData['nombreProfesor']))
 			{
 				$flag = false;
@@ -481,12 +481,27 @@
 		{
 			$postData = $request->getParsedBody();
 			$dbUser = User::where('email', $postData['email'])->first();
-			$validator = v::key('nombreProfesor', v::notEmpty()->stringType())
-						->key('emailProfesor', v::notEmpty()->email())
-						->key('telefonoProfesor', v::length(10,10)->number()); //validador de los paramtros recibidos
-			try
+			// $validator = v::key('nombreProfesor', v::notEmpty()->stringType())
+			// 			->key('emailProfesor', v::notEmpty()->email())
+			// 			->key('telefonoProfesor', v::length(10,10)->number()); //validador de los paramtros recibidos
+			$flag = true;
+			$responseMessage='';
+			if(v::notEmpty()->number()->validate($postData['nombreProfesor']))
 			{
-				$validator->assert($postData); //validacion de postData
+				$flag = false;
+				$responseMessage.='El nombre no puede contener solo números| ';
+			}
+			if(!v::notEmpty()->email()->validate($postData['emailProfesor']))
+			{
+				$flag = false;
+				$responseMessage.="Formato de email incorrecto |";	
+			}
+			if (!v::length(10,10)->number()->validate($postData['telefonoProfesor'])) {
+				$flag = false;
+				$responseMessage.="El teléfono debe contener solo 10 números |";
+			}
+			if($flag)//pasa las validaciones
+			{
 				$auxUser = User::where('email', $postData['emailProfesor'])->first();
 				
 				if(!$auxUser || $dbUser->email == $postData['emailProfesor']){ //el email no esta registrado
@@ -624,7 +639,7 @@
 						]);
 					}
 				}
-			}catch(\Exception $e) // no pasa la validacion
+			}else//no paso las validaciones
 			{
 				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
 				
@@ -638,7 +653,7 @@
 						'editableProfesor' => $dbUser,
 						'listClases' => $dbUser_Rel, 
 						'listSecuencias' => $listSecuencias,
-						'responseMessageEdit' => 'Algo salio mal, por favor revisa tu información'
+						'responseMessageEdit' => $responseMessage
 					]);
 				}else //no tiene
 				{
@@ -649,7 +664,7 @@
 						'listProfesores' => $listProfesores,
 						'editableProfesor' => $dbUser, 
 						'listSecuencias' => $listSecuencias,
-						'responseMessageEdit' => 'Algo salio mal, por favor revisa tu información'
+						'responseMessageEdit' => $responseMessage
 					]);
 				}
 			}

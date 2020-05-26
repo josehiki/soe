@@ -38,17 +38,17 @@
 				'Ingeniería en Transporte', 
 				'Ingeniería Industrial'
             ];
+
+            // $validator = v::key('nombreAlumno', v::notEmpty()->stringType())
+            // ->key('emailAlumno', v::notEmpty()->email())
+            // ->key('contraAlumno', v::notEmpty()->length(6,null))
+            // ->key('recontraAlumno', v::notEmpty()->length(6,null))
+            // ->key('telefonoAlumno', v::notEmpty()->length(10,10)->number())
+            // ->key('boletaAlumno', v::notEmpty()->length(10,10)->number())
+            // ->key('carreraAlumno', v::notEmpty()->stringType()); //validador de los paramtros recibidos
+
             $flag = true;
             $responseMessage='';
-
-            $validator = v::key('nombreAlumno', v::notEmpty()->stringType())
-            ->key('emailAlumno', v::notEmpty()->email())
-            ->key('contraAlumno', v::notEmpty()->length(6,null))
-            ->key('recontraAlumno', v::notEmpty()->length(6,null))
-            ->key('telefonoAlumno', v::notEmpty()->length(10,10)->number())
-            ->key('boletaAlumno', v::notEmpty()->length(10,10)->number())
-            ->key('carreraAlumno', v::notEmpty()->stringType()); //validador de los paramtros recibidos
-
             if(v::notEmpty()->number()->validate($postData['nombreAlumno']))
 			{
 				$flag = false;
@@ -519,13 +519,33 @@
 				'Ingeniería Industrial'
             ];
             
-            $validator = v::key('nombreAlumno', v::notEmpty()->stringType())
-            ->key('emailAlumno', v::notEmpty()->email())
-            ->key('telefonoAlumno', v::notEmpty()->length(10,10)->number())
-            ->key('boletaAlumno', v::notEmpty()->length(10,10)->number()); //validador de los paramtros recibidos
-			
-			try {
-				$validator->assert($postData); //validacion de postData
+            // $validator = v::key('nombreAlumno', v::notEmpty()->stringType())
+            // ->key('emailAlumno', v::notEmpty()->email())
+            // ->key('telefonoAlumno', v::notEmpty()->length(10,10)->number())
+            // ->key('boletaAlumno', v::notEmpty()->length(10,10)->number()); //validador de los paramtros recibidos
+
+            $flag = true;
+            $responseMessage='';
+            if(v::notEmpty()->number()->validate($postData['nombreAlumno']))
+			{
+				$flag = false;
+				$responseMessage.='El nombre no puede contener solo números| ';
+			}
+			if(!v::notEmpty()->email()->validate($postData['emailAlumno']))
+			{
+				$flag = false;
+				$responseMessage.="Formato de email incorrecto |";	
+			}
+			if (!v::length(10,10)->number()->validate($postData['telefonoAlumno'])) {
+				$flag = false;
+				$responseMessage.="El teléfono debe contener solo 10 números |";
+			}
+			if (!v::notEmpty()->length(10,10)->number()->validate($postData['boletaAlumno'])) {
+				$flag = false;
+				$responseMessage.="La boleta debe contener solo 10 números |";
+			}
+			if ($flag)//pasa la validacion 
+			{
 				$auxUser = User::where('email', $postData['emailAlumno'])->first();
 				if(!$auxUser || $dbUser->email == $postData['emailAlumno']) //el email no esta registrado
 				{
@@ -665,7 +685,8 @@
 						]);
 					}
 				}
-			} catch (\Exception $e) {
+			}else //no pasa la validacion
+			{
 				$dbUser_Rel = User_Rel::where('user_id', $dbUser->idUser)->get();
 				if(!$dbUser_Rel->isEmpty()) //el alumno tiene clases
 				{
@@ -677,7 +698,7 @@
 						'editableAlumno' => $dbUser,
 						'listClases' => $dbUser_Rel,  
 						'listSecuencias' => $listSecuencias,
-						'responseMessageEdit' => 'Algo salio mal, por favor revisa tu información'
+						'responseMessageEdit' => $responseMessage
 					]);
 				}else //no tiene
 				{
@@ -688,7 +709,7 @@
 						'listAlumnos' => $listAlumnos,
 						'editableAlumno' => $dbUser, 
 						'listSecuencias' => $listSecuencias,
-						'responseMessageEdit' => 'Algo salio mal, por favor revisa tu información'
+						'responseMessageEdit' => $responseMessage
 					]);
 				}
 			}
