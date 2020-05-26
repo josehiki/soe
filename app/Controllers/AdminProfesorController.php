@@ -33,16 +33,36 @@
 		function addProfesor($request) // Agrega la informacion general de un profesor
 		{
 			$postData = $request->getParsedBody();
-
-			$validator = v::key('nombreProfesor', v::notEmpty()->stringType())
-						->key('emailProfesor', v::notEmpty()->email())
-						->key('contraProfesor', v::notEmpty()->length(6,null))
-						->key('recontraProfesor', v::notEmpty()->length(6,null))
-						->key('telefonoProfesor', v::length(10,10)->number()); //validador de los paramtros recibidos
+			$flag = true;
+			$responseMessage='';
 			
-			try{
-				$validator->assert($postData); //validacion de postData
-				
+			// $validator = v::key('nombreProfesor', v::notEmpty()->stringType())
+			// 			->key('emailProfesor', v::notEmpty()->email())
+			// 			->key('contraProfesor', v::notEmpty()->length(6,null))
+			// 			->key('recontraProfesor', v::notEmpty()->length(6,null))
+			// 			->key('telefonoProfesor', v::length(10,10)->number()); //validador de los paramtros recibidos
+			
+			if(v::notEmpty()->number()->validate($postData['nombreProfesor']))
+			{
+				$flag = false;
+				$responseMessage.='El nombre no puede contener solo números| ';
+			}
+			if(!v::notEmpty()->email()->validate($postData['emailProfesor']))
+			{
+				$flag = false;
+				$responseMessage.="Formato de email incorrecto |";	
+			}
+			if(!v::notEmpty()->length(6,null)->validate($postData['contraProfesor']) || !v::notEmpty()->length(6,null)->validate($postData['recontraProfesor']))
+			{
+				$flag = false;
+				$responseMessage.="La contraseña debe tener mínimo 6 carácteres |";	
+			}
+			if (!v::length(10,10)->number()->validate($postData['telefonoProfesor'])) {
+				$flag = false;
+				$responseMessage.="El teléfono debe contener solo 10 números |";
+			}
+			if($flag) //si pasa todas las validaciones
+			{
 				if ($postData['contraProfesor'] == $postData['recontraProfesor']) {
 					$auxUser = User::where('email', $postData['emailProfesor'])->first();
 					if(!$auxUser){
@@ -77,15 +97,13 @@
 						'responseMessage' => 'Las contraseñas deben coincidir'
 					]);
 				}
-
-			}catch(\Exception $e)
+			}else
 			{
 				return $this->renderHTML('adminProfesorAdd.twig', [
 					'username' => $_SESSION['userName'],
-					'responseMessage' => 'Algo salio mal, por favor revisa tu información '
+					'responseMessage' => $responseMessage
 				]);
 			}
-
 		} //addProfesor
 
 		function getMateriasfromSecuencia($request)// imprime las materias segun la secuencia seleccionada

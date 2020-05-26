@@ -38,7 +38,9 @@
 				'Ingeniería en Transporte', 
 				'Ingeniería Industrial'
             ];
-            
+            $flag = true;
+            $responseMessage='';
+
             $validator = v::key('nombreAlumno', v::notEmpty()->stringType())
             ->key('emailAlumno', v::notEmpty()->email())
             ->key('contraAlumno', v::notEmpty()->length(6,null))
@@ -47,9 +49,32 @@
             ->key('boletaAlumno', v::notEmpty()->length(10,10)->number())
             ->key('carreraAlumno', v::notEmpty()->stringType()); //validador de los paramtros recibidos
 
-            try {
-                $validator->assert($postData); //validacion de postData
-                if ($postData['contraAlumno'] == $postData['recontraAlumno']) // las contraseñas son iguales
+            if(v::notEmpty()->number()->validate($postData['nombreAlumno']))
+			{
+				$flag = false;
+				$responseMessage.='El nombre no puede contener solo números| ';
+			}
+			if(!v::notEmpty()->email()->validate($postData['emailAlumno']))
+			{
+				$flag = false;
+				$responseMessage.="Formato de email incorrecto |";	
+			}
+			if(!v::notEmpty()->length(6,null)->validate($postData['contraAlumno']) || !v::notEmpty()->length(6,null)->validate($postData['recontraAlumno']))
+			{
+				$flag = false;
+				$responseMessage.="La contraseña debe tener mínimo 6 carácteres |";	
+			}
+			if (!v::length(10,10)->number()->validate($postData['telefonoAlumno'])) {
+				$flag = false;
+				$responseMessage.="El teléfono debe contener solo 10 números |";
+			}
+			if (!v::notEmpty()->length(10,10)->number()->validate($postData['boletaAlumno'])) {
+				$flag = false;
+				$responseMessage.="La boleta debe contener solo 10 números |";
+			}
+			if ($flag) //si pasa todas las validaciones
+			{
+				if ($postData['contraAlumno'] == $postData['recontraAlumno']) // las contraseñas son iguales
                 {
 					$auxUser = User::where('email', $postData['emailAlumno'])->first();
                     if(!$auxUser)//existe ese email registrado
@@ -107,14 +132,13 @@
                         'responseMessage' => 'Las contraseñas deben coincidir'
                     ]);
 				}
-
-            } catch (\Exception $e) //no paso la validacion
-            {
-                return $this->renderHTML('adminAlumnoAdd.twig', [
+			}else//no pasa alguna validacion
+			{
+				return $this->renderHTML('adminAlumnoAdd.twig', [
 					'username' => $_SESSION['userName'],
-					'responseMessage' => 'Algo salio mal, por favor revisa tu información '
+					'responseMessage' => $responseMessage
 				]);
-            }
+			}
         } // addAlumno
 
         function getMateriasfromSecuencia($request) // imprime las materias segun la secuencia seleccionada
