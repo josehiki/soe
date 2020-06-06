@@ -8,6 +8,10 @@
 	use App\Models\Secuencia;
     use App\Models\Tarea;
     use Laminas\Diactoros\Response\RedirectResponse;
+    use Aws\S3\S3Client;
+    use Aws\S3\AwsException;
+
+
 	/**
 	 * 
 	 */
@@ -98,4 +102,48 @@
                 'tarea' => $dbTarea
 			]);
 		}//getAnuncioDetail
+
+
+		function uploadTarea($request)
+		{
+			$idClase = $request->getAttribute('idClase');
+            $idTarea = $request->getAttribute('idTarea');
+
+
+            $S3Options = [
+            	'version'	=> 'latest',
+            	'region'	=> 'us-east-2',
+            	'credentials' =>
+            	[
+            		'key'	=> 'AKIAIU7EHNZIVLQF7S2A',
+            		'secret' => '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'
+            	]
+            ];
+            $s3 = new S3Client($S3Options);
+
+			// if(isset($_FILES['tareaAlumno']))
+			// {
+			// 	$uploadedObject = $s3->putObject([
+			// 		'Bucket'	=> 'soe-bucket',
+			// 		'Key'		=> $_FILES['tareaAlumno']['name'],
+			// 		'SourceFile'=> $_FILES['tareaAlumno']['tmp_name']
+			// 	]);
+			// 	print_r($uploadedObject);
+			// }else
+			// {
+			// 	echo "Error al cargar el archivo";
+			// }
+            try{
+			$result = $s3->getObject([
+			        'Bucket' => 'soe-bucket',
+			        'Key'    => 'Morgado_Jose_T25.pdf'
+			    ]);
+
+			    // Display the object in the browser.
+			    header("Content-Type: {$result['ContentType']}");
+			    echo $result['Body'];
+			} catch (S3Exception $e) {
+			    echo $e->getMessage() . PHP_EOL;
+			}
+		}
 	}

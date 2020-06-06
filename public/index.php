@@ -532,6 +532,15 @@
 		'userType' => getenv('USER_TYPE2')
 	]);
 
+
+	$map->post('a.tarea.upload', '/soe/alumno/tarea', [
+		'controller' => 'App\Controllers\StudentDashController',
+		'action' => 'uploadTarea',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE2')
+	]);
+
+
 	$matcher = $routerContainer->getMatcher();	
 	$route = $matcher->match($request);
 

@@ -22,8 +22,8 @@
         <div class="content content_Clase">
             <h1 class="content_Title_Clase">{{nombreMateria}} <span class="secuencia_title">Secuencia: {{secuencia}}</span></h1>
             <div class="menu_Actividad menu_Actividad_Detail">
-                <span class="tag_Menu_Actividad tag_Tarea_Detail">
-                    <a href=""></a>
+                <span class="tag_Menu_Actividad tag_Tarea_Detail editar_Tag" onclick="showModal()">
+                    Subir tarea
                 </span>
             </div>
             <div class="tarea tarea_Detail">
@@ -37,7 +37,33 @@
 
             </div>
             
+            <div id="modalSecuenciaCancel" class="modal_This modal_Secuencia" style="display: none;">
+                <div class="modal_Content">
+                    <span class="close" >
+                        <a onclick="hideModal()">&times;</a>
+                    </span>
+                    <h4>Entregar tarea</h4>
+                    <br><br>
+                    <form method="post" action="/soe/alumno/tarea" enctype="multipart/form-data">
+                        <input name="idClase" value="{{idClase}}" style="display: none;">
+                        <input name="idClase" value="{{tarea._id}}" style="display: none;">
+                        <input type="file" name="tareaAlumno" required />
+                        <br>
+                        <button class="boton boton_Modal">Enviar</button>
+                    </form>
+                </div>
+            </div>
+
 		</div>
-        
+        <script>
+            function showModal()
+            {
+                document.getElementById('modalSecuenciaCancel').style.display = 'block';
+            }
+            function hideModal()
+            {
+                document.getElementById('modalSecuenciaCancel').style.display = 'none';
+            }
+        </script>
     </body>
 </html>
