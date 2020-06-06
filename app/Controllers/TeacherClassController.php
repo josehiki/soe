@@ -7,6 +7,7 @@
 	use App\Models\Subject;
 	use App\Models\Secuencia;
     use App\Models\Tarea;
+    use App\Models\Entrega;
     use Laminas\Diactoros\Response\RedirectResponse;
 
     
@@ -18,7 +19,7 @@
             $dbMateria = $this->getMateriaName($postData);
             $dbSecuencia = $this->getSecuenciaClave($postData);
             $dbTareas = Tarea::where('clase_id', $postData)
-            ->orderBy('fechaLimite', 'asc')
+            ->orderBy('fechaLimite', 'desc')
             ->get();
             
             return $this->renderHTML('teacherClass.twig', [
@@ -145,6 +146,7 @@
             $newTarea->descripcion = $postData['descripcionAnuncio'];
             $newTarea->tipo = 'anuncio';
             $newTarea->fecha = date("Y-m-d");
+            $newTarea->fechaLimite = date("Y-m-d");
             $newTarea->save();
             return new RedirectResponse('/soe/profesor/'.$postData['idClase']);
         }//addAnuncio
@@ -193,18 +195,20 @@
             $postData = $request->getAttribute('idClase');
             $dbMateria = $this->getMateriaName($postData);
             $dbSecuencia = $this->getSecuenciaClave($postData);
-            $auxlistStudent = User_Rel::where('rel_id', $postData)->get();
-            $listStudent;
-            $alumno;
-            foreach ($auxlistStudent as $student) 
+
+            $auxlistStudent = User_Rel::where('rel_id', $postData)->get(); //lista de alumnos que pertenecen a la clase
+            
+            $listStudent; //lista de alumnos - salida
+            $alumno; //auxiliar 
+            foreach ($auxlistStudent as $student) //minentras la lista de alumnos
             {
-                if ($student->user_id != $_SESSION['userId']) {
-                    $auxAlumno = User::find($student->user_id);
+                if ($student->user_id != $_SESSION['userId']) { // si el alumno no es el profesor de la clase 
+                    $auxAlumno = User::find($student->user_id); //Busca info del alumno 
                     $alumno=[
                         'nombreAlumno' => $auxAlumno->userName,
                         'boleta' => $auxAlumno->boleta
-                    ];
-                    $listStudent[] = $alumno;
+                    ]; //guarda informacion en el auxiliar 
+                    $listStudent[] = $alumno; // agrega el auxiliar a la lista 
                 }
             }
             return $this->renderHTML('teacherStudentsList.twig', [
@@ -215,5 +219,62 @@
                 'listAlumnos' => $listStudent
             ]);
 
-        }
+        }// getStudentsList
+
+        function getEntregasList($request)
+        {
+            $idClase = $request->getAttribute('idClase'); 
+            $idTarea = $request->getAttribute('idTarea');
+
+            $dbMateria = $this->getMateriaName($idClase); // Recupera el nombre de la materia
+            $dbSecuencia = $this->getSecuenciaClave($idClase); // Recupera la clave de la secuecia 
+
+            $auxlistStudent = User_Rel::where('rel_id', $idClase)->get(); //lista de alumnos que pertenecen a la clase
+            $listStudent; //lista de alumnos - salida
+            $alumno; //auxiliar 
+            foreach($auxlistStudent as $student) //mientras la lista de alumnos
+            {
+                if ($student->user_id != $_SESSION['userId']) // si el usuario no es el profesor de la clase 
+                { 
+                    $auxAlumno = User::find($student->user_id); //Busca info del alumno 
+                    $auxEntrega = Entrega::where('idTarea', $idTarea)
+                    ->where('idUsuario', $student->user_id)->first(); // Busca una entrega de la tarea por parte del usuario (alumno)
+                    $auxTarea = Tarea::find($idTarea); //aux de tarea 
+                    if($auxEntrega)// realizo una entrega 
+                    {  
+                        if($auxEntrega->fecha > $auxTarea->fecha) // realizo la tarea de forma tardia
+                        {
+                            $alumno=[
+                                'nombreAlumno' => $auxAlumno->userName,
+                                'entrego' => true,
+                                'tardio' => true,
+                                'fecha' => $auxEntrega->fecha,
+                                'url' => $auxEntrega->urlEntrega
+                            ]; //guarda informacion en el auxiliar 
+                        }else{
+                            $alumno=[
+                                'nombreAlumno' => $auxAlumno->userName,
+                                'entrego' => true,
+                                'fecha' => $auxEntrega->fecha,
+                                'url' => $auxEntrega->urlEntrega
+                            ]; //guarda informacion en el auxiliar     
+                        }
+                    }else{ // No entrego
+                        $alumno=[
+                            'nombreAlumno' => $auxAlumno->userName,
+                            'entrego' => false
+                        ];
+                    }
+                    $listStudent[] = $alumno; // agrega el auxiliar a la lista de alumnos
+                }
+            }            
+            return $this->renderHTML('teacherEntregasList.twig', [
+                'username' => $_SESSION['userName'],
+                'idClase' => $idClase,
+                'idTarea' => $idTarea,
+                'nombreMateria' => $dbMateria->subjectName,
+                'secuencia' => $dbSecuencia->claveSecuencia,
+                'listaEntregas' => $listStudent
+            ]);
+        } // getEntregasList
     }

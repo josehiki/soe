@@ -1,0 +1,63 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/profesor_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Soe</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+		<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+		{% block estilo %}{% endblock %}
+        {% block profesor_CSS %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+            <a href="/soe/profesor/tarea/{{idClase}}/d/{{idTarea}}" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+        <div class="content content_Clase">
+            <h1 class="content_Title_Clase">{{nombreMateria}} <span class="secuencia_title">Secuencia: {{secuencia}}</span></h1>
+            <h2 class="content_Title_Menus">Entregas</h2>
+            <br>
+            {% if listaEntregas != null %}
+                <table class="lista_Entregas">
+                    <tr>
+                        <th>Alumno</th>
+                        <th>Fecha</th>
+                        <th>Tarea</th>
+                    </tr>
+                    {% for alumno in listaEntregas %}
+            			{% if alumno.entrego == true %}
+                            <tr class="listaEntregas">
+                                <td>{{alumno.nombreAlumno}}</td>
+                                {% if alumno.tardio == true %}
+                                    <td class="eliminar">{{alumno.fecha}}</td>
+                                {% endif %}
+                                {% if alumno.tardio != true %}
+                                    <td class="">{{alumno.fecha}}</td>
+                                {% endif %}
+                                <td>
+                                    <a href="{{alumno.url}}">
+                                        <i class='fas fa-file-download'></i>&nbsp;&nbsp;
+                                        Descargar
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% if alumno.entrego != true %}
+                            <tr class="listaEntregas">
+                                <td>{{alumno.nombreAlumno}}</td>
+                                <td>-</td>
+                                <td>No ha entregado tarea</td>
+                            </tr>
+                        {% endif %}
+            		{% endfor %}
+                </table>
+            {% endif %}
+		</div>
+    </body>
+</html>

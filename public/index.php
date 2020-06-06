@@ -477,6 +477,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE3')
 	]);
+	$map->get('t.tarea.entregasList', '/soe/profesor/tarea/{idClase}/list/{idTarea}', [
+		'controller' => 'App\Controllers\TeacherClassController',
+		'action' => 'getEntregasList',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE3')
+	]);
 
 
 	$map->post('t.tarea.add', '/soe/profesor/tarea/n', [

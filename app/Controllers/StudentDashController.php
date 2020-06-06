@@ -60,7 +60,7 @@
             $dbMateria = $this->getMateriaName($postData);
             $dbSecuencia = $this->getSecuenciaClave($postData);
             $dbTareas = Tarea::where('clase_id', $postData)
-            ->orderBy('fechaLimite', 'asc')
+            ->orderBy('fechaLimite', 'desc')
             ->get();
             
             return $this->renderHTML('studentClass.twig', [
@@ -132,7 +132,7 @@
 			{
 				$flag = true;
 				$responseMessage = '';
-				if($_FILES["tareaAlumno"]["size"] > (1024*1024*50))
+				if($_FILES["tareaAlumno"]["size"] > (1024*1024*25))
 				{
 					$flag = false;
 					$responseMessage = 'El tamaño máximo permitido es 50MB';
