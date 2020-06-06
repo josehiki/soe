@@ -7,6 +7,7 @@
 	use App\Models\Subject;
 	use App\Models\Secuencia;
     use App\Models\Tarea;
+    use App\Models\Entrega;
     use Laminas\Diactoros\Response\RedirectResponse;
     use Aws\S3\S3Client;
     use Aws\S3\AwsException;
@@ -77,13 +78,20 @@
             $idTarea = $request->getAttribute('idTarea');
             $dbMateria = $this->getMateriaName($idClase);
             $dbSecuencia = $this->getSecuenciaClave($idClase);
-            $dbTarea = Tarea::find($idTarea);
+			$dbTarea = Tarea::find($idTarea);
+			$consultaEntrega = Entrega::where('idTarea', $idTarea)
+			->where('idUsuario', $_SESSION['userId'])->first();
+			$tareaEntregada = false;
+			if($consultaEntrega){
+				$tareaEntregada = true;
+			}
             return $this->renderHTML('studentTareaDetail.twig', [
                 'username' => $_SESSION['userName'],
                 'idClase' => $idClase,
                 'nombreMateria' => $dbMateria->subjectName,
                 'secuencia' => $dbSecuencia->claveSecuencia,
-                'tarea' => $dbTarea
+				'tarea' => $dbTarea,
+				'tareaEntregada'=>$tareaEntregada
 			]);
 		}//getTareaDetail
 
@@ -106,8 +114,7 @@
 
 		function uploadTarea($request)
 		{
-			$idClase = $request->getAttribute('idClase');
-            $idTarea = $request->getAttribute('idTarea');
+			$postData = $request->getParsedBody();
 
 
             $S3Options = [
@@ -118,32 +125,42 @@
             		'key'	=> 'AKIAIU7EHNZIVLQF7S2A',
             		'secret' => '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'
             	]
-            ];
+            ]; //Configuracion objeto S3
             $s3 = new S3Client($S3Options);
 
-			// if(isset($_FILES['tareaAlumno']))
-			// {
-			// 	$uploadedObject = $s3->putObject([
-			// 		'Bucket'	=> 'soe-bucket',
-			// 		'Key'		=> $_FILES['tareaAlumno']['name'],
-			// 		'SourceFile'=> $_FILES['tareaAlumno']['tmp_name']
-			// 	]);
-			// 	print_r($uploadedObject);
-			// }else
-			// {
-			// 	echo "Error al cargar el archivo";
-			// }
-            try{
-			$result = $s3->getObject([
-			        'Bucket' => 'soe-bucket',
-			        'Key'    => 'Morgado_Jose_T25.pdf'
-			    ]);
-
-			    // Display the object in the browser.
-			    header("Content-Type: {$result['ContentType']}");
-			    echo $result['Body'];
-			} catch (S3Exception $e) {
-			    echo $e->getMessage() . PHP_EOL;
+			if(isset($_FILES['tareaAlumno'])) //hay un archivo para subir 
+			{
+				$flag = true;
+				$responseMessage = '';
+				if($_FILES["tareaAlumno"]["size"] > (1024*1024*50))
+				{
+					$flag = false;
+					$responseMessage = 'El tamaño máximo permitido es 50MB';
+				}
+				if($flag)//paso las validaciones 
+				{
+					//Carga de archivo en el bucket
+					$uploadedObject = $s3->putObject([
+						'Bucket'	=> 'soe-bucket',
+						'Key'		=> $_FILES['tareaAlumno']['name'],
+						'SourceFile'=> $_FILES['tareaAlumno']['tmp_name']
+					]);
+					$newEntrega = new Entrega();
+					$newEntrega->idTarea = $postData['idTarea'];
+					$newEntrega->idUsuario = $_SESSION['userId'];
+					$newEntrega->urlEntrega = $uploadedObject['ObjectURL'];
+					$newEntrega->fecha = date("Y-m-d");;
+					$newEntrega->save();
+					return new RedirectResponse('/soe/alumno/'.$postData['idClase'].'/d/'.$postData['idTarea']);
+				}
+				else //fallo la validacion del archivo 
+				{
+					return new RedirectResponse('/soe/alumno/'.$postData['idClase'].'/d/'.$postData['idTarea']);
+				}
+			}else //error al subir el archivo 
+			{
+				return new RedirectResponse('/soe/alumno/'.$postData['idClase'].'/d/'.$postData['idTarea']);
 			}
+            
 		}
 	}

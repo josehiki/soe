@@ -22,10 +22,18 @@
         <div class="content content_Clase">
             <h1 class="content_Title_Clase">{{nombreMateria}} <span class="secuencia_title">Secuencia: {{secuencia}}</span></h1>
             <div class="menu_Actividad menu_Actividad_Detail">
-                <span class="tag_Menu_Actividad tag_Tarea_Detail editar_Tag" onclick="showModal()">
-                    Subir tarea
-                </span>
+                {% if tareaEntregada != true %}
+                    <span class="tag_Menu_Actividad tag_Tarea_Detail editar_Tag" onclick="showModal()">
+                        Subir tarea
+                    </span>
+                {% endif %}
+                {% if tareaEntregada == true %}
+                    <span class="tag_Menu_Actividad tag_Tarea_Detail eliminar">
+                        Tarea Entregada
+                    </span>
+                {% endif %}
             </div>
+            
             <div class="tarea tarea_Detail">
                 <h3>{{tarea.nombre}}</h3>
                 <span class="span span_Detail ">Descripcion:</span>
@@ -46,7 +54,7 @@
                     <br><br>
                     <form method="post" action="/soe/alumno/tarea" enctype="multipart/form-data">
                         <input name="idClase" value="{{idClase}}" style="display: none;">
-                        <input name="idClase" value="{{tarea._id}}" style="display: none;">
+                        <input name="idTarea" value="{{tarea._id}}" style="display: none;">
                         <input type="file" name="tareaAlumno" required />
                         <br>
                         <button class="boton boton_Modal">Enviar</button>
