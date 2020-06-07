@@ -544,6 +544,7 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE2')
 	]);
+	
 
 
 	$map->post('a.tarea.upload', '/soe/alumno/tarea', [

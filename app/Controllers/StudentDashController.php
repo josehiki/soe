@@ -171,5 +171,25 @@
 				'username' => $_SESSION['userName'],
 				'idClase' => $idClase
 			]);
+			
 		}//calendario
+
+		// function getTareas(){
+		// 	$userMaterias = User_Rel::where('user_id', $_SESSION['userId'])->get(); // lista de materias del alumno
+		// 	$listaTareas; // lista de las tareas de todas las materias del usuario
+		// 	$auxTarea;
+		// 	foreach ($userMaterias as $materia) //recorrer la lista de materias
+		// 	{	
+		// 		$auxListTareas = Tarea::where('clase_id', $materia->rel_id)->get();
+		// 		$auxNameMateria = $this->getMateriaName($materia->rel_id);
+		// 		foreach ($auxListTareas as $tarea) {
+		// 			$auxTarea = [
+		// 				'title' => $auxNameMateria->subjectName.' - '.$tarea->nombre,
+		// 				'start' => $tarea->fechaLimite
+		// 			];
+		// 			$listaTareas[] = $auxTarea;
+		// 		}
+		// 	}
+		// 	echo json_encode($listaTareas);
+		// }//getTareas
 	}
