@@ -162,5 +162,14 @@
 				return new RedirectResponse('/soe/alumno/'.$postData['idClase'].'/d/'.$postData['idTarea']);
 			}
             
-		}
+		} //uploadTarea
+
+		function calendario($request)
+		{
+			$idClase = $request->getAttribute('idClase');
+			return $this->renderHTML('studentCalendar.twig', [
+				'username' => $_SESSION['userName'],
+				'idClase' => $idClase
+			]);
+		}//calendario
 	}

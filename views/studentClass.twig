@@ -23,11 +23,8 @@
             <h1 class="content_Title_Clase">{{nombreMateria}} <span class="secuencia_title">Secuencia: {{secuencia}}</span></h1>
             <div class="menu_Actividad">
                 <span class="tag_Menu_Actividad">
-                    <a href=""></a>
+                    <a href="/soe/alumno/calendario/{{idClase}}">Calendario</a>
                 </span>
-                {# <span class="tag_Menu_Actividad">
-                    <a href="">Nueva Proyecto</a>
-                </span> #}
             </div>
             {% for tarea in listTareas %}
                 {% if tarea.tipo == 'tarea' %}

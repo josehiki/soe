@@ -483,6 +483,7 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE3')
 	]);
+	
 
 
 	$map->post('t.tarea.add', '/soe/profesor/tarea/n', [
@@ -534,6 +535,12 @@
 	$map->get('a.anuncio.Detail', '/soe/alumno/{idClase}/a/{idTarea}', [
 		'controller' => 'App\Controllers\StudentDashController',
 		'action' => 'getAnuncioDetail',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE2')
+	]);
+	$map->get('a.calendario', '/soe/alumno/calendario/{idClase}', [
+		'controller' => 'App\Controllers\StudentDashController',
+		'action' => 'calendario',
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE2')
 	]);

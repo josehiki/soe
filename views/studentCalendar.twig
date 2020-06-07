@@ -1,0 +1,22 @@
+{% include 'css/estilos.twig' %}
+{% include 'css/profesor_CSS.twig' %}
+<!DOCTYPE html>
+<html>
+	<head>	
+		<title>Soe</title>
+        <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+		{% block estilo %}{% endblock %}
+        {% block profesor_CSS %}{% endblock %}
+	</head>
+	<body>
+		<div class="header header_Usuario" >
+            <a href="/soe/alumno/{{idClase}}" class="etiqueta_Cerrar_Sesion etiqueta_Atras">
+				<i class='fas fa-arrow-left'></i>
+			</a>
+			<p class="header_p"  id="nombreUsuario">{{username}}</p>
+			<span>
+				<a href="/soe/logout" class="etiqueta_Cerrar_Sesion">Cerrar Sesion</a>
+			</span>
+		</div>
+    </body>
+</html>
