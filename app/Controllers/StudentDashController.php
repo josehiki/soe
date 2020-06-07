@@ -167,29 +167,40 @@
 		function calendario($request)
 		{
 			$idClase = $request->getAttribute('idClase');
+			$userMaterias = User_Rel::where('user_id', $_SESSION['userId'])->get(); // lista de materias del alumno
+			$listaTareas; // lista de las tareas de todas las materias del usuario
+			$auxTarea;
+			$color = array("#5BA8D4", "#5FDEB4", "#65C75F", "#B3B149", "#D6AC25");
+			foreach ($userMaterias as $materia) //recorrer la lista de materias
+			{	
+				$auxListTareas = Tarea::where('clase_id', $materia->rel_id)->get();
+				$auxNameMateria = $this->getMateriaName($materia->rel_id);
+				$auxNameSecuencia = $this->getSecuenciaClave($materia->rel_id);
+				$colorMateria = $color[rand(0,4)];
+				foreach ($auxListTareas as $tarea) {
+					$auxTarea = [
+						'title' => $auxNameMateria->subjectName.' - '.$tarea->nombre,
+						'description' => $tarea->descripcion,
+						'start' => $tarea->fechaLimite,
+						'color' => $colorMateria,
+						'extendedProps' => [
+							"tipo" => $tarea->tipo,
+							"secuencia" => $auxNameSecuencia->claveSecuencia
+						],
+						'textColor' => 'white'
+						
+					];
+					$listaTareas[] = $auxTarea;
+				}
+			}
+			// print_r($listaTareas);
 			return $this->renderHTML('studentCalendar.twig', [
 				'username' => $_SESSION['userName'],
-				'idClase' => $idClase
+				'idClase' => $idClase,
+				'listaTareas' => $listaTareas
 			]);
 			
 		}//calendario
 
-		// function getTareas(){
-		// 	$userMaterias = User_Rel::where('user_id', $_SESSION['userId'])->get(); // lista de materias del alumno
-		// 	$listaTareas; // lista de las tareas de todas las materias del usuario
-		// 	$auxTarea;
-		// 	foreach ($userMaterias as $materia) //recorrer la lista de materias
-		// 	{	
-		// 		$auxListTareas = Tarea::where('clase_id', $materia->rel_id)->get();
-		// 		$auxNameMateria = $this->getMateriaName($materia->rel_id);
-		// 		foreach ($auxListTareas as $tarea) {
-		// 			$auxTarea = [
-		// 				'title' => $auxNameMateria->subjectName.' - '.$tarea->nombre,
-		// 				'start' => $tarea->fechaLimite
-		// 			];
-		// 			$listaTareas[] = $auxTarea;
-		// 		}
-		// 	}
-		// 	echo json_encode($listaTareas);
-		// }//getTareas
+		
 	}
