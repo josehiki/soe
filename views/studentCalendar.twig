@@ -41,8 +41,10 @@
             document.getElementById('tipo_Tarea').innerHTML = info.event.extendedProps.tipo;
             document.getElementById('descripcion_Tarea').innerHTML = info.event.extendedProps.description;
             document.getElementById('clave_Secuencia').innerHTML = info.event.extendedProps.secuencia;
+            document.getElementById('formExtra').style.display = "none";
+            
             if(info.event.extendedProps.tipo == 'Actividad Extracurricular'){
-              document.getElementById('eliminarActividad').style.display = "inline";
+              document.getElementById('formExtra').style.display = "block";
               document.getElementById('id_Extra').value = info.event.id;
             }
           }
@@ -84,10 +86,10 @@
           <h4 id="clave_Secuencia"></h4>
           <h3 id="titulo_Tarea"></h3>
           <p id="descripcion_Tarea" class="instrucciones"></p>
-          <form method="post" action="/soe/alumno/actividadExtra/del" id="formExtra" style="text-align: right;">
+          <form method="post" action="/soe/alumno/actividadExtra/del" id="formExtra" style="text-align: right; display: none;">
             <input name="idClase" value="{{idClase}}" style="display: none;" />
             <input type="text" name="idExtra" id="id_Extra" style="display: none;" />
-            <button id="eliminarActividad" class="boton_To_A boton_Act_Extra eliminar" style="display: none;">Eliminar</button>
+            <button id="eliminarActividad" class="boton_To_A boton_Act_Extra eliminar" style="">Eliminar</button>
           </form>
       </div>
     </div>    
