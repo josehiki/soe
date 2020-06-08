@@ -198,6 +198,7 @@
 			}
 			foreach ($userExtras as $extra) {
 				$auxTarea = [
+					'id' => $extra->id,
 					'title' => $extra->titulo,
 					'description' => $extra->descripcion,
 					'start' => $extra->fechaLimite,
@@ -233,5 +234,13 @@
 			$newActividadExtra->save();
 			return new RedirectResponse('/soe/alumno/calendario/'.$postData['idClase']);
 		}//addActividadExtra
+
+		function deleteActividadExtra($request)
+		{
+			$postData = $request->getParsedBody();
+			$delExtra = Extra::find($postData['idExtra']);
+			$delExtra->delete();
+			return new RedirectResponse('/soe/alumno/calendario/'.$postData['idClase']);
+		}//deleteActividadExtra
 		
 	}

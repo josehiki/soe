@@ -558,6 +558,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE2')
 	]);
+	$map->post('a.extra.del', '/soe/alumno/actividadExtra/del', [
+		'controller' => 'App\Controllers\StudentDashController',
+		'action' => 'deleteActividadExtra',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE2')
+	]);
 
 	$matcher = $routerContainer->getMatcher();	
 	$route = $matcher->match($request);

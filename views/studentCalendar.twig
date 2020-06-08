@@ -41,6 +41,10 @@
             document.getElementById('tipo_Tarea').innerHTML = info.event.extendedProps.tipo;
             document.getElementById('descripcion_Tarea').innerHTML = info.event.extendedProps.description;
             document.getElementById('clave_Secuencia').innerHTML = info.event.extendedProps.secuencia;
+            if(info.event.extendedProps.tipo == 'Actividad Extracurricular'){
+              document.getElementById('eliminarActividad').style.display = "inline";
+              document.getElementById('id_Extra').value = info.event.id;
+            }
           }
         });
 
@@ -80,6 +84,11 @@
           <h4 id="clave_Secuencia"></h4>
           <h3 id="titulo_Tarea"></h3>
           <p id="descripcion_Tarea" class="instrucciones"></p>
+          <form method="post" action="/soe/alumno/actividadExtra/del" id="formExtra" style="text-align: right;">
+            <input name="idClase" value="{{idClase}}" style="display: none;" />
+            <input type="text" name="idExtra" id="id_Extra" style="display: none;" />
+            <button id="eliminarActividad" class="boton_To_A boton_Act_Extra eliminar" style="display: none;">Eliminar</button>
+          </form>
       </div>
     </div>    
     <div id="modalActExtra" class="modal_This modal_Secuencia" style="display: none;">
@@ -91,14 +100,14 @@
           <h2>Nueva Actividad Extracurricular</h2>
           <p class="instrucciones">Ingrese los siguientes datos</p>
           <form method="post" action="/soe/alumno/actividadExtra">
-          <input name="idClase" value="{{idClase}}" style="display: none;" />
+            <input name="idClase" value="{{idClase}}" style="display: none;" />
             <span class="span span_Act">Nombre de la actividad</span>
             <input type="text" name="nombreActividad" class="input_Text " placeholder="Ingrese el nombre de la actividad" required/><br>
             <span class="span span_Act">Descripción</span><br>
             <textarea name="descripcionActividad" class="text_Area input_Text_Teacher text_Area_ActE" placeholder="Describe la Actividad" rows="4" cols="50" required></textarea><br>
             <span class="span span_Act">Fecha límite</span>
             <input type="date" id="myDate" name="fechaActividad" class="date_Act" required/>
-            <button class="boton boton_Usuario">Enviar</button>
+            <button class="boton boton_Usuario">Crear</button>
           </form>
       </div>
     </div>
