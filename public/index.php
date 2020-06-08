@@ -544,13 +544,6 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE2')
 	]);
-	$map->get('a.calendario.getTarea', '/soe/alumno/calendar/cargaTareas', [
-		'controller' => 'App\Controllers\StudentDashController',
-		'action' => 'loadTarea',
-		'auth' => true, 
-		'userType' => getenv('USER_TYPE2')
-	]);
-
 
 
 	$map->post('a.tarea.upload', '/soe/alumno/tarea', [
@@ -559,7 +552,12 @@
 		'auth' => true, 
 		'userType' => getenv('USER_TYPE2')
 	]);
-
+	$map->post('a.extra.add', '/soe/alumno/actividadExtra', [
+		'controller' => 'App\Controllers\StudentDashController',
+		'action' => 'addActividadExtra',
+		'auth' => true, 
+		'userType' => getenv('USER_TYPE2')
+	]);
 
 	$matcher = $routerContainer->getMatcher();	
 	$route = $matcher->match($request);

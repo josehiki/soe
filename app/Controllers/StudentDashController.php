@@ -8,6 +8,7 @@
 	use App\Models\Secuencia;
     use App\Models\Tarea;
     use App\Models\Entrega;
+    use App\Models\Extra;
     use Laminas\Diactoros\Response\RedirectResponse;
     use Aws\S3\S3Client;
     use Aws\S3\AwsException;
@@ -168,8 +169,10 @@
 		{
 			$idClase = $request->getAttribute('idClase');
 			$userMaterias = User_Rel::where('user_id', $_SESSION['userId'])->get(); // lista de materias del alumno
+			$userExtras = Extra::where('user_id', $_SESSION['userId'])->get();//lista de actividades extracurriculares
 			$listaTareas; // lista de las tareas de todas las materias del usuario
 			$auxTarea;
+			$colorExtra = '#5c6bc0';
 			$color = array("#5BA8D4", "#5FDEB4", "#65C75F", "#B3B149", "#D6AC25");
 			foreach ($userMaterias as $materia) //recorrer la lista de materias
 			{	
@@ -193,6 +196,21 @@
 					$listaTareas[] = $auxTarea;
 				}
 			}
+			foreach ($userExtras as $extra) {
+				$auxTarea = [
+					'title' => $extra->titulo,
+					'description' => $extra->descripcion,
+					'start' => $extra->fechaLimite,
+					'color' => $colorExtra,
+					'extendedProps' => [
+						"tipo" => 'Actividad Extracurricular',
+						"secuencia" => ''
+					],
+					'textColor' => 'white'
+					
+				];
+				$listaTareas[] = $auxTarea;
+			}
 			// print_r($listaTareas);
 			return $this->renderHTML('studentCalendar.twig', [
 				'username' => $_SESSION['userName'],
@@ -202,5 +220,18 @@
 			
 		}//calendario
 
+		function addActividadExtra($request)
+		{
+			$postData = $request->getParsedBody();
+			print_r ($postData);
+			
+			$newActividadExtra = new Extra();
+			$newActividadExtra->user_id = $_SESSION['userId'];
+			$newActividadExtra->titulo = $postData['nombreActividad'];
+			$newActividadExtra->descripcion = $postData['descripcionActividad'];
+			$newActividadExtra->fechaLimite = $postData['fechaActividad'];
+			$newActividadExtra->save();
+			return new RedirectResponse('/soe/alumno/calendario/'.$postData['idClase']);
+		}//addActividadExtra
 		
 	}

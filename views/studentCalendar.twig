@@ -63,7 +63,7 @@
     <div class="content" style="height: 80%;">
       <br>
       <div class="menu_Actividad menu_Actividad_Detail" style="text-align: center;">
-        <span class="tag_Menu_Actividad tag_Tarea_Detail editar_Tag" onclick="showModal()">
+        <span class="tag_Menu_Actividad tag_Tarea_Detail editar_Tag" onclick="showActExtra()">
           Nueva Actividad Extracurricular
         </span>
       </div>
@@ -82,11 +82,41 @@
           <p id="descripcion_Tarea" class="instrucciones"></p>
       </div>
     </div>    
+    <div id="modalActExtra" class="modal_This modal_Secuencia" style="display: none;">
+      <div class="modal_Content modal_Act">
+          <span class="close" >
+              <a onclick="hideActExtra()">&times;</a>
+          </span>
+          <br>
+          <h2>Nueva Actividad Extracurricular</h2>
+          <p class="instrucciones">Ingrese los siguientes datos</p>
+          <form method="post" action="/soe/alumno/actividadExtra">
+          <input name="idClase" value="{{idClase}}" style="display: none;" />
+            <span class="span span_Act">Nombre de la actividad</span>
+            <input type="text" name="nombreActividad" class="input_Text " placeholder="Ingrese el nombre de la actividad" required/><br>
+            <span class="span span_Act">Descripción</span><br>
+            <textarea name="descripcionActividad" class="text_Area input_Text_Teacher text_Area_ActE" placeholder="Describe la Actividad" rows="4" cols="50" required></textarea><br>
+            <span class="span span_Act">Fecha límite</span>
+            <input type="date" id="myDate" name="fechaActividad" class="date_Act" required/>
+            <button class="boton boton_Usuario">Enviar</button>
+          </form>
+      </div>
+    </div>
   </body>
   <script>
-    function showModal()
-    {
-        document.getElementById('modalDetalleTarea').style.display = 'block';
+    var today = new Date();
+		var dd = String(today.getDate()).padStart(2, '0');
+		var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+		var yyyy = today.getFullYear();
+		today = yyyy + '-' + mm + '-' + dd;
+		document.getElementById("myDate").min = today;
+    function showActExtra(){
+      document.getElementById('modalActExtra').style.display = 'block';
+
+    }
+    function hideActExtra(){
+      document.getElementById('modalActExtra').style.display = 'none';
+
     }
     function hideModal()
     {
