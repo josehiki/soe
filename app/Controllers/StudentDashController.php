@@ -123,8 +123,8 @@
             	'region'	=> 'us-east-2',
             	'credentials' =>
             	[
-            		'key'	=> 'AKIAIU7EHNZIVLQF7S2A',
-            		'secret' => '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'
+            		'key'	=> '<key>'>,
+            		'secret' => '<secretkey>'
             	]
             ]; //Configuracion objeto S3
             $s3 = new S3Client($S3Options);
